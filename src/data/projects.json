@@ -120,19 +120,27 @@
     "title": "A Boy and His Beard",
     "slug": "a-boy-and-his-beard",
     "section": "games",
-    "tag": "Twin Stick",
-    "year": "",
+    "tag": "PC Steam",
+    "year": "2018",
     "status": "",
-    "description": "Twin-stick beat 'em up prototype with animated combat and character-driven presentation. The project explored quick readability for attacks, movement, and enemy reactions.",
+    "description": "Released twin-stick beat 'em up where players steal beards from lumberjacks, vikings, pirates, bikers, and skeletons to unlock new potential. Contributed production scheduling, mechanics and enemy design, balancing, main character creation, rigging, animation, polish, and publishing.",
     "thumbnail": "/assets/projects/a-boy-and-his-beard/banner.webp",
     "media": [
-      { "src": "/assets/projects/a-boy-and-his-beard/banner.webp",     "type": "image", "caption": "Title banner" },
-      { "src": "/assets/projects/a-boy-and-his-beard/gameplay-1.webp", "type": "gif",   "caption": "Gameplay animation" },
-      { "src": "/assets/projects/a-boy-and-his-beard/gameplay-2.webp", "type": "gif",   "caption": "Combat animation" },
-      { "src": "/assets/projects/a-boy-and-his-beard/gameplay-3.webp", "type": "gif",   "caption": "Gameplay prototype" },
-      { "src": "/assets/projects/a-boy-and-his-beard/concept.webp",    "type": "image", "caption": "Concept and presentation art" }
+      { "src": "/assets/projects/a-boy-and-his-beard/banner.webp", "type": "image", "caption": "Steam title banner" },
+      { "src": "/assets/projects/a-boy-and-his-beard/tutorial-1.webp", "type": "gif", "caption": "Tutorial design: getting players up to speed with the unusual beard controls" },
+      { "src": "/assets/projects/a-boy-and-his-beard/tutorial-2.webp", "type": "gif", "caption": "Beard interaction feedback: breaking props, leveling up, and confirming the mechanic" },
+      { "src": "/assets/projects/a-boy-and-his-beard/tutorial-3.webp", "type": "gif", "caption": "Grabbing mechanic: chest, key, door, dialogue, and focus cues" },
+      { "src": "/assets/projects/a-boy-and-his-beard/enemy-skellytons.webp", "type": "gif", "caption": "Enemy variation: skeleton projectiles force player movement" },
+      { "src": "/assets/projects/a-boy-and-his-beard/enemy-bikers.webp", "type": "gif", "caption": "Enemy variation: bikers fire knockable projectiles" },
+      { "src": "/assets/projects/a-boy-and-his-beard/enemy-lumberjacks.webp", "type": "gif", "caption": "Enemy variation: lumberjacks drop projectiles that block beard movement" },
+      { "src": "/assets/projects/a-boy-and-his-beard/enemy-vikings.webp", "type": "gif", "caption": "Enemy variation: vikings use shields that can be grabbed and ripped away" },
+      { "src": "/assets/projects/a-boy-and-his-beard/enemy-pirates.webp", "type": "gif", "caption": "Enemy variation: pirate bombers create focused target pressure" },
+      { "src": "/assets/projects/a-boy-and-his-beard/cut-content.webp", "type": "gif", "caption": "Cut-content preview from the original page" },
+      { "src": "/assets/projects/a-boy-and-his-beard/cut-content-imgur.mp4", "type": "video", "caption": "Imgur cut-content loop", "mime": "video/mp4" },
+      { "src": "/assets/projects/a-boy-and-his-beard/special-thanks.webp", "type": "image", "caption": "Special thanks and team credit image" },
+      { "src": "/assets/projects/a-boy-and-his-beard/concept.webp", "type": "image", "caption": "Concept and presentation art" }
     ],
-    "link": ""
+    "link": "https://store.steampowered.com/app/708100/A_Boy_and_His_Beard/"
   },
   {
     "id": "play-two-heroes",
