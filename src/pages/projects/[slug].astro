@@ -51,7 +51,15 @@ const sectionLabels: Record<string, string> = {
             <figure class="media-item">
               <div class="media-frame">
                 {item.type === 'video' ? (
-                  <video class="media-video" controls preload="metadata">
+                  <video
+                    class="media-video"
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    preload="metadata"
+                    aria-label={item.caption || project.title}
+                  >
                     <source src={item.src} type={item.mime || 'video/mp4'} />
                     <a href={item.src}>Open video</a>
                   </video>
