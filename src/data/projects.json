@@ -97,21 +97,6 @@
     "link": ""
   },
   {
-    "id": "southpark-platformer",
-    "title": "South Park Platformer",
-    "slug": "southpark-platformer",
-    "section": "games",
-    "tag": "2D / Pixel Art",
-    "year": "",
-    "status": "",
-    "description": "Pixel art platformer built as a personal project. Custom sprite art, character animation, and game logic.",
-    "thumbnail": "/assets/projects/southpark-platformer/platformer.webp",
-    "media": [
-      { "src": "/assets/projects/southpark-platformer/platformer.webp", "type": "image", "caption": "" }
-    ],
-    "link": ""
-  },
-  {
     "id": "time-travelers-dropbox",
     "title": "Time Travelers DropBox",
     "slug": "time-travelers-dropbox",
@@ -202,22 +187,6 @@
       { "src": "/assets/projects/junkensteins-revenge/gameplay.webp", "type": "gif",   "caption": "Boss mod overview" },
       { "src": "/assets/projects/junkensteins-revenge/roadpull.webp", "type": "gif",   "caption": "Roadhog — pull ultimate" },
       { "src": "/assets/projects/junkensteins-revenge/road-aoe.webp", "type": "gif",   "caption": "Roadhog — stacking AOE damage" }
-    ],
-    "link": ""
-  },
-  {
-    "id": "hearthtone-concepts",
-    "title": "Hearthtone Concepts",
-    "slug": "hearthtone-concepts",
-    "section": "older",
-    "tag": "Concept Art",
-    "year": "",
-    "status": "",
-    "description": "Concept art and card design for a Hearthstone-inspired card game. Dark atmospheric illustration and creature card design.",
-    "thumbnail": "/assets/projects/hearthtone-concepts/carriage.webp",
-    "media": [
-      { "src": "/assets/projects/hearthtone-concepts/carriage.webp", "type": "image", "caption": "Dark forest atmosphere" },
-      { "src": "/assets/projects/hearthtone-concepts/monster.webp",  "type": "image", "caption": "Creature card art" }
     ],
     "link": ""
   },
