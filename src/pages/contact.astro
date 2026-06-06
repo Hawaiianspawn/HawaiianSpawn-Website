@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const socials = [
+  {
+    label: 'Twitter / X',
+    handle: '@hawaiian_spawn',
+    href: 'https://twitter.com/hawaiian_spawn',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+  },
+  {
+    label: 'Instagram',
+    handle: '@hawaiian_spawn',
+    href: 'https://instagram.com/hawaiian_spawn',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
+  },
+  {
+    label: 'Vimeo',
+    handle: 'user8051156',
+    href: 'https://vimeo.com/user8051156',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 12.5c-.719-2.586-1.502-3.878-2.309-3.878-.18 0-.806.378-1.876 1.132L0 8.586c1.182-1.038 2.348-2.077 3.498-3.115C5.08 4.043 6.266 3.31 7.054 3.237c1.882-.18 3.037 1.107 3.468 3.86.468 2.972.793 4.814.977 5.529.543 2.462 1.135 3.692 1.783 3.692.503 0 1.259-.796 2.275-2.384 1.013-1.588 1.554-2.797 1.625-3.628.144-1.371-.395-2.061-1.625-2.061-.578 0-1.173.134-1.783.395 1.184-3.87 3.434-5.755 6.762-5.637 2.473.06 3.639 1.664 3.441 4.813z"/></svg>`,
+  },
+  {
+    label: 'YouTube',
+    handle: '@hawaiian_spawn',
+    href: 'https://youtube.com/@hawaiian_spawn',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>`,
+  },
+];
+---
+
+<BaseLayout
+  title="Contact — Aaron Low"
+  description="Get in touch with Aaron Low, Technical Artist."
+>
+  <div class="page-content">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Contact</h1>
+        <p class="page-subtitle">
+          Want to collaborate or just say hi? Find me on any of these platforms.
+        </p>
+      </div>
+
+      <div class="social-grid">
+        {socials.map(s => (
+          <a href={s.href} target="_blank" rel="noopener noreferrer" class="social-card">
+            <div class="social-icon"><Fragment set:html={s.icon} /></div>
+            <div class="social-info">
+              <span class="social-platform">{s.label}</span>
+              <span class="social-handle">{s.handle}</span>
+            </div>
+            <svg class="social-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        ))}
+      </div>
+
+      <div class="email-section">
+        <h2 class="section-title">Email</h2>
+        <p class="email-text">
+          Prefer email?
+          <a href="mailto:Hawaiian_spawn@live.com">Hawaiian_spawn@live.com</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: 48px;
+  }
+
+  .page-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 480px;
+  }
+
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 64px;
+  }
+
+  .social-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .social-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    color: var(--text);
+  }
+
+  .social-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-surface);
+    border-radius: var(--radius);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .social-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .social-platform {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .social-handle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .social-arrow {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .social-card:hover .social-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  .email-section {
+    margin-top: 24px;
+  }
+
+  .email-text {
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+</style>

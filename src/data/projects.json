@@ -1,0 +1,250 @@
+[
+  {
+    "id": "warhammer-inquisitor",
+    "title": "Warhammer: Inquisitor",
+    "slug": "warhammer-inquisitor",
+    "section": "wips",
+    "tag": "Unreal",
+    "year": "",
+    "status": "In Progress",
+    "description": "Warhammer Inquisitor is a first-person shooter horror game set in the Warhammer 40k universe. A passion project I picked up to further my understanding of Unreal and its new Niagara systems. Currently still in the asset creation phase I would be excited to have something presentable in 2021 if time allows.",
+    "thumbnail": "/assets/projects/warhammer-inquisitor/screenshot-1.webp",
+    "media": [
+      { "src": "/assets/projects/warhammer-inquisitor/screenshot-1.webp", "type": "image", "caption": "Boltgun — modeled from reference" },
+      { "src": "/assets/projects/warhammer-inquisitor/screenshot-2.webp", "type": "image", "caption": "" },
+      { "src": "/assets/projects/warhammer-inquisitor/vfx-1.webp",        "type": "gif",   "caption": "Niagara VFX" },
+      { "src": "/assets/projects/warhammer-inquisitor/vfx-2.webp",        "type": "gif",   "caption": "" },
+      { "src": "/assets/projects/warhammer-inquisitor/vfx-3.webp",        "type": "gif",   "caption": "" },
+      { "src": "/assets/projects/warhammer-inquisitor/vfx-4.webp",        "type": "gif",   "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "dungeon-crawler",
+    "title": "Dungeon Crawler",
+    "slug": "dungeon-crawler",
+    "section": "wips",
+    "tag": "Unity",
+    "year": "2018",
+    "status": "",
+    "description": "The goal of Dungeon Crawler was to make a quick simulator for World of Warcraft's dungeon design. The idea being you can have a greater data set and feedback from testing a dungeon in simulations. Reducing playtesting time to just when you need it. This project had a very high level of scope and I realize I wouldn't have the time to dedicate much to it but it was very insightful in providing me with ideas for GUIs for game testing. Examples are shown in the agro range, line of sight, and Simple AI systems.",
+    "thumbnail": "/assets/projects/dungeon-crawler/gameplay.webp",
+    "media": [
+      { "src": "/assets/projects/dungeon-crawler/gameplay.webp", "type": "gif", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "unreal-cinematics",
+    "title": "Unreal Cinematics Practice",
+    "slug": "unreal-cinematics",
+    "section": "wips",
+    "tag": "Unreal",
+    "year": "2021",
+    "status": "",
+    "description": "This was a quick project to better understand Sequencer and Unreal's new water system. Done over the course of 2 weekends the project was very simple. Half of my work went into retopologizing the hero asset; the skull. Done manually in Maya and baked in Zbrush. Overall the project came out fine. If I had more time I would have figured out how to get transparency shaders to work with the water shader, so the sprite works underwater.",
+    "thumbnail": "/assets/projects/unreal-cinematics/placeholder.svg",
+    "media": [],
+    "link": ""
+  },
+  {
+    "id": "detective-game",
+    "title": "Detective Game",
+    "slug": "detective-game",
+    "section": "wips",
+    "tag": "WIP",
+    "year": "",
+    "status": "In Progress",
+    "description": "Animated art project featuring sculpted character melts and transformations. GIF assets coming soon.",
+    "thumbnail": "/assets/projects/detective-game/placeholder.svg",
+    "media": [],
+    "link": ""
+  },
+  {
+    "id": "table-flipper",
+    "title": "Table Flipper",
+    "slug": "table-flipper",
+    "section": "games",
+    "tag": "Unity",
+    "year": "",
+    "status": "",
+    "description": "3D table-flipping arcade game built in Unity. Responsible for 3D assets, lighting, and game logic.",
+    "thumbnail": "/assets/projects/table-flipper/splash.webp",
+    "media": [
+      { "src": "/assets/projects/table-flipper/splash.webp",    "type": "image", "caption": "Title asset" },
+      { "src": "/assets/projects/table-flipper/gameplay.webp",  "type": "gif",   "caption": "Gameplay" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "escape-from-editor",
+    "title": "Escape From Editor",
+    "slug": "escape-from-editor",
+    "section": "games",
+    "tag": "Unreal",
+    "year": "",
+    "status": "",
+    "description": "Unreal Engine mech combat game. Built and rigged the mech character, designed interior levels with lighting, and authored environmental storytelling through prop placement.",
+    "thumbnail": "/assets/projects/escape-from-editor/mech.webp",
+    "media": [
+      { "src": "/assets/projects/escape-from-editor/mech.webp",      "type": "image", "caption": "Mech character" },
+      { "src": "/assets/projects/escape-from-editor/interior.webp",  "type": "image", "caption": "Interior level design" },
+      { "src": "/assets/projects/escape-from-editor/billboard.webp", "type": "image", "caption": "Environmental storytelling" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "southpark-platformer",
+    "title": "South Park Platformer",
+    "slug": "southpark-platformer",
+    "section": "games",
+    "tag": "2D / Pixel Art",
+    "year": "",
+    "status": "",
+    "description": "Pixel art platformer built as a personal project. Custom sprite art, character animation, and game logic.",
+    "thumbnail": "/assets/projects/southpark-platformer/platformer.webp",
+    "media": [
+      { "src": "/assets/projects/southpark-platformer/platformer.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "play-two-heroes",
+    "title": "Play Two Heroes",
+    "slug": "play-two-heroes",
+    "section": "games",
+    "tag": "Overwatch Workshop",
+    "year": "2019",
+    "status": "",
+    "description": "Play Two Heroes is a mod that takes inspiration from Marvel Vs Capcom 2 and utilizes a hero switch mechanic. Players leverage a broader ability toolkit by switching between two selected heroes, creating more solutions to problems. Six core systems coded: crowd-control prevention, ultimate transfer, health percentage carry-over, switch cooldowns, momentum retention, and tiered cooldown adjustments. Notable edge cases handled include Baby D.Va's 30-second lockout and a visual indicator for cloaked Sombra. Officially acknowledged by Jeff Kaplan (Blizzard) — ranked 11th overall most-played mod by duration, 2nd highest average player retention.",
+    "thumbnail": "/assets/projects/play-two-heroes/logo.webp",
+    "media": [
+      { "src": "/assets/projects/play-two-heroes/logo.webp",      "type": "image", "caption": "Jeff Kaplan acknowledgment — Workshop rankings" },
+      { "src": "/assets/projects/play-two-heroes/gameplay.webp",  "type": "gif",   "caption": "Gameplay demo" }
+    ],
+    "link": "https://www.reddit.com/r/Overwatch/comments/bmlnkc/i_made_a_mod_so_you_can_play_two_heroes_at_once/"
+  },
+  {
+    "id": "junkensteins-revenge",
+    "title": "Junkenstein's New Boss Mod",
+    "slug": "junkensteins-revenge",
+    "section": "games",
+    "tag": "Overwatch Workshop",
+    "year": "2019",
+    "status": "",
+    "description": "A twist on Junkenstein's Revenge providing new powerful enemies through redesigned hero mechanics. Reaper teleports and hacks on ultimate using line-of-sight detection. Roadhog pulls enemies toward him on ultimate with stacking AOE damage. Symmetra spawns sentry turrets every 9 seconds. Junkrat's RIP-tires lack AI movement — Junkenstein moves to the player instead. Mercy given a gun with no forced Valkyrie mode.",
+    "thumbnail": "/assets/projects/junkensteins-revenge/gameplay.webp",
+    "media": [
+      { "src": "/assets/projects/junkensteins-revenge/gameplay.webp", "type": "gif",   "caption": "Boss mod overview" },
+      { "src": "/assets/projects/junkensteins-revenge/roadpull.webp", "type": "gif",   "caption": "Roadhog — pull ultimate" },
+      { "src": "/assets/projects/junkensteins-revenge/road-aoe.webp", "type": "gif",   "caption": "Roadhog — stacking AOE damage" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "hearthtone-concepts",
+    "title": "Hearthtone Concepts",
+    "slug": "hearthtone-concepts",
+    "section": "older",
+    "tag": "Concept Art",
+    "year": "",
+    "status": "",
+    "description": "Concept art and card design for a Hearthstone-inspired card game. Dark atmospheric illustration and creature card design.",
+    "thumbnail": "/assets/projects/hearthtone-concepts/carriage.webp",
+    "media": [
+      { "src": "/assets/projects/hearthtone-concepts/carriage.webp", "type": "image", "caption": "Dark forest atmosphere" },
+      { "src": "/assets/projects/hearthtone-concepts/monster.webp",  "type": "image", "caption": "Creature card art" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "the-spare",
+    "title": "The Spare",
+    "slug": "the-spare",
+    "section": "older",
+    "tag": "3D Animation",
+    "year": "",
+    "status": "",
+    "description": "3D animated title sequence — treehouse environment with stylized lighting.",
+    "thumbnail": "/assets/projects/the-spare/cover.webp",
+    "media": [
+      { "src": "/assets/projects/the-spare/cover.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "thrive-vr",
+    "title": "ThriveVR",
+    "slug": "thrive-vr",
+    "section": "older",
+    "tag": "VR / Unreal",
+    "year": "",
+    "status": "",
+    "description": "Virtual reality game featuring a robot character in a photorealistic interior environment. Environment design and asset work.",
+    "thumbnail": "/assets/projects/thrive-vr/screenshot.webp",
+    "media": [
+      { "src": "/assets/projects/thrive-vr/screenshot.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "low-fruit",
+    "title": "Low Fruit",
+    "slug": "low-fruit",
+    "section": "older",
+    "tag": "3D / Maya",
+    "year": "",
+    "status": "",
+    "description": "Still life 3D render — mango, game controller, rose, and aged book. Lighting and texturing study in Maya.",
+    "thumbnail": "/assets/projects/low-fruit/render.webp",
+    "media": [
+      { "src": "/assets/projects/low-fruit/render.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "character-rig",
+    "title": "Character Rig",
+    "slug": "character-rig",
+    "section": "older",
+    "tag": "Rigging / Maya",
+    "year": "",
+    "status": "",
+    "description": "Stylized character rig built in Maya. Full-body IK/FK control rig with facial controls.",
+    "thumbnail": "/assets/projects/character-rig/screenshot.webp",
+    "media": [
+      { "src": "/assets/projects/character-rig/screenshot.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "hanamikoji",
+    "title": "Hanamikoji",
+    "slug": "hanamikoji",
+    "section": "older",
+    "tag": "Tabletop",
+    "year": "",
+    "status": "",
+    "description": "Physical card game design and production. Designed, printed, and played.",
+    "thumbnail": "/assets/projects/hanamikoji/photo.webp",
+    "media": [
+      { "src": "/assets/projects/hanamikoji/photo.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "cabin-render",
+    "title": "Cabin Lighting Study",
+    "slug": "cabin-render",
+    "section": "older",
+    "tag": "3D / Maya",
+    "year": "",
+    "status": "",
+    "description": "Maya exterior render — cabin with windmill, tree, and natural lighting study.",
+    "thumbnail": "/assets/projects/cabin-render/render.webp",
+    "media": [
+      { "src": "/assets/projects/cabin-render/render.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  }
+]
