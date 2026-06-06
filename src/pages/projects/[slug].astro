@@ -1,0 +1,188 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import projects from '../../data/projects.json';
+
+export function getStaticPaths() {
+  return projects.map(p => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = projects.find(p => p.slug === slug)!;
+
+const sectionLabels: Record<string, string> = {
+  wips:  'WIPs & Small Projects',
+  games: 'Games & Mods',
+  older: 'Older Works',
+};
+---
+
+<BaseLayout
+  title={`${project.title} — Aaron Low`}
+  description={project.description}
+>
+  <div class="page-content">
+    <div class="container">
+
+      <nav class="breadcrumb">
+        <a href="/">← All Work</a>
+        <span class="sep">/</span>
+        <a href={`/#${project.section}`}>{sectionLabels[project.section]}</a>
+      </nav>
+
+      <header class="project-header">
+        <div class="project-meta">
+          {project.tag    && <span class="chip">{project.tag}</span>}
+          {project.year   && <span class="chip chip-muted">{project.year}</span>}
+          {project.status && <span class="chip chip-accent">{project.status}</span>}
+        </div>
+        <h1 class="project-title">{project.title}</h1>
+        {project.description && <p class="project-desc">{project.description}</p>}
+        {project.link && (
+          <a href={project.link} target="_blank" rel="noopener noreferrer" class="btn btn-primary project-link">
+            View Project
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        )}
+      </header>
+
+      {project.media.length > 0 ? (
+        <div class="media-grid">
+          {project.media.map(item => (
+            <figure class="media-item">
+              <div class="media-frame">
+                <img
+                  src={item.src}
+                  alt={item.caption || project.title}
+                  loading="lazy"
+                  class:list={['media-img', { 'is-gif': item.type === 'gif' }]}
+                />
+              </div>
+              {item.caption && <figcaption class="media-caption">{item.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      ) : (
+        <div class="media-empty">
+          <p>Media coming soon.</p>
+        </div>
+      )}
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 36px;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover { color: var(--accent); }
+
+  .sep { color: var(--border); }
+
+  .project-header {
+    margin-bottom: 48px;
+  }
+
+  .project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .chip-accent {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: transparent;
+  }
+
+  .chip-muted { color: var(--text-muted); }
+
+  .project-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+
+  .project-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 680px;
+    margin-bottom: 24px;
+  }
+
+  .project-link { align-self: flex-start; }
+
+  /* Media grid */
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+  }
+
+  .media-item {
+    margin: 0;
+  }
+
+  .media-frame {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .media-caption {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding-left: 2px;
+  }
+
+  .media-empty {
+    padding: 80px 0;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+  }
+
+  @media (max-width: 600px) {
+    .media-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

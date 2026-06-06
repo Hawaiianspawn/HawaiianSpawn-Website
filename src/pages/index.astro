@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import projects from '../data/projects.json';
+
+const wips  = projects.filter(p => p.section === 'wips');
+const games = projects.filter(p => p.section === 'games');
+const older = projects.filter(p => p.section === 'older');
+
+const sections = [
+  { id: 'wips',  title: 'WIPs & Small Projects', items: wips  },
+  { id: 'games', title: 'Games & Mods',           items: games },
+  { id: 'older', title: 'Older Works',            items: older },
+];
+---
+
+<BaseLayout
+  title="Aaron Low — Technical Artist"
+  description="Portfolio of Aaron Low, Technical Artist and Game Designer based in Hawaii."
+>
+  <div class="page-content">
+    <div class="container">
+
+      <section class="hero">
+        <div class="hero-body">
+          <div class="hero-text">
+            <h1 class="hero-name">Aaron Low</h1>
+            <p class="hero-role">Technical Artist</p>
+            <p class="hero-bio">
+              A kid from Hawaii with an earnest desire to pay it forward for what games
+              have done for me. A long journey with many obstacles — here's what I've built
+              along the way.
+            </p>
+            <div class="hero-actions">
+              <a href="/reel" class="btn btn-primary">Watch Reel</a>
+              <a href="/resume" class="btn btn-outline">View Resume</a>
+            </div>
+          </div>
+          <div class="hero-photo">
+            <img src="/assets/projects/profile/photo.jpg" alt="Aaron Low" />
+          </div>
+        </div>
+      </section>
+
+      {sections.map(section => section.items.length > 0 && (
+        <section class="gallery-section" id={section.id}>
+          <h2 class="section-title">{section.title}</h2>
+          <div class="project-grid">
+            {section.items.map(project => (
+              <ProjectCard
+                id={project.id}
+                title={project.title}
+                description={project.description}
+                thumbnail={project.thumbnail}
+                tag={project.tag || undefined}
+                mediaCount={project.media.length}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 24px 0 72px;
+  }
+
+  .hero-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+  }
+
+  .hero-text { flex: 1; }
+
+  .hero-name {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .hero-role {
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+
+  .hero-bio {
+    max-width: 520px;
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hero-photo {
+    flex-shrink: 0;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--border);
+  }
+
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 640px) {
+    .hero-body {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .hero-photo {
+      width: 100px;
+      height: 100px;
+    }
+  }
+</style>
