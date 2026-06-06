@@ -61,6 +61,45 @@
     "link": ""
   },
   {
+    "id": "perfect-dark",
+    "title": "Perfect Dark",
+    "slug": "perfect-dark",
+    "section": "games",
+    "tag": "Animation / Technical Art",
+    "year": "",
+    "status": "In Progress",
+    "description": "Perfect Dark breakdown page for animation and technical art work, including hero-shot presentation, first-person combat systems, slide takedowns, Control Rig execution, and crowd facial emotion systems.",
+    "thumbnail": "/assets/projects/perfect-dark/HeroShotWork.webp",
+    "media": [
+      {
+        "src": "/assets/projects/perfect-dark/HeroShotWork.webp",
+        "type": "image",
+        "caption": "Hero shot presentation work"
+      },
+      {
+        "src": "/assets/projects/perfect-dark/First Person Combat system.webp",
+        "type": "gif",
+        "caption": "First-person combat system work"
+      },
+      {
+        "src": "/assets/projects/perfect-dark/SlideTakedown.webp",
+        "type": "gif",
+        "caption": "Slide takedown interaction"
+      },
+      {
+        "src": "/assets/projects/perfect-dark/ControlRigMultiExecution.webp",
+        "type": "gif",
+        "caption": "Control Rig multi-execution setup"
+      },
+      {
+        "src": "/assets/projects/perfect-dark/CrowdFacialEmotionSystem.webp",
+        "type": "gif",
+        "caption": "Crowd facial emotion system"
+      }
+    ],
+    "link": ""
+  },
+  {
     "id": "hogwarts-legacy",
     "title": "Hogwarts Legacy",
     "slug": "hogwarts-legacy",
@@ -378,45 +417,6 @@
         "src": "/assets/projects/junkensteins-revenge/road-aoe.webp",
         "type": "gif",
         "caption": "Roadhog — stacking AOE damage"
-      }
-    ],
-    "link": ""
-  },
-  {
-    "id": "perfect-dark",
-    "title": "Perfect Dark",
-    "slug": "perfect-dark",
-    "section": "games",
-    "tag": "Animation / Technical Art",
-    "year": "",
-    "status": "In Progress",
-    "description": "Perfect Dark breakdown page for animation and technical art work, including hero-shot presentation, first-person combat systems, slide takedowns, Control Rig execution, and crowd facial emotion systems.",
-    "thumbnail": "/assets/projects/perfect-dark/HeroShotWork.webp",
-    "media": [
-      {
-        "src": "/assets/projects/perfect-dark/HeroShotWork.webp",
-        "type": "image",
-        "caption": "Hero shot presentation work"
-      },
-      {
-        "src": "/assets/projects/perfect-dark/First Person Combat system.webp",
-        "type": "gif",
-        "caption": "First-person combat system work"
-      },
-      {
-        "src": "/assets/projects/perfect-dark/SlideTakedown.webp",
-        "type": "gif",
-        "caption": "Slide takedown interaction"
-      },
-      {
-        "src": "/assets/projects/perfect-dark/ControlRigMultiExecution.webp",
-        "type": "gif",
-        "caption": "Control Rig multi-execution setup"
-      },
-      {
-        "src": "/assets/projects/perfect-dark/CrowdFacialEmotionSystem.webp",
-        "type": "gif",
-        "caption": "Crowd facial emotion system"
       }
     ],
     "link": ""
