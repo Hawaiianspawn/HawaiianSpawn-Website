@@ -1,23 +1,38 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const youtubeVideoId = '';
-const vimeoVideoId = '';
-
 const videos = [
-  youtubeVideoId && {
+  {
     title: 'Demo Reel',
-    embedUrl: `https://www.youtube.com/embed/${youtubeVideoId}`,
+    embedUrl: 'https://www.youtube.com/embed/cODxyX-7pAE',
     platform: 'YouTube',
     description: 'General demo reel showcasing technical art and game design work.',
   },
-  vimeoVideoId && {
-    title: 'Rigging Reel 2012',
-    embedUrl: `https://player.vimeo.com/video/${vimeoVideoId}?title=0&byline=0&portrait=0`,
+  {
+    title: 'The Spare',
+    embedUrl: 'https://player.vimeo.com/video/42439088?title=0&byline=0&portrait=0',
     platform: 'Vimeo',
-    description: 'Character rigging reel — IK/FK systems, facial controls, and deformation work.',
+    description: 'Five-minute animated short produced with a group of 12.',
   },
-].filter(Boolean);
+  {
+    title: 'Thrive Inspire Reel',
+    embedUrl: 'https://player.vimeo.com/video/156515019?title=0&byline=0&portrait=0',
+    platform: 'Vimeo',
+    description: 'Promotional reel connected to the Thrive VR physical therapy project.',
+  },
+  {
+    title: 'Generalist Reel 2012',
+    embedUrl: 'https://player.vimeo.com/video/42337411?title=0&byline=0&portrait=0',
+    platform: 'Vimeo',
+    description: 'Older generalist reel included to preserve the work history from the original site.',
+  },
+  {
+    title: 'Rigging Reel 2012',
+    embedUrl: 'https://player.vimeo.com/video/42337346?title=0&byline=0&portrait=0',
+    platform: 'Vimeo',
+    description: 'Character rigging reel covering IK/FK systems, facial controls, and deformation work.',
+  },
+];
 ---
 
 <BaseLayout

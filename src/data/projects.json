@@ -49,15 +49,18 @@
   },
   {
     "id": "detective-game",
-    "title": "Detective Game",
+    "title": "Detective",
     "slug": "detective-game",
     "section": "wips",
-    "tag": "WIP",
+    "tag": "InDesign Game",
     "year": "",
     "status": "In Progress",
-    "description": "Animated art project featuring sculpted character melts and transformations. GIF assets coming soon.",
-    "thumbnail": "/assets/projects/detective-game/placeholder.svg",
-    "media": [],
+    "description": "InDesign detective game project featuring Mona Lisa themed interaction and animated presentation work.",
+    "thumbnail": "/assets/projects/detective-game/cover.webp",
+    "media": [
+      { "src": "/assets/projects/detective-game/cover.webp", "type": "image", "caption": "Detective game cover" },
+      { "src": "/assets/projects/detective-game/mona.webp",  "type": "gif",   "caption": "Mona interaction animation" }
+    ],
     "link": ""
   },
   {
@@ -105,6 +108,44 @@
     "thumbnail": "/assets/projects/southpark-platformer/platformer.webp",
     "media": [
       { "src": "/assets/projects/southpark-platformer/platformer.webp", "type": "image", "caption": "" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "time-travelers-dropbox",
+    "title": "Time Travelers DropBox",
+    "slug": "time-travelers-dropbox",
+    "section": "games",
+    "tag": "Card Game",
+    "year": "",
+    "status": "",
+    "description": "Competitive card game design built around time-traveling characters and item cards. The project focused on readable card layout, iconography, and tabletop presentation.",
+    "thumbnail": "/assets/projects/time-travelers-dropbox/card-1.webp",
+    "media": [
+      { "src": "/assets/projects/time-travelers-dropbox/card-1.webp", "type": "image", "caption": "Card layout sample" },
+      { "src": "/assets/projects/time-travelers-dropbox/card-2.webp", "type": "image", "caption": "Character card" },
+      { "src": "/assets/projects/time-travelers-dropbox/card-3.webp", "type": "image", "caption": "Character card" },
+      { "src": "/assets/projects/time-travelers-dropbox/card-4.webp", "type": "image", "caption": "Item card" },
+      { "src": "/assets/projects/time-travelers-dropbox/card-5.webp", "type": "image", "caption": "Item card" }
+    ],
+    "link": ""
+  },
+  {
+    "id": "a-boy-and-his-beard",
+    "title": "A Boy and His Beard",
+    "slug": "a-boy-and-his-beard",
+    "section": "games",
+    "tag": "Twin Stick",
+    "year": "",
+    "status": "",
+    "description": "Twin-stick beat 'em up prototype with animated combat and character-driven presentation. The project explored quick readability for attacks, movement, and enemy reactions.",
+    "thumbnail": "/assets/projects/a-boy-and-his-beard/banner.webp",
+    "media": [
+      { "src": "/assets/projects/a-boy-and-his-beard/banner.webp",     "type": "image", "caption": "Title banner" },
+      { "src": "/assets/projects/a-boy-and-his-beard/gameplay-1.webp", "type": "gif",   "caption": "Gameplay animation" },
+      { "src": "/assets/projects/a-boy-and-his-beard/gameplay-2.webp", "type": "gif",   "caption": "Combat animation" },
+      { "src": "/assets/projects/a-boy-and-his-beard/gameplay-3.webp", "type": "gif",   "caption": "Gameplay prototype" },
+      { "src": "/assets/projects/a-boy-and-his-beard/concept.webp",    "type": "image", "caption": "Concept and presentation art" }
     ],
     "link": ""
   },
@@ -180,10 +221,16 @@
     "tag": "VR / Unreal",
     "year": "",
     "status": "",
-    "description": "Virtual reality game featuring a robot character in a photorealistic interior environment. Environment design and asset work.",
+    "description": "Physical therapy VR game and promotional prototype work. Built around approachable motion, robot character presentation, and readable VR interactions.",
     "thumbnail": "/assets/projects/thrive-vr/screenshot.webp",
     "media": [
-      { "src": "/assets/projects/thrive-vr/screenshot.webp", "type": "image", "caption": "" }
+      { "src": "/assets/projects/thrive-vr/screenshot.webp", "type": "image", "caption": "Environment screenshot" },
+      { "src": "/assets/projects/thrive-vr/promo.webp",      "type": "image", "caption": "Promotional still" },
+      { "src": "/assets/projects/thrive-vr/therapy-1.webp",  "type": "gif",   "caption": "Therapy interaction" },
+      { "src": "/assets/projects/thrive-vr/therapy-2.webp",  "type": "gif",   "caption": "VR interaction prototype" },
+      { "src": "/assets/projects/thrive-vr/therapy-3.webp",  "type": "gif",   "caption": "Motion and feedback test" },
+      { "src": "/assets/projects/thrive-vr/therapy-4.webp",  "type": "gif",   "caption": "Robot presentation" },
+      { "src": "/assets/projects/thrive-vr/therapy-5.webp",  "type": "gif",   "caption": "Gameplay interaction" }
     ],
     "link": ""
   },
