@@ -19,3 +19,14 @@ npm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# local source media kept outside the published site assets
+public/assets/projects/hogwarts-legacy/2) Raw Mocap Side by Side.mp4
+public/assets/projects/hogwarts-legacy/71798f30-054b-4368-941f-67c22638159e_73_Capture_3.jpg
+public/assets/projects/hogwarts-legacy/Action in Volume.mkv
+public/assets/projects/hogwarts-legacy/IKinUnreal.mkv
+public/assets/projects/hogwarts-legacy/SceneRig.gif
+public/assets/projects/hogwarts-legacy/WizardPHD - wBrushSounds.mp4
+public/assets/projects/play-two-heroes/JRGetAway.mp4
+public/assets/projects/play-two-heroes/WhereDidThebastionComefrom.mp4
+public/assets/projects/play-two-heroes/YourDestinyIsYourOwn.mp4

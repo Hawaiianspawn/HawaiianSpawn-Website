@@ -50,12 +50,23 @@ const sectionLabels: Record<string, string> = {
           {project.media.map(item => (
             <figure class="media-item">
               <div class="media-frame">
-                <img
-                  src={item.src}
-                  alt={item.caption || project.title}
-                  loading="lazy"
-                  class:list={['media-img', { 'is-gif': item.type === 'gif' }]}
-                />
+                {item.type === 'video' ? (
+                  <video class="media-video" controls preload="metadata">
+                    <source src={item.src} type={item.mime || 'video/mp4'} />
+                    <a href={item.src}>Open video</a>
+                  </video>
+                ) : item.type === 'file' ? (
+                  <a class="media-download" href={item.src}>
+                    Open media file
+                  </a>
+                ) : (
+                  <img
+                    src={item.src}
+                    alt={item.caption || project.title}
+                    loading="lazy"
+                    class:list={['media-img', { 'is-gif': item.type === 'gif' }]}
+                  />
+                )}
               </div>
               {item.caption && <figcaption class="media-caption">{item.caption}</figcaption>}
             </figure>
@@ -166,6 +177,23 @@ const sectionLabels: Record<string, string> = {
     height: 100%;
     object-fit: contain;
     display: block;
+  }
+
+  .media-video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #000;
+  }
+
+  .media-download {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--accent);
+    font-weight: 600;
   }
 
   .media-caption {

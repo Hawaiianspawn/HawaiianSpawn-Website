@@ -158,12 +158,35 @@
     "year": "2019",
     "status": "",
     "description": "Play Two Heroes is a mod that takes inspiration from Marvel Vs Capcom 2 and utilizes a hero switch mechanic. Players leverage a broader ability toolkit by switching between two selected heroes, creating more solutions to problems. Six core systems coded: crowd-control prevention, ultimate transfer, health percentage carry-over, switch cooldowns, momentum retention, and tiered cooldown adjustments. Notable edge cases handled include Baby D.Va's 30-second lockout and a visual indicator for cloaked Sombra. Officially acknowledged by Jeff Kaplan (Blizzard) — ranked 11th overall most-played mod by duration, 2nd highest average player retention.",
-    "thumbnail": "/assets/projects/play-two-heroes/logo.webp",
+    "thumbnail": "/assets/projects/play-two-heroes/gameplay.webp",
     "media": [
       { "src": "/assets/projects/play-two-heroes/logo.webp",      "type": "image", "caption": "Jeff Kaplan acknowledgment — Workshop rankings" },
-      { "src": "/assets/projects/play-two-heroes/gameplay.webp",  "type": "gif",   "caption": "Gameplay demo" }
+      { "src": "/assets/projects/play-two-heroes/gameplay.webp",  "type": "gif",   "caption": "Gameplay demo" },
+      { "src": "/assets/projects/play-two-heroes/jr-get-away.mp4", "type": "video", "caption": "JR get away clip", "mime": "video/mp4" },
+      { "src": "/assets/projects/play-two-heroes/where-did-the-bastion-come-from.mp4", "type": "video", "caption": "Bastion switch clip", "mime": "video/mp4" },
+      { "src": "/assets/projects/play-two-heroes/your-destiny-is-your-own.mp4", "type": "video", "caption": "Hero switch clip", "mime": "video/mp4" }
     ],
     "link": "https://www.reddit.com/r/Overwatch/comments/bmlnkc/i_made_a_mod_so_you_can_play_two_heroes_at_once/"
+  },
+  {
+    "id": "hogwarts-legacy",
+    "title": "Hogwarts Legacy",
+    "slug": "hogwarts-legacy",
+    "section": "games",
+    "tag": "Animation / Technical Art",
+    "year": "",
+    "status": "",
+    "description": "Hogwarts Legacy production and technical animation work, including mocap review, Unreal IK tests, scene rigging, and wizard interaction footage.",
+    "thumbnail": "/assets/projects/hogwarts-legacy/scene-rig.webp",
+    "media": [
+      { "src": "/assets/projects/hogwarts-legacy/scene-rig.webp", "type": "gif", "caption": "Scene rig animation" },
+      { "src": "/assets/projects/hogwarts-legacy/71798f30-054b-4368-941f-67c22638159e_73_Capture_3.webp", "type": "image", "caption": "Capture still" },
+      { "src": "/assets/projects/hogwarts-legacy/raw-mocap-side-by-side.mp4", "type": "video", "caption": "Raw mocap side-by-side", "mime": "video/mp4" },
+      { "src": "/assets/projects/hogwarts-legacy/action-in-volume.mp4", "type": "video", "caption": "Action in volume", "mime": "video/mp4" },
+      { "src": "/assets/projects/hogwarts-legacy/ik-in-unreal.mp4", "type": "video", "caption": "IK in Unreal", "mime": "video/mp4" },
+      { "src": "/assets/projects/hogwarts-legacy/wizard-phd-brush-sounds.mp4", "type": "video", "caption": "Wizard PHD brush interaction with sounds", "mime": "video/mp4" }
+    ],
+    "link": ""
   },
   {
     "id": "junkensteins-revenge",
