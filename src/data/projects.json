@@ -1,36 +1,20 @@
 [
   {
-    "id": "warhammer-inquisitor",
-    "title": "Warhammer: Inquisitor",
-    "slug": "warhammer-inquisitor",
-    "section": "wips",
-    "tag": "Unreal",
-    "year": "",
-    "status": "In Progress",
-    "description": "Warhammer Inquisitor is a first-person shooter horror game set in the Warhammer 40k universe. A passion project I picked up to further my understanding of Unreal and its new Niagara systems. Currently still in the asset creation phase I would be excited to have something presentable in 2021 if time allows.",
-    "thumbnail": "/assets/projects/warhammer-inquisitor/screenshot-1.webp",
-    "media": [
-      { "src": "/assets/projects/warhammer-inquisitor/screenshot-1.webp", "type": "image", "caption": "Boltgun — modeled from reference" },
-      { "src": "/assets/projects/warhammer-inquisitor/screenshot-2.webp", "type": "image", "caption": "" },
-      { "src": "/assets/projects/warhammer-inquisitor/vfx-1.webp",        "type": "gif",   "caption": "Niagara VFX" },
-      { "src": "/assets/projects/warhammer-inquisitor/vfx-2.webp",        "type": "gif",   "caption": "" },
-      { "src": "/assets/projects/warhammer-inquisitor/vfx-3.webp",        "type": "gif",   "caption": "" },
-      { "src": "/assets/projects/warhammer-inquisitor/vfx-4.webp",        "type": "gif",   "caption": "" }
-    ],
-    "link": ""
-  },
-  {
     "id": "dungeon-crawler",
     "title": "Dungeon Crawler",
     "slug": "dungeon-crawler",
-    "section": "wips",
+    "section": "older",
     "tag": "Unity",
     "year": "2018",
     "status": "",
     "description": "The goal of Dungeon Crawler was to make a quick simulator for World of Warcraft's dungeon design. The idea being you can have a greater data set and feedback from testing a dungeon in simulations. Reducing playtesting time to just when you need it. This project had a very high level of scope and I realize I wouldn't have the time to dedicate much to it but it was very insightful in providing me with ideas for GUIs for game testing. Examples are shown in the agro range, line of sight, and Simple AI systems.",
     "thumbnail": "/assets/projects/dungeon-crawler/gameplay.webp",
     "media": [
-      { "src": "/assets/projects/dungeon-crawler/gameplay.webp", "type": "gif", "caption": "" }
+      {
+        "src": "/assets/projects/dungeon-crawler/gameplay.webp",
+        "type": "gif",
+        "caption": ""
+      }
     ],
     "link": ""
   },
@@ -38,7 +22,7 @@
     "id": "unreal-cinematics",
     "title": "Unreal Cinematics Practice",
     "slug": "unreal-cinematics",
-    "section": "wips",
+    "section": "older",
     "tag": "Unreal",
     "year": "2021",
     "status": "",
@@ -51,31 +35,89 @@
     "id": "detective-game",
     "title": "Detective",
     "slug": "detective-game",
-    "section": "wips",
+    "section": "older",
     "tag": "InDesign Game",
     "year": "",
     "status": "In Progress",
     "description": "InDesign detective game project featuring Mona Lisa themed interaction and animated presentation work.",
     "thumbnail": "/assets/projects/detective-game/cover.webp",
     "media": [
-      { "src": "/assets/projects/detective-game/cover.webp", "type": "image", "caption": "Detective game cover" },
-      { "src": "/assets/projects/detective-game/mona.webp",  "type": "gif",   "caption": "Mona interaction animation" }
+      {
+        "src": "/assets/projects/detective-game/cover.webp",
+        "type": "image",
+        "caption": "Detective game cover"
+      },
+      {
+        "src": "/assets/projects/detective-game/mona.webp",
+        "type": "gif",
+        "caption": "Mona interaction animation"
+      },
+      {
+        "src": "/assets/projects/detective-game/vfx-4.webp",
+        "type": "gif",
+        "caption": "Additional detective game interaction capture"
+      }
     ],
     "link": ""
   },
   {
-    "id": "table-flipper",
-    "title": "Table Flipper",
-    "slug": "table-flipper",
+    "id": "hogwarts-legacy",
+    "title": "Hogwarts Legacy",
+    "slug": "hogwarts-legacy",
     "section": "games",
-    "tag": "Unity",
+    "tag": "Animation / Technical Art",
     "year": "",
     "status": "",
-    "description": "3D table-flipping arcade game built in Unity. Responsible for 3D assets, lighting, and game logic.",
-    "thumbnail": "/assets/projects/table-flipper/splash.webp",
+    "featured": true,
+    "description": "Hogwarts Legacy production and technical animation work, including mocap review, Unreal IK tests, scene rigging, and wizard interaction footage.",
+    "thumbnail": "/assets/projects/hogwarts-legacy/scene-rig.webp",
     "media": [
-      { "src": "/assets/projects/table-flipper/splash.webp",    "type": "image", "caption": "Title asset" },
-      { "src": "/assets/projects/table-flipper/gameplay.webp",  "type": "gif",   "caption": "Gameplay" }
+      {
+        "src": "/assets/projects/hogwarts-legacy/scene-rig.webp",
+        "type": "gif",
+        "caption": "Scene rig animation"
+      },
+      {
+        "src": "/assets/projects/hogwarts-legacy/71798f30-054b-4368-941f-67c22638159e_73_Capture_3.webp",
+        "type": "image",
+        "caption": "Capture still"
+      },
+      {
+        "src": "/assets/projects/hogwarts-legacy/raw-mocap-side-by-side.mp4",
+        "type": "video",
+        "caption": "Raw mocap side-by-side",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/hogwarts-legacy/action-in-volume.mp4",
+        "type": "video",
+        "caption": "Action in volume",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/hogwarts-legacy/ik-in-unreal.mp4",
+        "type": "video",
+        "caption": "IK in Unreal",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/hogwarts-legacy/wizard-phd-brush-sounds.mp4",
+        "type": "video",
+        "caption": "Wizard PHD brush interaction with sounds",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/hogwarts-legacy/avalanche-twitch-stream-web.mp4",
+        "type": "video",
+        "caption": "Avalanche stream showcase clip",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/hogwarts-legacy/ava-pets-web.mp4",
+        "type": "video",
+        "caption": "Ava pets interaction clip",
+        "mime": "video/mp4"
+      }
     ],
     "link": ""
   },
@@ -84,63 +126,56 @@
     "title": "Escape From Editor",
     "slug": "escape-from-editor",
     "section": "games",
-    "tag": "Unreal",
-    "year": "",
+    "tag": "Unreal Fellowship",
+    "year": "2025",
     "status": "",
-    "description": "Unreal Engine mech combat game. Built and rigged the mech character, designed interior levels with lighting, and authored environmental storytelling through prop placement.",
-    "thumbnail": "/assets/projects/escape-from-editor/mech.webp",
+    "description": "Unreal Fellowship arcade project and postmortem built around a light-gun style experience, using Unreal Engine examples, Sinden Lightgun integration, Blueprints, Control Rig, retargeting, and rapid prototyping within a three-week timeline.",
+    "thumbnail": "/assets/projects/escape-from-editor/fellowship-intro-card.webp",
     "media": [
-      { "src": "/assets/projects/escape-from-editor/mech.webp",      "type": "image", "caption": "Mech character" },
-      { "src": "/assets/projects/escape-from-editor/interior.webp",  "type": "image", "caption": "Interior level design" },
-      { "src": "/assets/projects/escape-from-editor/billboard.webp", "type": "image", "caption": "Environmental storytelling" }
+      {
+        "src": "/assets/projects/escape-from-editor/fellowship-intro-web.mp4",
+        "type": "video",
+        "caption": "Unreal Fellowship arcade project intro",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/escape-from-editor/dodge-test.webp",
+        "type": "gif",
+        "caption": "Sinden Lightgun dodge test"
+      },
+      {
+        "src": "/assets/projects/escape-from-editor/realistic-rendering-menu-web.mp4",
+        "type": "video",
+        "caption": "Realistic Rendering sample repurposed for the menu system",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/escape-from-editor/ai-study.webp",
+        "type": "gif",
+        "caption": "AI study and Unreal gameplay prototype"
+      },
+      {
+        "src": "/assets/projects/escape-from-editor/prank-war.webp",
+        "type": "gif",
+        "caption": "Damascus prank-war gameplay moment"
+      },
+      {
+        "src": "/assets/projects/escape-from-editor/mech.webp",
+        "type": "image",
+        "caption": "Mech character"
+      },
+      {
+        "src": "/assets/projects/escape-from-editor/interior.webp",
+        "type": "image",
+        "caption": "Interior level design"
+      },
+      {
+        "src": "/assets/projects/escape-from-editor/billboard.webp",
+        "type": "image",
+        "caption": "Environmental storytelling"
+      }
     ],
-    "link": ""
-  },
-  {
-    "id": "time-travelers-dropbox",
-    "title": "Time Travelers DropBox",
-    "slug": "time-travelers-dropbox",
-    "section": "games",
-    "tag": "Card Game",
-    "year": "",
-    "status": "",
-    "description": "Competitive card game design built around time-traveling characters and item cards. The project focused on readable card layout, iconography, and tabletop presentation.",
-    "thumbnail": "/assets/projects/time-travelers-dropbox/card-1.webp",
-    "media": [
-      { "src": "/assets/projects/time-travelers-dropbox/card-1.webp", "type": "image", "caption": "Card layout sample" },
-      { "src": "/assets/projects/time-travelers-dropbox/card-2.webp", "type": "image", "caption": "Character card" },
-      { "src": "/assets/projects/time-travelers-dropbox/card-3.webp", "type": "image", "caption": "Character card" },
-      { "src": "/assets/projects/time-travelers-dropbox/card-4.webp", "type": "image", "caption": "Item card" },
-      { "src": "/assets/projects/time-travelers-dropbox/card-5.webp", "type": "image", "caption": "Item card" }
-    ],
-    "link": ""
-  },
-  {
-    "id": "a-boy-and-his-beard",
-    "title": "A Boy and His Beard",
-    "slug": "a-boy-and-his-beard",
-    "section": "games",
-    "tag": "PC Steam",
-    "year": "2018",
-    "status": "",
-    "description": "Released twin-stick beat 'em up where players steal beards from lumberjacks, vikings, pirates, bikers, and skeletons to unlock new potential. Contributed production scheduling, mechanics and enemy design, balancing, main character creation, rigging, animation, polish, and publishing.",
-    "thumbnail": "/assets/projects/a-boy-and-his-beard/banner.webp",
-    "media": [
-      { "src": "/assets/projects/a-boy-and-his-beard/banner.webp", "type": "image", "caption": "Steam title banner" },
-      { "src": "/assets/projects/a-boy-and-his-beard/tutorial-1.webp", "type": "gif", "caption": "Tutorial design: getting players up to speed with the unusual beard controls" },
-      { "src": "/assets/projects/a-boy-and-his-beard/tutorial-2.webp", "type": "gif", "caption": "Beard interaction feedback: breaking props, leveling up, and confirming the mechanic" },
-      { "src": "/assets/projects/a-boy-and-his-beard/tutorial-3.webp", "type": "gif", "caption": "Grabbing mechanic: chest, key, door, dialogue, and focus cues" },
-      { "src": "/assets/projects/a-boy-and-his-beard/enemy-skellytons.webp", "type": "gif", "caption": "Enemy variation: skeleton projectiles force player movement" },
-      { "src": "/assets/projects/a-boy-and-his-beard/enemy-bikers.webp", "type": "gif", "caption": "Enemy variation: bikers fire knockable projectiles" },
-      { "src": "/assets/projects/a-boy-and-his-beard/enemy-lumberjacks.webp", "type": "gif", "caption": "Enemy variation: lumberjacks drop projectiles that block beard movement" },
-      { "src": "/assets/projects/a-boy-and-his-beard/enemy-vikings.webp", "type": "gif", "caption": "Enemy variation: vikings use shields that can be grabbed and ripped away" },
-      { "src": "/assets/projects/a-boy-and-his-beard/enemy-pirates.webp", "type": "gif", "caption": "Enemy variation: pirate bombers create focused target pressure" },
-      { "src": "/assets/projects/a-boy-and-his-beard/cut-content.webp", "type": "gif", "caption": "Cut-content preview from the original page" },
-      { "src": "/assets/projects/a-boy-and-his-beard/cut-content-imgur.mp4", "type": "video", "caption": "Imgur cut-content loop", "mime": "video/mp4" },
-      { "src": "/assets/projects/a-boy-and-his-beard/special-thanks.webp", "type": "image", "caption": "Special thanks and team credit image" },
-      { "src": "/assets/projects/a-boy-and-his-beard/concept.webp", "type": "image", "caption": "Concept and presentation art" }
-    ],
-    "link": "https://store.steampowered.com/app/708100/A_Boy_and_His_Beard/"
+    "link": "https://forums.unrealengine.com/t/fellowship-in-games-postmortem-arcades/2302090"
   },
   {
     "id": "play-two-heroes",
@@ -153,33 +188,169 @@
     "description": "Play Two Heroes is a mod that takes inspiration from Marvel Vs Capcom 2 and utilizes a hero switch mechanic. Players leverage a broader ability toolkit by switching between two selected heroes, creating more solutions to problems. Six core systems coded: crowd-control prevention, ultimate transfer, health percentage carry-over, switch cooldowns, momentum retention, and tiered cooldown adjustments. Notable edge cases handled include Baby D.Va's 30-second lockout and a visual indicator for cloaked Sombra. Officially acknowledged by Jeff Kaplan (Blizzard) — ranked 11th overall most-played mod by duration, 2nd highest average player retention.",
     "thumbnail": "/assets/projects/play-two-heroes/gameplay.webp",
     "media": [
-      { "src": "/assets/projects/play-two-heroes/logo.webp",      "type": "image", "caption": "Jeff Kaplan acknowledgment — Workshop rankings" },
-      { "src": "/assets/projects/play-two-heroes/gameplay.webp",  "type": "gif",   "caption": "Gameplay demo" },
-      { "src": "/assets/projects/play-two-heroes/jr-get-away.mp4", "type": "video", "caption": "JR get away clip", "mime": "video/mp4" },
-      { "src": "/assets/projects/play-two-heroes/where-did-the-bastion-come-from.mp4", "type": "video", "caption": "Bastion switch clip", "mime": "video/mp4" },
-      { "src": "/assets/projects/play-two-heroes/your-destiny-is-your-own.mp4", "type": "video", "caption": "Hero switch clip", "mime": "video/mp4" }
+      {
+        "src": "/assets/projects/play-two-heroes/Play Two Heroes.PNG",
+        "type": "image",
+        "caption": "Play Two Heroes project image"
+      },
+      {
+        "src": "/assets/projects/play-two-heroes/gameplay.webp",
+        "type": "gif",
+        "caption": "Gameplay demo"
+      },
+      {
+        "src": "/assets/projects/play-two-heroes/jr-get-away.mp4",
+        "type": "video",
+        "caption": "JR get away clip",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/play-two-heroes/where-did-the-bastion-come-from.mp4",
+        "type": "video",
+        "caption": "Bastion switch clip",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/play-two-heroes/your-destiny-is-your-own.mp4",
+        "type": "video",
+        "caption": "Hero switch clip",
+        "mime": "video/mp4"
+      }
     ],
     "link": "https://www.reddit.com/r/Overwatch/comments/bmlnkc/i_made_a_mod_so_you_can_play_two_heroes_at_once/"
   },
   {
-    "id": "hogwarts-legacy",
-    "title": "Hogwarts Legacy",
-    "slug": "hogwarts-legacy",
+    "id": "a-boy-and-his-beard",
+    "title": "A Boy and His Beard",
+    "slug": "a-boy-and-his-beard",
     "section": "games",
-    "tag": "Animation / Technical Art",
+    "tag": "PC Steam",
+    "year": "2018",
+    "status": "",
+    "description": "Released twin-stick beat 'em up where players steal beards from lumberjacks, vikings, pirates, bikers, and skeletons to unlock new potential. Contributed production scheduling, mechanics and enemy design, balancing, main character creation, rigging, animation, polish, and publishing.",
+    "thumbnail": "/assets/projects/a-boy-and-his-beard/tutorial-2.webp",
+    "media": [
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/banner.webp",
+        "type": "image",
+        "caption": "Steam title banner"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/tutorial-1.webp",
+        "type": "gif",
+        "caption": "Tutorial design: getting players up to speed with the unusual beard controls"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/tutorial-2.webp",
+        "type": "gif",
+        "caption": "Beard interaction feedback: breaking props, leveling up, and confirming the mechanic"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/tutorial-3.webp",
+        "type": "gif",
+        "caption": "Grabbing mechanic: chest, key, door, dialogue, and focus cues"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/enemy-skellytons.webp",
+        "type": "gif",
+        "caption": "Enemy variation: skeleton projectiles force player movement"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/enemy-bikers.webp",
+        "type": "gif",
+        "caption": "Enemy variation: bikers fire knockable projectiles"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/enemy-lumberjacks.webp",
+        "type": "gif",
+        "caption": "Enemy variation: lumberjacks drop projectiles that block beard movement"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/enemy-vikings.webp",
+        "type": "gif",
+        "caption": "Enemy variation: vikings use shields that can be grabbed and ripped away"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/enemy-pirates.webp",
+        "type": "gif",
+        "caption": "Enemy variation: pirate bombers create focused target pressure"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/cut-content.webp",
+        "type": "gif",
+        "caption": "Cut-content preview from the original page"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/cut-content-beard-physics.webp",
+        "type": "gif",
+        "caption": "Cut-content beard physics test"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/cut-content-beard-reward.webp",
+        "type": "gif",
+        "caption": "Cut-content beard reward sequence"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/special-thanks.webp",
+        "type": "image",
+        "caption": "Special thanks and team credit image"
+      },
+      {
+        "src": "/assets/projects/a-boy-and-his-beard/concept.webp",
+        "type": "image",
+        "caption": "Concept and presentation art"
+      }
+    ],
+    "link": "https://store.steampowered.com/app/708100/A_Boy_and_His_Beard/"
+  },
+  {
+    "id": "thrive-vr",
+    "title": "ThriveVR",
+    "slug": "thrive-vr",
+    "section": "games",
+    "tag": "HTC Vive Pre",
     "year": "",
     "status": "",
-    "description": "Hogwarts Legacy production and technical animation work, including mocap review, Unreal IK tests, scene rigging, and wizard interaction footage.",
-    "thumbnail": "/assets/projects/hogwarts-legacy/scene-rig.webp",
+    "description": "Physical therapy VR prototype built around approachable exercise interactions: goal setting with a Daruma-inspired loop, physician-controlled challenge timing, foot tracking, balance work, and playful movement prompts.",
+    "thumbnail": "/assets/projects/thrive-vr/thrive-overview.webp",
     "media": [
-      { "src": "/assets/projects/hogwarts-legacy/scene-rig.webp", "type": "gif", "caption": "Scene rig animation" },
-      { "src": "/assets/projects/hogwarts-legacy/71798f30-054b-4368-941f-67c22638159e_73_Capture_3.webp", "type": "image", "caption": "Capture still" },
-      { "src": "/assets/projects/hogwarts-legacy/raw-mocap-side-by-side.mp4", "type": "video", "caption": "Raw mocap side-by-side", "mime": "video/mp4" },
-      { "src": "/assets/projects/hogwarts-legacy/action-in-volume.mp4", "type": "video", "caption": "Action in volume", "mime": "video/mp4" },
-      { "src": "/assets/projects/hogwarts-legacy/ik-in-unreal.mp4", "type": "video", "caption": "IK in Unreal", "mime": "video/mp4" },
-      { "src": "/assets/projects/hogwarts-legacy/wizard-phd-brush-sounds.mp4", "type": "video", "caption": "Wizard PHD brush interaction with sounds", "mime": "video/mp4" }
+      {
+        "src": "/assets/projects/thrive-vr/thrive-overview.webp",
+        "type": "gif",
+        "caption": "ThriveVR overview"
+      },
+      {
+        "src": "/assets/projects/thrive-vr/daruma-goal.webp",
+        "type": "gif",
+        "caption": "Daruma goal-setting interaction"
+      },
+      {
+        "src": "/assets/projects/thrive-vr/physician-cannon.webp",
+        "type": "gif",
+        "caption": "Physician-controlled cannon challenge"
+      },
+      {
+        "src": "/assets/projects/thrive-vr/foot-tracking.webp",
+        "type": "gif",
+        "caption": "Foot tracking prototype"
+      },
+      {
+        "src": "/assets/projects/thrive-vr/balance-coconuts.webp",
+        "type": "gif",
+        "caption": "Balance exercise with coconut targets"
+      },
+      {
+        "src": "/assets/projects/thrive-vr/vfx-3.webp",
+        "type": "gif",
+        "caption": "Additional ThriveVR interaction capture"
+      },
+      {
+        "src": "/assets/projects/thrive-vr/games-for-health-award.webp",
+        "type": "image",
+        "caption": "Games for Health most popular at show 2016"
+      }
     ],
-    "link": ""
+    "link": "https://hawaiianspawn.wixsite.com/thrivevr"
   },
   {
     "id": "junkensteins-revenge",
@@ -192,10 +363,36 @@
     "description": "A twist on Junkenstein's Revenge providing new powerful enemies through redesigned hero mechanics. Reaper teleports and hacks on ultimate using line-of-sight detection. Roadhog pulls enemies toward him on ultimate with stacking AOE damage. Symmetra spawns sentry turrets every 9 seconds. Junkrat's RIP-tires lack AI movement — Junkenstein moves to the player instead. Mercy given a gun with no forced Valkyrie mode.",
     "thumbnail": "/assets/projects/junkensteins-revenge/gameplay.webp",
     "media": [
-      { "src": "/assets/projects/junkensteins-revenge/gameplay.webp", "type": "gif",   "caption": "Boss mod overview" },
-      { "src": "/assets/projects/junkensteins-revenge/roadpull.webp", "type": "gif",   "caption": "Roadhog — pull ultimate" },
-      { "src": "/assets/projects/junkensteins-revenge/road-aoe.webp", "type": "gif",   "caption": "Roadhog — stacking AOE damage" }
+      {
+        "src": "/assets/projects/junkensteins-revenge/gameplay.webp",
+        "type": "gif",
+        "caption": "Boss mod overview"
+      },
+      {
+        "src": "/assets/projects/junkensteins-revenge/new-boss-mod-web.mp4",
+        "type": "video",
+        "caption": "Junkenstein new boss mod full clip",
+        "mime": "video/mp4"
+      },
+      {
+        "src": "/assets/projects/junkensteins-revenge/road-aoe.webp",
+        "type": "gif",
+        "caption": "Roadhog — stacking AOE damage"
+      }
     ],
+    "link": ""
+  },
+  {
+    "id": "perfect-dark",
+    "title": "Perfect Dark",
+    "slug": "perfect-dark",
+    "section": "games",
+    "tag": "Gameplay Breakdown",
+    "year": "",
+    "status": "In Progress",
+    "description": "Placeholder page for Perfect Dark breakdown content. Add local clips, stills, and notes here as the section is prepared.",
+    "thumbnail": "/assets/projects/perfect-dark/placeholder.svg",
+    "media": [],
     "link": ""
   },
   {
@@ -209,29 +406,13 @@
     "description": "3D animated title sequence — treehouse environment with stylized lighting.",
     "thumbnail": "/assets/projects/the-spare/cover.webp",
     "media": [
-      { "src": "/assets/projects/the-spare/cover.webp", "type": "image", "caption": "" }
+      {
+        "src": "/assets/projects/the-spare/cover.webp",
+        "type": "image",
+        "caption": ""
+      }
     ],
     "link": ""
-  },
-  {
-    "id": "thrive-vr",
-    "title": "ThriveVR",
-    "slug": "thrive-vr",
-    "section": "older",
-    "tag": "VR / Unreal",
-    "year": "",
-    "status": "",
-    "description": "Physical therapy VR prototype built around approachable exercise interactions: goal setting with a Daruma-inspired loop, physician-controlled challenge timing, foot tracking, balance work, and playful movement prompts.",
-    "thumbnail": "/assets/projects/thrive-vr/thrive-overview.webp",
-    "media": [
-      { "src": "/assets/projects/thrive-vr/thrive-overview.webp",       "type": "gif",   "caption": "ThriveVR overview" },
-      { "src": "/assets/projects/thrive-vr/daruma-goal.webp",           "type": "gif",   "caption": "Daruma goal-setting interaction" },
-      { "src": "/assets/projects/thrive-vr/physician-cannon.webp",      "type": "gif",   "caption": "Physician-controlled cannon challenge" },
-      { "src": "/assets/projects/thrive-vr/foot-tracking.webp",         "type": "gif",   "caption": "Foot tracking prototype" },
-      { "src": "/assets/projects/thrive-vr/balance-coconuts.webp",      "type": "gif",   "caption": "Balance exercise with coconut targets" },
-      { "src": "/assets/projects/thrive-vr/games-for-health-award.webp", "type": "image", "caption": "Games for Health most popular at show 2016" }
-    ],
-    "link": "https://hawaiianspawn.wixsite.com/thrivevr"
   },
   {
     "id": "low-fruit",
@@ -244,7 +425,11 @@
     "description": "Still life 3D render — mango, game controller, rose, and aged book. Lighting and texturing study in Maya.",
     "thumbnail": "/assets/projects/low-fruit/render.webp",
     "media": [
-      { "src": "/assets/projects/low-fruit/render.webp", "type": "image", "caption": "" }
+      {
+        "src": "/assets/projects/low-fruit/render.webp",
+        "type": "image",
+        "caption": ""
+      }
     ],
     "link": ""
   },
@@ -259,7 +444,11 @@
     "description": "Stylized character rig built in Maya. Full-body IK/FK control rig with facial controls.",
     "thumbnail": "/assets/projects/character-rig/screenshot.webp",
     "media": [
-      { "src": "/assets/projects/character-rig/screenshot.webp", "type": "image", "caption": "" }
+      {
+        "src": "/assets/projects/character-rig/screenshot.webp",
+        "type": "image",
+        "caption": ""
+      }
     ],
     "link": ""
   },
@@ -274,7 +463,11 @@
     "description": "Physical card game design and production. Designed, printed, and played.",
     "thumbnail": "/assets/projects/hanamikoji/photo.webp",
     "media": [
-      { "src": "/assets/projects/hanamikoji/photo.webp", "type": "image", "caption": "" }
+      {
+        "src": "/assets/projects/hanamikoji/photo.webp",
+        "type": "image",
+        "caption": ""
+      }
     ],
     "link": ""
   },
@@ -289,7 +482,11 @@
     "description": "Maya exterior render — cabin with windmill, tree, and natural lighting study.",
     "thumbnail": "/assets/projects/cabin-render/render.webp",
     "media": [
-      { "src": "/assets/projects/cabin-render/render.webp", "type": "image", "caption": "" }
+      {
+        "src": "/assets/projects/cabin-render/render.webp",
+        "type": "image",
+        "caption": ""
+      }
     ],
     "link": ""
   }

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <rect width="640" height="360" fill="#101414"/>
+  <rect x="0" y="0" width="640" height="360" fill="url(#grid)" opacity="0.24"/>
+  <rect x="238" y="126" width="164" height="108" rx="6" fill="#182020" stroke="#2c3a38"/>
+  <path d="M286 190h68l-18-46h-31l-19 46Z" fill="#2f4640"/>
+  <path d="M329 144h34l24 46h-34l-24-46Z" fill="#1f332f"/>
+  <circle cx="320" cy="180" r="18" fill="#79d6b8" opacity="0.28"/>
+  <circle cx="320" cy="180" r="6" fill="#79d6b8"/>
+  <text x="320" y="262" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#d7ece6" text-anchor="middle">Perfect Dark</text>
+  <text x="320" y="286" font-family="system-ui, sans-serif" font-size="13" fill="#7fa39a" text-anchor="middle">Add project media</text>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0v32" stroke="#5a8076" stroke-width="1"/>
+    </pattern>
+  </defs>
+</svg>

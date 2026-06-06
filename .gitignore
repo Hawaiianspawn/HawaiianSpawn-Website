@@ -10,6 +10,14 @@ node_modules/
 
 # logs
 npm-debug.log*
+.astro-dev*.log
+.astro-preview*.log
+.static-server*.log
+
+# local browser captures/profiles
+mobile-home.png
+.chrome-mobile-profile/
+.edge-mobile-profile/
 
 # environment variables
 .env
@@ -27,6 +35,14 @@ public/assets/projects/hogwarts-legacy/Action in Volume.mkv
 public/assets/projects/hogwarts-legacy/IKinUnreal.mkv
 public/assets/projects/hogwarts-legacy/SceneRig.gif
 public/assets/projects/hogwarts-legacy/WizardPHD - wBrushSounds.mp4
+public/assets/projects/hogwarts-legacy/AvaPets.mkv
+public/assets/projects/hogwarts-legacy/AvalancheTwitchStream.mp4
+public/assets/projects/junkensteins-revenge/Junkensteins New Boss Mod.mp4
+public/assets/projects/escape-from-editor/fellowship-intro-poster.webp
+public/assets/projects/escape-from-editor/realistic-rendering-menu-poster.webp
+public/assets/projects/play-two-heroes/2) Raw Mocap Side by Side.mp4
 public/assets/projects/play-two-heroes/JRGetAway.mp4
 public/assets/projects/play-two-heroes/WhereDidThebastionComefrom.mp4
 public/assets/projects/play-two-heroes/YourDestinyIsYourOwn.mp4
+public/assets/projects/small_projects/GameDesign.PNG
+public/assets/projects/a-boy-and-his-beard/undefined - Imgur*.gif
