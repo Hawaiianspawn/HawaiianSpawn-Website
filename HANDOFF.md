@@ -1,200 +1,322 @@
-# HawaiianSpawn Portfolio — Handoff Document
+# HawaiianSpawn Website Handoff
 
-**Project:** Personal portfolio site for Aaron Low (Technical Artist / Game Designer)
-**Repo root:** `C:\Users\Hawaiian_spawn\HawaiianSpawn-Website`
-**Reference site:** https://hawaiianspawn.wixsite.com/home (source of truth for content)
-**Target hosting:** GitHub Pages (`https://github.com/Hawaiianspawn`) + custom domain (TBD)
-**Stack:** Astro 5, plain CSS, no JS framework, GitHub Actions deploy
+Last updated: 2026-06-05
 
----
+## Project
 
-## Current State
+Personal portfolio website for Aaron Low / HawaiianSpawn.
 
-The site builds clean (`npm run build` → 20 pages, 0 errors) and the dev server runs on `http://localhost:4321/`.
+- Repo root: `C:\Users\Hawaiian_spawn\HawaiianSpawn-Website`
+- GitHub remote: `https://github.com/Hawaiianspawn/HawaiianSpawn-Website.git`
+- Branch: `main`
+- Stack: Astro 5, plain CSS, static output
+- Source content reference: `https://hawaiianspawn.wixsite.com/home`
+- Project data source of truth: `src/data/projects.json`
+- Generated project pages: `src/pages/projects/[slug].astro`
+- Project assets: `public/assets/projects/[project-id]/`
 
-### What is done
-- Astro 5 project scaffolded with GitHub Actions deploy workflow
-- Dark theme design system (CSS variables, `--bg: #0f0f0f`, `--accent: #00c9a7`)
-- 16 projects fully structured in `src/data/projects.json` (project-glossary format)
-- Per-project asset folders under `public/assets/projects/[id]/`
-- All Wix CDN assets downloaded and placed in correct folders
-- All GIF + image assets converted to WebP via `sharp` (27 files, 22–97% size savings)
-- `src/data/projects.json` paths fully updated to `.webp` (40 path references)
-- Dynamic detail pages at `/projects/[slug]` for all 16 projects
-- Homepage with hero/profile photo, project grid filtered by section (WIPs / Games / Older)
-- Project cards link to detail pages and show media-count badge
-- Reel page avoids broken embeds until real YouTube/Vimeo video IDs are added
-- Resume page avoids a broken PDF iframe until `public/assets/resume.pdf` exists
-- Contact page with real social handles and email
-- Footer with real social links
-- Sticky header with hamburger nav
+## Current Git State
 
-### What still needs doing
+Latest pushed commit:
 
-| Task | File(s) to touch | Notes |
-|------|-----------------|-------|
-| YouTube/Vimeo reel video IDs | `src/pages/reel.astro` | Set `youtubeVideoId` and/or `vimeoVideoId`; page currently shows channel links instead of broken embeds |
-| Custom domain | `public/CNAME`, `astro.config.mjs` | Create `public/CNAME` only after a real domain is chosen; keep absent for GitHub Pages default domain |
-| Resume PDF | `public/assets/resume.pdf` | Drop file here; `src/pages/resume.astro` auto-detects it and renders the PDF viewer |
-| Detective Game GIFs | `public/assets/projects/detective-game/` + `src/data/projects.json` | Aaron is optimizing these himself |
-| Push to GitHub | — | `git push origin main`, then enable Pages → Source: GitHub Actions |
-| DNS CNAME record | DNS provider | Point custom domain → `Hawaiianspawn.github.io` |
-
----
-
-## Repository Layout
-
-```
-HawaiianSpawn-Website/
-├── .github/workflows/deploy.yml      # GitHub Actions: build → upload → deploy-pages
-├── astro.config.mjs                  # site: 'https://Hawaiianspawn.github.io' (placeholder)
-├── package.json                      # astro ^5.0.0, sharp ^0.34.5 (devDep)
-├── public/
-│   └── assets/projects/              # 56 files across 18 subfolders
-│       ├── profile/                  photo.webp
-│       ├── warhammer-inquisitor/     screenshot-1.webp, screenshot-2.webp, vfx-1..4.webp
-│       ├── dungeon-crawler/          gameplay.webp
-│       ├── unreal-cinematics/        placeholder.svg (no media yet)
-│       ├── detective-game/           placeholder.svg (GIFs coming)
-│       ├── table-flipper/            splash.webp, gameplay.webp
-│       ├── escape-from-editor/       mech.webp, interior.webp, billboard.webp
-│       ├── southpark-platformer/     platformer.webp
-│       ├── play-two-heroes/          logo.webp, gameplay.webp
-│       ├── junkensteins-revenge/     gameplay.webp, roadpull.webp, road-aoe.webp
-│       ├── hearthtone-concepts/      carriage.webp, monster.webp
-│       ├── the-spare/                cover.webp
-│       ├── thrive-vr/                screenshot.webp
-│       ├── low-fruit/                render.webp
-│       ├── character-rig/            screenshot.webp
-│       ├── hanamikoji/               photo.webp
-│       └── cabin-render/             render.webp
-├── scripts/
-│   ├── optimize-media.mjs            # Converts .gif/.png/.jpg → .webp via sharp (re-runnable)
-│   └── update-paths.mjs              # Rewrites projects.json paths after conversion (re-runnable)
-└── src/
-    ├── data/projects.json            # SOURCE OF TRUTH for all project data
-    ├── layouts/BaseLayout.astro
-    ├── components/
-    │   ├── Header.astro
-    │   ├── Footer.astro
-    │   └── ProjectCard.astro
-    ├── pages/
-    │   ├── index.astro               # Homepage (hero + 3 project grids)
-    │   ├── reel.astro                # Conditional YouTube/Vimeo embeds
-    │   ├── resume.astro              # Conditional PDF viewer for public/assets/resume.pdf
-    │   ├── contact.astro             # Social links + email
-    │   └── projects/[slug].astro     # Dynamic detail page (getStaticPaths from projects.json)
-    └── styles/global.css             # Design tokens + shared utility classes
+```text
+829485e Refresh A Boy and His Beard project content
 ```
 
----
+Recent useful commits:
 
-## Data Model — `src/data/projects.json`
+```text
+829485e Refresh A Boy and His Beard project content
+45123bb Refresh ThriveVR project media
+6b4810a Remove weak portfolio projects
+5562d2b Autoplay project videos muted
+5e5d7e8 Add web-ready Hogwarts and Play Two Heroes media
+535522d Improve project gallery image framing
+46852e7 Add recovered Wix project content
+```
 
-Each project is one object. The gallery shows `thumbnail`; the detail page renders all `media[]`.
+Important: the working tree is intentionally not fully clean. Do not revert these unless the user asks.
 
-```jsonc
+```text
+ D public/assets/projects/play-two-heroes/logo.png
+ D public/assets/projects/play-two-heroes/logo.webp
+?? public/assets/projects/detective-game/vfx-4.webp
+?? public/assets/projects/hogwarts-legacy/AvaPets.mkv
+?? public/assets/projects/hogwarts-legacy/AvalancheTwitchStream.mp4
+?? "public/assets/projects/junkensteins-revenge/Junkensteins New Boss Mod.mp4"
+?? "public/assets/projects/play-two-heroes/2) Raw Mocap Side by Side.mp4"
+?? "public/assets/projects/play-two-heroes/Play Two Heroes.PNG"
+?? public/assets/projects/small_projects/
+?? public/assets/projects/thrive-vr/vfx-3.webp
+```
+
+These appear to be user/local source assets or new content drops. Treat them as pending inputs, not accidental files.
+
+## Build And Run
+
+Install deps if needed:
+
+```bash
+npm install
+```
+
+Run locally:
+
+```bash
+npm run dev
+```
+
+Build:
+
+```bash
+npm run build
+```
+
+Last verified build passed after the A Boy and His Beard update:
+
+```text
+npm run build
+21 page(s) built
+Complete
+```
+
+Useful local URL examples:
+
+```text
+http://127.0.0.1:4321/
+http://127.0.0.1:4321/projects/a-boy-and-his-beard/
+http://127.0.0.1:4321/projects/thrive-vr/
+http://127.0.0.1:4321/projects/junkensteins-revenge/
+```
+
+## Site Architecture
+
+The homepage imports `src/data/projects.json` and groups projects by `section`:
+
+- `wips`
+- `games`
+- `older`
+
+Each project has this shape:
+
+```json
 {
-  "id": "play-two-heroes",           // kebab-case, unique, matches folder name
-  "title": "Play Two Heroes",
-  "slug": "play-two-heroes",         // same as id (used in URL: /projects/[slug])
-  "section": "games",                // "wips" | "games" | "older"
-  "tag": "Overwatch Workshop",       // shown as chip on card and detail page
-  "year": "2019",                    // empty string if unknown
-  "status": "",                      // "In Progress" or empty
-  "description": "...",
-  "thumbnail": "/assets/projects/play-two-heroes/logo.webp",
+  "id": "project-id",
+  "title": "Project Title",
+  "slug": "project-slug",
+  "section": "games",
+  "tag": "Unity",
+  "year": "2018",
+  "status": "",
+  "description": "Short portfolio description.",
+  "thumbnail": "/assets/projects/project-id/thumbnail.webp",
   "media": [
-    { "src": "/assets/projects/play-two-heroes/logo.webp",     "type": "image", "caption": "..." },
-    { "src": "/assets/projects/play-two-heroes/gameplay.webp", "type": "gif",   "caption": "..." }
+    { "src": "/assets/projects/project-id/file.webp", "type": "gif", "caption": "Caption" },
+    { "src": "/assets/projects/project-id/file.mp4", "type": "video", "caption": "Caption", "mime": "video/mp4" }
   ],
-  "link": "https://..."              // external link shown as button on detail page; empty string if none
+  "link": ""
 }
 ```
 
-**`type` field values:**
-- `"image"` — static WebP (rendered as `<img>`)
-- `"gif"` — animated WebP (still uses `type: "gif"` so the detail page applies the `is-gif` CSS class for sizing; the file extension is `.webp`)
+Supported media types in `src/pages/projects/[slug].astro`:
 
-**Sections and current project count:**
-- `wips` — 4 projects (Warhammer: Inquisitor, Dungeon Crawler, Unreal Cinematics, Detective Game)
-- `games` — 6 projects (Table Flipper, Escape From Editor, South Park Platformer, Play Two Heroes, Junkenstein's, ...)
-- `older` — 7 projects (Hearthtone Concepts, The Spare, ThriveVR, Low Fruit, Character Rig, Hanamikoji, Cabin Render)
+- `image`: rendered as `img`
+- `gif`: rendered as `img`; animated WebP works here
+- `video`: rendered as autoplaying, looping, muted, inline `video`
+- `file`: rendered as a download/open link
 
----
+Videos already autoplay silently:
 
-## Key Design Decisions
-
-### No JS framework — plain Astro + CSS
-All interactivity (mobile nav toggle) is vanilla JS in `<script>` tags. No React/Vue/Svelte. Keeps bundle tiny and build fast.
-
-### Animated WebP, not GIF
-All GIFs were converted to animated WebP with `sharp`. The `type: "gif"` field in `projects.json` marks animated content — it doesn't mean the file is a `.gif`. Do not change this field back; the detail page CSS depends on it.
-
-### Assets are committed, not fetched at build time
-`public/assets/` is in the repo. This is intentional: no CDN dependency, offline dev works, GitHub Pages serves them directly. The tradeoff is a larger repo (~200MB estimated at full scale).
-
-### Privacy constraint
-Aaron's Wix contact page contains a home address and phone number. These are **intentionally excluded** from the site. Do not add them.
-
----
-
-## How to Add a New Project
-
-1. Create folder: `public/assets/projects/[id]/`
-2. Drop assets in — then run `node scripts/optimize-media.mjs` to convert to WebP
-3. Run `node scripts/update-paths.mjs` to rewrite any `.gif/.png/.jpg` refs in `projects.json` to `.webp`
-4. Add the project object to `src/data/projects.json`
-5. `npm run build` to verify, then push
-
----
-
-## How to Add Detective Game GIFs (when ready)
-
-1. Drop optimized WebP files into `public/assets/projects/detective-game/`
-2. Update the `detective-game` entry in `projects.json`:
-   - Change `thumbnail` from `placeholder.svg` to the first media file
-   - Add entries to `media[]` with `type: "gif"`
-
----
-
-## Deploy Checklist
-
-- [ ] If using a custom domain, create `public/CNAME` with the real domain
-- [ ] If using a custom domain, update `astro.config.mjs` `site:` to `https://yourdomain.com`
-- [ ] Add `public/assets/resume.pdf`
-- [ ] Set `youtubeVideoId` and/or `vimeoVideoId` in `src/pages/reel.astro`
-- [ ] `git init` (if not already) → `git remote add origin https://github.com/Hawaiianspawn/HawaiianSpawn-Website.git`
-- [ ] `git push -u origin main`
-- [ ] GitHub repo → Settings → Pages → Source: **GitHub Actions**
-- [ ] DNS: add CNAME record pointing custom domain → `Hawaiianspawn.github.io`
-- [ ] GitHub repo → Settings → Pages → Custom domain: enter domain, enable HTTPS
-
----
-
-## Local Dev Commands
-
-```powershell
-cd C:\Users\Hawaiian_spawn\HawaiianSpawn-Website
-
-npm install          # first time only
-npm run dev          # dev server → http://localhost:4321
-npm run build        # production build → dist/
-npm run preview      # preview prod build locally
-
-node scripts/optimize-media.mjs   # convert new assets to WebP
-node scripts/update-paths.mjs     # sync projects.json after conversion
+```astro
+<video autoplay loop muted playsinline preload="metadata">
 ```
 
----
+## Current Project List
 
-## Contact & Social (Aaron Low)
+Current `src/data/projects.json` includes:
 
-| Platform | Handle / URL |
-|----------|-------------|
-| Email | Hawaiian_spawn@live.com |
-| Twitter / X | @hawaiian_spawn |
-| Instagram | @hawaiian_spawn |
-| YouTube | @hawaiian_spawn |
-| Vimeo | user8051156 |
-| GitHub | https://github.com/Hawaiianspawn |
+- Warhammer: Inquisitor
+- Dungeon Crawler
+- Unreal Cinematics Practice
+- Detective
+- Table Flipper
+- Escape From Editor
+- Time Travelers DropBox
+- A Boy and His Beard
+- Play Two Heroes
+- Hogwarts Legacy
+- Junkenstein's New Boss Mod
+- The Spare
+- ThriveVR
+- Low Fruit
+- Character Rig
+- Hanamikoji
+- Cabin Lighting Study
+
+Removed by request:
+
+- Hearthstone Concepts
+- South Park Platformer
+
+## Recent Completed Work
+
+### A Boy and His Beard
+
+Pulled content from:
+
+- `https://hawaiianspawn.wixsite.com/home/a-boy-and-his-beard`
+- `https://imgur.com/a/boyandhisbeadgif-0VcaZ`
+
+Updated the project with:
+
+- Steam release year: `2018`
+- Tag: `PC Steam`
+- Steam link: `https://store.steampowered.com/app/708100/A_Boy_and_His_Beard/`
+- Stronger description based on the original Wix page
+- Tutorial design GIFs converted to WebP
+- Enemy variation GIFs converted to WebP
+- Cut-content GIF converted to WebP
+- Imgur asset added as MP4: `cut-content-imgur.mp4`
+- Special thanks/team image converted to WebP
+
+Committed and pushed as:
+
+```text
+829485e Refresh A Boy and His Beard project content
+```
+
+### ThriveVR
+
+Pulled content from:
+
+- `https://hawaiianspawn.wixsite.com/home/thrive`
+
+Downloaded and converted Wix media into:
+
+- `thrive-overview.webp`
+- `daruma-goal.webp`
+- `physician-cannon.webp`
+- `foot-tracking.webp`
+- `balance-coconuts.webp`
+- `games-for-health-award.webp`
+
+Updated the ThriveVR project description, thumbnail, media captions, and link:
+
+```text
+https://hawaiianspawn.wixsite.com/thrivevr
+```
+
+Committed and pushed as:
+
+```text
+45123bb Refresh ThriveVR project media
+```
+
+### Hogwarts Legacy And Play Two Heroes
+
+Added web-ready MP4/WebP media and updated pages.
+
+Hogwarts media currently referenced:
+
+- `scene-rig.webp`
+- `71798f30-054b-4368-941f-67c22638159e_73_Capture_3.webp`
+- `raw-mocap-side-by-side.mp4`
+- `action-in-volume.mp4`
+- `ik-in-unreal.mp4`
+- `wizard-phd-brush-sounds.mp4`
+
+Play Two Heroes media currently referenced:
+
+- `logo.webp`
+- `gameplay.webp`
+- `jr-get-away.mp4`
+- `where-did-the-bastion-come-from.mp4`
+- `your-destiny-is-your-own.mp4`
+
+Note: `logo.webp` is referenced in JSON, but local status currently shows it deleted. This needs cleanup before changing Play Two Heroes further.
+
+### Junkenstein's Revenge Research
+
+User asked whether old Gfycat URLs could be found through Archive.org.
+
+Findings:
+
+- Current Wix page did not include literal `gfycat.com` URLs.
+- Exact Wayback CDX query for the page returned no saved 200 snapshots at that time.
+- ArchiveTeam did archive Gfycat generally, but original Gfycat slugs are needed for targeted recovery.
+- Best immediate route is to use available Wix-hosted media or any local source videos the user drops.
+
+There is now an untracked local file:
+
+```text
+public/assets/projects/junkensteins-revenge/Junkensteins New Boss Mod.mp4
+```
+
+Likely next task: convert/compress this to a website-friendly muted autoplay MP4 or WebP preview and add it to `src/data/projects.json`.
+
+## Media Workflow
+
+Prefer website assets as:
+
+- Static images: `.webp`
+- Animated loops without sound: animated `.webp` or muted `.mp4`
+- Long or large video: compressed `.mp4`
+
+Existing FFmpeg executable:
+
+```text
+C:\Users\Hawaiian_spawn\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe
+```
+
+Example GIF to animated WebP:
+
+```powershell
+& "C:\Users\Hawaiian_spawn\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe" `
+  -y -i input.gif `
+  -vf "fps=15,scale='min(960,iw)':-1:flags=lanczos" `
+  -loop 0 -q:v 75 output.webp
+```
+
+Example source video to muted web MP4:
+
+```powershell
+& "C:\Users\Hawaiian_spawn\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe" `
+  -y -i input.mp4 `
+  -an -vf "scale='min(1280,iw)':-2" `
+  -c:v libx264 -pix_fmt yuv420p -crf 24 -preset medium `
+  output.mp4
+```
+
+The `.gitignore` already ignores several known large source originals for Hogwarts and Play Two Heroes. If new large local source videos are meant to stay local, add specific ignore entries after producing web assets.
+
+## Known Issues / Cautions
+
+- Some text has mojibake in existing source files from older encoding, for example `â€”` where an em dash was intended. Avoid broad formatting churn unless intentionally fixing copy.
+- Do not revert local dirty files unless explicitly asked. Several are user-provided source assets.
+- Play Two Heroes currently references `logo.webp`, but local status shows `logo.webp` and `logo.png` deleted. Resolve deliberately before the next commit touching Play Two Heroes.
+- `public/assets/projects/small_projects/GameDesign.PNG` is currently untracked and probably needs a new project entry or to be folded into an existing page.
+- `public/assets/projects/detective-game/vfx-4.webp` is untracked and probably belongs on the Detective page.
+- `public/assets/projects/thrive-vr/vfx-3.webp` is untracked; compare against the current ThriveVR media before adding.
+
+## Good Next Steps
+
+1. Start local server with `npm run dev` and visually review:
+   - `/projects/a-boy-and-his-beard/`
+   - `/projects/thrive-vr/`
+   - `/projects/play-two-heroes/`
+   - `/projects/junkensteins-revenge/`
+
+2. Process pending local user assets:
+   - Convert `Junkensteins New Boss Mod.mp4` into a compressed web MP4.
+   - Decide whether `detective-game/vfx-4.webp` belongs on Detective.
+   - Decide whether `thrive-vr/vfx-3.webp` is a duplicate or a missing Thrive asset.
+   - Decide where `small_projects/GameDesign.PNG` should appear.
+
+3. Resolve Play Two Heroes logo deletion:
+   - If logo should stay: restore/regenerate `logo.webp`.
+   - If logo should go: remove it from `src/data/projects.json` and pick another thumbnail/media item.
+
+4. Run `npm run build`.
+
+5. Commit only the scoped files for the completed content pass.
+
