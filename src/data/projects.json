@@ -213,18 +213,17 @@
     "tag": "VR / Unreal",
     "year": "",
     "status": "",
-    "description": "Physical therapy VR game and promotional prototype work. Built around approachable motion, robot character presentation, and readable VR interactions.",
-    "thumbnail": "/assets/projects/thrive-vr/screenshot.webp",
+    "description": "Physical therapy VR prototype built around approachable exercise interactions: goal setting with a Daruma-inspired loop, physician-controlled challenge timing, foot tracking, balance work, and playful movement prompts.",
+    "thumbnail": "/assets/projects/thrive-vr/thrive-overview.webp",
     "media": [
-      { "src": "/assets/projects/thrive-vr/screenshot.webp", "type": "image", "caption": "Environment screenshot" },
-      { "src": "/assets/projects/thrive-vr/promo.webp",      "type": "image", "caption": "Promotional still" },
-      { "src": "/assets/projects/thrive-vr/therapy-1.webp",  "type": "gif",   "caption": "Therapy interaction" },
-      { "src": "/assets/projects/thrive-vr/therapy-2.webp",  "type": "gif",   "caption": "VR interaction prototype" },
-      { "src": "/assets/projects/thrive-vr/therapy-3.webp",  "type": "gif",   "caption": "Motion and feedback test" },
-      { "src": "/assets/projects/thrive-vr/therapy-4.webp",  "type": "gif",   "caption": "Robot presentation" },
-      { "src": "/assets/projects/thrive-vr/therapy-5.webp",  "type": "gif",   "caption": "Gameplay interaction" }
+      { "src": "/assets/projects/thrive-vr/thrive-overview.webp",       "type": "gif",   "caption": "ThriveVR overview" },
+      { "src": "/assets/projects/thrive-vr/daruma-goal.webp",           "type": "gif",   "caption": "Daruma goal-setting interaction" },
+      { "src": "/assets/projects/thrive-vr/physician-cannon.webp",      "type": "gif",   "caption": "Physician-controlled cannon challenge" },
+      { "src": "/assets/projects/thrive-vr/foot-tracking.webp",         "type": "gif",   "caption": "Foot tracking prototype" },
+      { "src": "/assets/projects/thrive-vr/balance-coconuts.webp",      "type": "gif",   "caption": "Balance exercise with coconut targets" },
+      { "src": "/assets/projects/thrive-vr/games-for-health-award.webp", "type": "image", "caption": "Games for Health most popular at show 2016" }
     ],
-    "link": ""
+    "link": "https://hawaiianspawn.wixsite.com/thrivevr"
   },
   {
     "id": "low-fruit",
