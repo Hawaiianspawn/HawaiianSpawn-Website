@@ -92,6 +92,8 @@ const sectionLabels: Record<string, string> = {
         </div>
       )}
 
+      {project.note && <p class="project-note">{project.note}</p>}
+
     </div>
   </div>
 </BaseLayout>
@@ -163,6 +165,16 @@ const sectionLabels: Record<string, string> = {
   }
 
   .project-link { align-self: flex-start; }
+
+  .project-note {
+    max-width: 760px;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
 
   /* Media grid */
   .media-grid {

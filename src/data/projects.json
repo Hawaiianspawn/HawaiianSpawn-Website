@@ -39,7 +39,7 @@
       {
         "src": "/assets/projects/detective-game/mona.webp",
         "type": "gif",
-        "caption": "Mona interaction animation",
+        "caption": "One version of Napoleon Crossing the Alps",
         "mobileSrc": "/assets/projects/detective-game/mona-mobile.webp"
       },
       {
@@ -184,7 +184,7 @@
     "slug": "hogwarts-legacy",
     "section": "games",
     "tag": "Animation / Technical Art",
-    "year": "",
+    "year": "2023",
     "status": "",
     "featured": true,
     "description": "Hogwarts Legacy production and technical animation work, including mocap review, Unreal IK tests, scene rigging, and wizard interaction footage.",
@@ -249,6 +249,7 @@
       }
     ],
     "link": "",
+    "note": "All footage shown here comes from behind-the-scenes footage provided on YouTube.",
     "thumbnailMobile": "/assets/projects/hogwarts-legacy/scene-rig-mobile.webp"
   },
   {
