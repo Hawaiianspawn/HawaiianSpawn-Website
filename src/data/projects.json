@@ -19,19 +19,6 @@
     "link": ""
   },
   {
-    "id": "unreal-cinematics",
-    "title": "Unreal Cinematics Practice",
-    "slug": "unreal-cinematics",
-    "section": "older",
-    "tag": "Unreal",
-    "year": "2021",
-    "status": "",
-    "description": "This was a quick project to better understand Sequencer and Unreal's new water system. Done over the course of 2 weekends the project was very simple. Half of my work went into retopologizing the hero asset; the skull. Done manually in Maya and baked in Zbrush. Overall the project came out fine. If I had more time I would have figured out how to get transparency shaders to work with the water shader, so the sprite works underwater.",
-    "thumbnail": "/assets/projects/unreal-cinematics/placeholder.svg",
-    "media": [],
-    "link": ""
-  },
-  {
     "id": "detective-game",
     "title": "Detective",
     "slug": "detective-game",
@@ -56,6 +43,82 @@
         "src": "/assets/projects/detective-game/vfx-4.webp",
         "type": "gif",
         "caption": "Additional detective game interaction capture"
+      }
+    ],
+    "link": ""
+  },
+  {
+    "id": "the-spare",
+    "title": "The Spare",
+    "slug": "the-spare",
+    "section": "older",
+    "tag": "3D Animation",
+    "year": "",
+    "status": "",
+    "description": "3D animated title sequence — treehouse environment with stylized lighting.",
+    "thumbnail": "/assets/projects/the-spare/cover.webp",
+    "media": [
+      {
+        "src": "/assets/projects/the-spare/cover.webp",
+        "type": "image",
+        "caption": ""
+      }
+    ],
+    "link": ""
+  },
+  {
+    "id": "character-rig",
+    "title": "Character Rig",
+    "slug": "character-rig",
+    "section": "older",
+    "tag": "Rigging / Maya",
+    "year": "",
+    "status": "",
+    "description": "Stylized character rig built in Maya. Full-body IK/FK control rig with facial controls.",
+    "thumbnail": "/assets/projects/character-rig/screenshot.webp",
+    "media": [
+      {
+        "src": "/assets/projects/character-rig/screenshot.webp",
+        "type": "image",
+        "caption": ""
+      }
+    ],
+    "link": ""
+  },
+  {
+    "id": "hanamikoji",
+    "title": "Hanamikoji",
+    "slug": "hanamikoji",
+    "section": "older",
+    "tag": "Tabletop",
+    "year": "",
+    "status": "",
+    "description": "Physical card game design and production. Designed, printed, and played.",
+    "thumbnail": "/assets/projects/hanamikoji/photo.webp",
+    "media": [
+      {
+        "src": "/assets/projects/hanamikoji/photo.webp",
+        "type": "image",
+        "caption": ""
+      }
+    ],
+    "link": ""
+  },
+  {
+    "id": "cabin-render",
+    "title": "Cabin Lighting Study",
+    "slug": "cabin-render",
+    "section": "older",
+    "tag": "3D / Maya",
+    "year": "",
+    "status": "",
+    "description": "Maya exterior render — cabin with windmill, tree, and natural lighting study.",
+    "thumbnail": "/assets/projects/cabin-render/render.webp",
+    "media": [
+      {
+        "src": "/assets/projects/cabin-render/render.webp",
+        "type": "image",
+        "caption": ""
       }
     ],
     "link": ""
@@ -417,101 +480,6 @@
         "src": "/assets/projects/junkensteins-revenge/road-aoe.webp",
         "type": "gif",
         "caption": "Roadhog — stacking AOE damage"
-      }
-    ],
-    "link": ""
-  },
-  {
-    "id": "the-spare",
-    "title": "The Spare",
-    "slug": "the-spare",
-    "section": "older",
-    "tag": "3D Animation",
-    "year": "",
-    "status": "",
-    "description": "3D animated title sequence — treehouse environment with stylized lighting.",
-    "thumbnail": "/assets/projects/the-spare/cover.webp",
-    "media": [
-      {
-        "src": "/assets/projects/the-spare/cover.webp",
-        "type": "image",
-        "caption": ""
-      }
-    ],
-    "link": ""
-  },
-  {
-    "id": "low-fruit",
-    "title": "Low Fruit",
-    "slug": "low-fruit",
-    "section": "older",
-    "tag": "3D / Maya",
-    "year": "",
-    "status": "",
-    "description": "Still life 3D render — mango, game controller, rose, and aged book. Lighting and texturing study in Maya.",
-    "thumbnail": "/assets/projects/low-fruit/render.webp",
-    "media": [
-      {
-        "src": "/assets/projects/low-fruit/render.webp",
-        "type": "image",
-        "caption": ""
-      }
-    ],
-    "link": ""
-  },
-  {
-    "id": "character-rig",
-    "title": "Character Rig",
-    "slug": "character-rig",
-    "section": "older",
-    "tag": "Rigging / Maya",
-    "year": "",
-    "status": "",
-    "description": "Stylized character rig built in Maya. Full-body IK/FK control rig with facial controls.",
-    "thumbnail": "/assets/projects/character-rig/screenshot.webp",
-    "media": [
-      {
-        "src": "/assets/projects/character-rig/screenshot.webp",
-        "type": "image",
-        "caption": ""
-      }
-    ],
-    "link": ""
-  },
-  {
-    "id": "hanamikoji",
-    "title": "Hanamikoji",
-    "slug": "hanamikoji",
-    "section": "older",
-    "tag": "Tabletop",
-    "year": "",
-    "status": "",
-    "description": "Physical card game design and production. Designed, printed, and played.",
-    "thumbnail": "/assets/projects/hanamikoji/photo.webp",
-    "media": [
-      {
-        "src": "/assets/projects/hanamikoji/photo.webp",
-        "type": "image",
-        "caption": ""
-      }
-    ],
-    "link": ""
-  },
-  {
-    "id": "cabin-render",
-    "title": "Cabin Lighting Study",
-    "slug": "cabin-render",
-    "section": "older",
-    "tag": "3D / Maya",
-    "year": "",
-    "status": "",
-    "description": "Maya exterior render — cabin with windmill, tree, and natural lighting study.",
-    "thumbnail": "/assets/projects/cabin-render/render.webp",
-    "media": [
-      {
-        "src": "/assets/projects/cabin-render/render.webp",
-        "type": "image",
-        "caption": ""
       }
     ],
     "link": ""
