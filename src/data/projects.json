@@ -467,14 +467,9 @@
     "tag": "Overwatch Workshop",
     "year": "2019",
     "status": "",
-    "description": "A twist on Junkenstein's Revenge providing new powerful enemies through redesigned hero mechanics. Reaper teleports and hacks on ultimate using line-of-sight detection. Roadhog pulls enemies toward him on ultimate with stacking AOE damage. Symmetra spawns sentry turrets every 9 seconds. Junkrat's RIP-tires lack AI movement — Junkenstein moves to the player instead. Mercy given a gun with no forced Valkyrie mode.",
-    "thumbnail": "/assets/projects/junkensteins-revenge/gameplay.webp",
+    "description": "A twist on Junkenstein's Revenge with redesigned boss mechanics: Reaper teleports and hacks on ultimate using line-of-sight detection, Roadhog adds burning AOE pressure, Symmetra spawns sentry turrets on a timer, Junkrat changes RIP-tire pressure, and Mercy keeps direct combat behavior without forced Valkyrie mode.",
+    "thumbnail": "/assets/projects/junkensteins-revenge/Reaper.webp",
     "media": [
-      {
-        "src": "/assets/projects/junkensteins-revenge/gameplay.webp",
-        "type": "gif",
-        "caption": "Boss mod overview"
-      },
       {
         "src": "/assets/projects/junkensteins-revenge/new-boss-mod-web.mp4",
         "type": "video",
@@ -482,9 +477,29 @@
         "mime": "video/mp4"
       },
       {
+        "src": "/assets/projects/junkensteins-revenge/Reaper.webp",
+        "type": "gif",
+        "caption": "Reaper boss behavior: teleport and hack pressure"
+      },
+      {
+        "src": "/assets/projects/junkensteins-revenge/Roadhog Burning.webp",
+        "type": "gif",
+        "caption": "Roadhog boss behavior: burning AOE pressure"
+      },
+      {
         "src": "/assets/projects/junkensteins-revenge/road-aoe.webp",
         "type": "gif",
-        "caption": "Roadhog — stacking AOE damage"
+        "caption": "Roadhog boss behavior: stacking AOE damage"
+      },
+      {
+        "src": "/assets/projects/junkensteins-revenge/Symetra.webp",
+        "type": "gif",
+        "caption": "Symmetra boss behavior: timed sentry turret spawns"
+      },
+      {
+        "src": "/assets/projects/junkensteins-revenge/Junkrat.webp",
+        "type": "gif",
+        "caption": "Junkrat boss behavior: revised RIP-tire pressure"
       }
     ],
     "link": ""
