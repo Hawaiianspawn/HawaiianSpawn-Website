@@ -4,19 +4,23 @@ interface Props {
   title: string;
   description: string;
   thumbnail: string;
+  thumbnailMobile?: string;
   tag?: string;
   mediaCount?: number;
   featured?: boolean;
 }
 
-const { id, title, description, thumbnail, tag, mediaCount = 0, featured = false } = Astro.props;
+const { id, title, description, thumbnail, thumbnailMobile, tag, mediaCount = 0, featured = false } = Astro.props;
 const detailHref = `/projects/${id}`;
 ---
 
 <article class:list={['project-card', { 'is-featured': featured }]}>
   <a href={detailHref} class="card-image-link">
     <div class="card-image">
-      <img src={thumbnail} alt={title} loading="lazy" />
+      <picture>
+        {thumbnailMobile && <source media="(max-width: 640px)" srcset={thumbnailMobile} />}
+        <img src={thumbnail} alt={title} loading="lazy" />
+      </picture>
       {tag && <span class="card-tag">{tag}</span>}
       {mediaCount > 1 && (
         <span class="card-count">
@@ -99,9 +103,17 @@ const detailHref = `/projects/${id}`;
     border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
   }
 
+  .card-image picture,
   .card-image img {
     width: 100%;
     height: 100%;
+  }
+
+  .card-image picture {
+    display: block;
+  }
+
+  .card-image img {
     object-fit: cover;
     transition: transform 0.3s;
   }

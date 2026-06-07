@@ -13,10 +13,12 @@
       {
         "src": "/assets/projects/dungeon-crawler/gameplay.webp",
         "type": "gif",
-        "caption": ""
+        "caption": "",
+        "mobileSrc": "/assets/projects/dungeon-crawler/gameplay-mobile.webp"
       }
     ],
-    "link": ""
+    "link": "",
+    "thumbnailMobile": "/assets/projects/dungeon-crawler/gameplay-mobile.webp"
   },
   {
     "id": "detective-game",
@@ -37,7 +39,8 @@
       {
         "src": "/assets/projects/detective-game/mona.webp",
         "type": "gif",
-        "caption": "Mona interaction animation"
+        "caption": "Mona interaction animation",
+        "mobileSrc": "/assets/projects/detective-game/mona-mobile.webp"
       },
       {
         "src": "/assets/projects/detective-game/vfx-4.webp",
@@ -55,7 +58,7 @@
     "tag": "3D Animation",
     "year": "",
     "status": "",
-    "description": "3D animated title sequence — treehouse environment with stylized lighting.",
+    "description": "3D animated title sequence - treehouse environment with stylized lighting.",
     "thumbnail": "/assets/projects/the-spare/cover.webp",
     "media": [
       {
@@ -99,10 +102,12 @@
       {
         "src": "/assets/projects/hanamikoji/photo.webp",
         "type": "image",
-        "caption": ""
+        "caption": "",
+        "mobileSrc": "/assets/projects/hanamikoji/photo-mobile.webp"
       }
     ],
-    "link": ""
+    "link": "",
+    "thumbnailMobile": "/assets/projects/hanamikoji/photo-mobile.webp"
   },
   {
     "id": "cabin-render",
@@ -112,7 +117,7 @@
     "tag": "3D / Maya",
     "year": "",
     "status": "",
-    "description": "Maya exterior render — cabin with windmill, tree, and natural lighting study.",
+    "description": "Maya exterior render - cabin with windmill, tree, and natural lighting study.",
     "thumbnail": "/assets/projects/cabin-render/render.webp",
     "media": [
       {
@@ -137,7 +142,8 @@
       {
         "src": "/assets/projects/perfect-dark/HeroShotWork.webp",
         "type": "image",
-        "caption": "Hero shot presentation work"
+        "caption": "Hero shot presentation work",
+        "mobileSrc": "/assets/projects/perfect-dark/HeroShotWork-mobile.webp"
       },
       {
         "src": "/assets/projects/perfect-dark/CNW.jpg",
@@ -147,25 +153,30 @@
       {
         "src": "/assets/projects/perfect-dark/First Person Combat system.webp",
         "type": "gif",
-        "caption": "First-person combat system work"
+        "caption": "First-person combat system work",
+        "mobileSrc": "/assets/projects/perfect-dark/First Person Combat system-mobile.webp"
       },
       {
         "src": "/assets/projects/perfect-dark/SlideTakedown.webp",
         "type": "gif",
-        "caption": "Slide takedown interaction"
+        "caption": "Slide takedown interaction",
+        "mobileSrc": "/assets/projects/perfect-dark/SlideTakedown-mobile.webp"
       },
       {
         "src": "/assets/projects/perfect-dark/ControlRigMultiExecution.webp",
         "type": "gif",
-        "caption": "Control Rig multi-execution setup"
+        "caption": "Control Rig multi-execution setup",
+        "mobileSrc": "/assets/projects/perfect-dark/ControlRigMultiExecution-mobile.webp"
       },
       {
         "src": "/assets/projects/perfect-dark/CrowdFacialEmotionSystem.webp",
         "type": "gif",
-        "caption": "Crowd facial emotion system"
+        "caption": "Crowd facial emotion system",
+        "mobileSrc": "/assets/projects/perfect-dark/CrowdFacialEmotionSystem-mobile.webp"
       }
     ],
-    "link": ""
+    "link": "",
+    "thumbnailMobile": "/assets/projects/perfect-dark/HeroShotWork-mobile.webp"
   },
   {
     "id": "hogwarts-legacy",
@@ -182,7 +193,8 @@
       {
         "src": "/assets/projects/hogwarts-legacy/scene-rig.webp",
         "type": "gif",
-        "caption": "Scene rig animation"
+        "caption": "Scene rig animation",
+        "mobileSrc": "/assets/projects/hogwarts-legacy/scene-rig-mobile.webp"
       },
       {
         "src": "/assets/projects/hogwarts-legacy/71798f30-054b-4368-941f-67c22638159e_73_Capture_3.webp",
@@ -193,31 +205,41 @@
         "src": "/assets/projects/hogwarts-legacy/raw-mocap-side-by-side.mp4",
         "type": "video",
         "caption": "Raw mocap side-by-side",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/hogwarts-legacy/raw-mocap-side-by-side-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/hogwarts-legacy/action-in-volume.mp4",
         "type": "video",
         "caption": "Action in volume",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/hogwarts-legacy/action-in-volume-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/hogwarts-legacy/ik-in-unreal.mp4",
         "type": "video",
         "caption": "IK in Unreal",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/hogwarts-legacy/ik-in-unreal-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/hogwarts-legacy/wizard-phd-brush-sounds.mp4",
         "type": "video",
         "caption": "Wizard PHD brush interaction with sounds",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/hogwarts-legacy/wizard-phd-brush-sounds-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/hogwarts-legacy/avalanche-twitch-stream-web.mp4",
         "type": "video",
         "caption": "Avalanche stream showcase clip",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/hogwarts-legacy/avalanche-twitch-stream-web-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/hogwarts-legacy/ava-pets-web.mp4",
@@ -226,7 +248,8 @@
         "mime": "video/mp4"
       }
     ],
-    "link": ""
+    "link": "",
+    "thumbnailMobile": "/assets/projects/hogwarts-legacy/scene-rig-mobile.webp"
   },
   {
     "id": "escape-from-editor",
@@ -248,7 +271,8 @@
       {
         "src": "/assets/projects/escape-from-editor/dodge-test.webp",
         "type": "gif",
-        "caption": "Sinden Lightgun dodge test"
+        "caption": "Sinden Lightgun dodge test",
+        "mobileSrc": "/assets/projects/escape-from-editor/dodge-test-mobile.webp"
       },
       {
         "src": "/assets/projects/escape-from-editor/realistic-rendering-menu-web.mp4",
@@ -259,7 +283,8 @@
       {
         "src": "/assets/projects/escape-from-editor/ai-study.webp",
         "type": "gif",
-        "caption": "AI study and Unreal gameplay prototype"
+        "caption": "AI study and Unreal gameplay prototype",
+        "mobileSrc": "/assets/projects/escape-from-editor/ai-study-mobile.webp"
       },
       {
         "src": "/assets/projects/escape-from-editor/prank-war.webp",
@@ -292,39 +317,48 @@
     "tag": "Overwatch Workshop",
     "year": "2019",
     "status": "",
-    "description": "Play Two Heroes is a mod that takes inspiration from Marvel Vs Capcom 2 and utilizes a hero switch mechanic. Players leverage a broader ability toolkit by switching between two selected heroes, creating more solutions to problems. Six core systems coded: crowd-control prevention, ultimate transfer, health percentage carry-over, switch cooldowns, momentum retention, and tiered cooldown adjustments. Notable edge cases handled include Baby D.Va's 30-second lockout and a visual indicator for cloaked Sombra. Officially acknowledged by Jeff Kaplan (Blizzard) — ranked 11th overall most-played mod by duration, 2nd highest average player retention.",
+    "description": "Play Two Heroes is a mod that takes inspiration from Marvel Vs Capcom 2 and utilizes a hero switch mechanic. Players leverage a broader ability toolkit by switching between two selected heroes, creating more solutions to problems. Six core systems coded: crowd-control prevention, ultimate transfer, health percentage carry-over, switch cooldowns, momentum retention, and tiered cooldown adjustments. Notable edge cases handled include Baby D.Va's 30-second lockout and a visual indicator for cloaked Sombra. Officially acknowledged by Jeff Kaplan (Blizzard) - ranked 11th overall most-played mod by duration, 2nd highest average player retention.",
     "thumbnail": "/assets/projects/play-two-heroes/gameplay.webp",
     "media": [
       {
         "src": "/assets/projects/play-two-heroes/Play Two Heroes.PNG",
         "type": "image",
-        "caption": "Play Two Heroes project image"
+        "caption": "Play Two Heroes project image",
+        "mobileSrc": "/assets/projects/play-two-heroes/Play Two Heroes-mobile.webp"
       },
       {
         "src": "/assets/projects/play-two-heroes/gameplay.webp",
         "type": "gif",
-        "caption": "Gameplay demo"
+        "caption": "Gameplay demo",
+        "mobileSrc": "/assets/projects/play-two-heroes/gameplay-mobile.webp"
       },
       {
         "src": "/assets/projects/play-two-heroes/jr-get-away.mp4",
         "type": "video",
         "caption": "JR get away clip",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/play-two-heroes/jr-get-away-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/play-two-heroes/where-did-the-bastion-come-from.mp4",
         "type": "video",
         "caption": "Bastion switch clip",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/play-two-heroes/where-did-the-bastion-come-from-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/play-two-heroes/your-destiny-is-your-own.mp4",
         "type": "video",
         "caption": "Hero switch clip",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/play-two-heroes/your-destiny-is-your-own-mobile.mp4",
+        "mobileMime": "video/mp4"
       }
     ],
-    "link": "https://www.reddit.com/r/Overwatch/comments/bmlnkc/i_made_a_mod_so_you_can_play_two_heroes_at_once/"
+    "link": "https://www.reddit.com/r/Overwatch/comments/bmlnkc/i_made_a_mod_so_you_can_play_two_heroes_at_once/",
+    "thumbnailMobile": "/assets/projects/play-two-heroes/gameplay-mobile.webp"
   },
   {
     "id": "a-boy-and-his-beard",
@@ -345,17 +379,20 @@
       {
         "src": "/assets/projects/a-boy-and-his-beard/tutorial-1.webp",
         "type": "gif",
-        "caption": "Tutorial design: getting players up to speed with the unusual beard controls"
+        "caption": "Tutorial design: getting players up to speed with the unusual beard controls",
+        "mobileSrc": "/assets/projects/a-boy-and-his-beard/tutorial-1-mobile.webp"
       },
       {
         "src": "/assets/projects/a-boy-and-his-beard/tutorial-2.webp",
         "type": "gif",
-        "caption": "Beard interaction feedback: breaking props, leveling up, and confirming the mechanic"
+        "caption": "Beard interaction feedback: breaking props, leveling up, and confirming the mechanic",
+        "mobileSrc": "/assets/projects/a-boy-and-his-beard/tutorial-2-mobile.webp"
       },
       {
         "src": "/assets/projects/a-boy-and-his-beard/tutorial-3.webp",
         "type": "gif",
-        "caption": "Grabbing mechanic: chest, key, door, dialogue, and focus cues"
+        "caption": "Grabbing mechanic: chest, key, door, dialogue, and focus cues",
+        "mobileSrc": "/assets/projects/a-boy-and-his-beard/tutorial-3-mobile.webp"
       },
       {
         "src": "/assets/projects/a-boy-and-his-beard/enemy-skellytons.webp",
@@ -385,7 +422,8 @@
       {
         "src": "/assets/projects/a-boy-and-his-beard/cut-content.webp",
         "type": "gif",
-        "caption": "Cut-content preview from the original page"
+        "caption": "Cut-content preview from the original page",
+        "mobileSrc": "/assets/projects/a-boy-and-his-beard/cut-content-mobile.webp"
       },
       {
         "src": "/assets/projects/a-boy-and-his-beard/cut-content-beard-physics.webp",
@@ -403,7 +441,8 @@
         "caption": "Special thanks and team credit image"
       }
     ],
-    "link": "https://store.steampowered.com/app/708100/A_Boy_and_His_Beard/"
+    "link": "https://store.steampowered.com/app/708100/A_Boy_and_His_Beard/",
+    "thumbnailMobile": "/assets/projects/a-boy-and-his-beard/tutorial-2-mobile.webp"
   },
   {
     "id": "thrive-vr",
@@ -419,17 +458,20 @@
       {
         "src": "/assets/projects/thrive-vr/thrive-overview.webp",
         "type": "gif",
-        "caption": "ThriveVR overview"
+        "caption": "ThriveVR overview",
+        "mobileSrc": "/assets/projects/thrive-vr/thrive-overview-mobile.webp"
       },
       {
         "src": "/assets/projects/thrive-vr/daruma-goal.webp",
         "type": "gif",
-        "caption": "Daruma goal-setting interaction"
+        "caption": "Daruma goal-setting interaction",
+        "mobileSrc": "/assets/projects/thrive-vr/daruma-goal-mobile.webp"
       },
       {
         "src": "/assets/projects/thrive-vr/physician-cannon.webp",
         "type": "gif",
-        "caption": "Physician-controlled cannon challenge"
+        "caption": "Physician-controlled cannon challenge",
+        "mobileSrc": "/assets/projects/thrive-vr/physician-cannon-mobile.webp"
       },
       {
         "src": "/assets/projects/thrive-vr/foot-tracking.webp",
@@ -452,7 +494,8 @@
         "caption": "Games for Health most popular at show 2016"
       }
     ],
-    "link": "https://hawaiianspawn.wixsite.com/thrivevr"
+    "link": "https://hawaiianspawn.wixsite.com/thrivevr",
+    "thumbnailMobile": "/assets/projects/thrive-vr/thrive-overview-mobile.webp"
   },
   {
     "id": "junkensteins-revenge",
@@ -469,34 +512,42 @@
         "src": "/assets/projects/junkensteins-revenge/new-boss-mod-web.mp4",
         "type": "video",
         "caption": "Junkenstein new boss mod full clip",
-        "mime": "video/mp4"
+        "mime": "video/mp4",
+        "mobileSrc": "/assets/projects/junkensteins-revenge/new-boss-mod-web-mobile.mp4",
+        "mobileMime": "video/mp4"
       },
       {
         "src": "/assets/projects/junkensteins-revenge/Reaper.webp",
         "type": "gif",
-        "caption": "Reaper boss behavior: teleport and hack pressure"
+        "caption": "Reaper boss behavior: teleport and hack pressure",
+        "mobileSrc": "/assets/projects/junkensteins-revenge/Reaper-mobile.webp"
       },
       {
         "src": "/assets/projects/junkensteins-revenge/Roadhog Burning.webp",
         "type": "gif",
-        "caption": "Roadhog boss behavior: burning AOE pressure"
+        "caption": "Roadhog boss behavior: burning AOE pressure",
+        "mobileSrc": "/assets/projects/junkensteins-revenge/Roadhog Burning-mobile.webp"
       },
       {
         "src": "/assets/projects/junkensteins-revenge/road-aoe.webp",
         "type": "gif",
-        "caption": "Roadhog boss behavior: stacking AOE damage"
+        "caption": "Roadhog boss behavior: stacking AOE damage",
+        "mobileSrc": "/assets/projects/junkensteins-revenge/road-aoe-mobile.webp"
       },
       {
         "src": "/assets/projects/junkensteins-revenge/Symetra.webp",
         "type": "gif",
-        "caption": "Symmetra boss behavior: timed sentry turret spawns"
+        "caption": "Symmetra boss behavior: timed sentry turret spawns",
+        "mobileSrc": "/assets/projects/junkensteins-revenge/Symetra-mobile.webp"
       },
       {
         "src": "/assets/projects/junkensteins-revenge/Junkrat.webp",
         "type": "gif",
-        "caption": "Junkrat boss behavior: revised RIP-tire pressure"
+        "caption": "Junkrat boss behavior: revised RIP-tire pressure",
+        "mobileSrc": "/assets/projects/junkensteins-revenge/Junkrat-mobile.webp"
       }
     ],
-    "link": ""
+    "link": "",
+    "thumbnailMobile": "/assets/projects/junkensteins-revenge/Reaper-mobile.webp"
   }
 ]
