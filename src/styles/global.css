@@ -79,6 +79,12 @@ h1, h2, h3, h4 {
   gap: 20px;
 }
 
+@media (min-width: 1180px) {
+  .project-grid-older {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* Gallery section spacing */
 .gallery-section {
   margin-bottom: 72px;

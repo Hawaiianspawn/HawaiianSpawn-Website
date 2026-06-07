@@ -89,46 +89,6 @@
     "link": ""
   },
   {
-    "id": "hanamikoji",
-    "title": "Hanamikoji",
-    "slug": "hanamikoji",
-    "section": "older",
-    "tag": "Tabletop",
-    "year": "",
-    "status": "",
-    "description": "Physical card game design and production. Designed, printed, and played.",
-    "thumbnail": "/assets/projects/hanamikoji/photo.webp",
-    "media": [
-      {
-        "src": "/assets/projects/hanamikoji/photo.webp",
-        "type": "image",
-        "caption": "",
-        "mobileSrc": "/assets/projects/hanamikoji/photo-mobile.webp"
-      }
-    ],
-    "link": "",
-    "thumbnailMobile": "/assets/projects/hanamikoji/photo-mobile.webp"
-  },
-  {
-    "id": "cabin-render",
-    "title": "Cabin Lighting Study",
-    "slug": "cabin-render",
-    "section": "older",
-    "tag": "3D / Maya",
-    "year": "",
-    "status": "",
-    "description": "Maya exterior render - cabin with windmill, tree, and natural lighting study.",
-    "thumbnail": "/assets/projects/cabin-render/render.webp",
-    "media": [
-      {
-        "src": "/assets/projects/cabin-render/render.webp",
-        "type": "image",
-        "caption": ""
-      }
-    ],
-    "link": ""
-  },
-  {
     "id": "perfect-dark",
     "title": "Perfect Dark",
     "slug": "perfect-dark",
