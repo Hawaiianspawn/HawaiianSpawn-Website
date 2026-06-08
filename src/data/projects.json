@@ -65,6 +65,11 @@
         "src": "/assets/projects/the-spare/cover.webp",
         "type": "image",
         "caption": ""
+      },
+      {
+        "src": "https://player.vimeo.com/video/42439088?title=0&byline=0&portrait=0",
+        "type": "embed",
+        "caption": "The Spare five-minute animated short"
       }
     ],
     "link": ""
@@ -84,6 +89,21 @@
         "src": "/assets/projects/character-rig/screenshot.webp",
         "type": "image",
         "caption": ""
+      },
+      {
+        "src": "https://www.youtube.com/embed/cODxyX-7pAE",
+        "type": "embed",
+        "caption": "Demo reel showcasing technical art and game design work"
+      },
+      {
+        "src": "https://player.vimeo.com/video/42337411?title=0&byline=0&portrait=0",
+        "type": "embed",
+        "caption": "Generalist Reel 2012"
+      },
+      {
+        "src": "https://player.vimeo.com/video/42337346?title=0&byline=0&portrait=0",
+        "type": "embed",
+        "caption": "Rigging Reel 2012"
       }
     ],
     "link": ""
@@ -421,6 +441,11 @@
         "type": "gif",
         "caption": "ThriveVR overview",
         "mobileSrc": "/assets/projects/thrive-vr/thrive-overview-mobile.webp"
+      },
+      {
+        "src": "https://player.vimeo.com/video/156515019?title=0&byline=0&portrait=0",
+        "type": "embed",
+        "caption": "Thrive Inspire Reel"
       },
       {
         "src": "/assets/projects/thrive-vr/daruma-goal.webp",
