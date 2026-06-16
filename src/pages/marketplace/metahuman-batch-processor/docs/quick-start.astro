@@ -32,6 +32,14 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           From the menu bar, go to <strong>Window → MHA Batch Processor</strong>.
           The panel will dock into the editor. You can float or re-dock it anywhere.
         </p>
+        <figure class="doc-figure">
+          <div class="doc-img-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+            <span class="placeholder-name">qs-panel-empty.webp</span>
+            <span class="placeholder-hint">The MHA Batch Processor tab open and docked — empty queue, Global Settings panel visible at top</span>
+          </div>
+          <figcaption>The batch processor panel on first open — empty queue with Global Settings at the top</figcaption>
+        </figure>
       </div>
     </div>
 
@@ -73,6 +81,14 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           If both assets are under a predictable folder structure, the plugin may auto-discover
           the Identity — check the cell before assigning manually.
         </p>
+        <figure class="doc-figure">
+          <div class="doc-img-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+            <span class="placeholder-name">qs-job-configured.webp</span>
+            <span class="placeholder-hint">Queue showing one Mono job row with Capture Data and Identity cells filled in</span>
+          </div>
+          <figcaption>A configured Mono job — Capture Data and Identity assigned, job type set to Mono</figcaption>
+        </figure>
       </div>
     </div>
 
@@ -97,6 +113,14 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           Progress is shown per-job in the queue row. The log panel below the queue streams
           live output from the solver.
         </p>
+        <figure class="doc-figure">
+          <div class="doc-img-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+            <span class="placeholder-name">qs-batch-running.webp</span>
+            <span class="placeholder-hint">Panel mid-process — job row showing progress bar and current stage label, log panel scrolling below</span>
+          </div>
+          <figcaption>The batch running — per-job progress bar and live log output visible</figcaption>
+        </figure>
       </div>
     </div>
 
@@ -125,6 +149,14 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
             <span>Sequencer-ready animation track (if enabled in Global Settings)</span>
           </div>
         </div>
+        <figure class="doc-figure">
+          <div class="doc-img-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+            <span class="placeholder-name">qs-content-browser-output.webp</span>
+            <span class="placeholder-hint">Content Browser showing the output folder — Performance asset, AnimSequence, and LevelSequence visible</span>
+          </div>
+          <figcaption>Generated assets in the Content Browser after a successful batch</figcaption>
+        </figure>
       </div>
     </div>
 
@@ -156,6 +188,24 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 </DocsLayout>
 
 <style>
+  /* Image placeholders */
+  .doc-figure { margin: 20px 0 4px; }
+  .doc-img-placeholder {
+    background: #0a0a0a;
+    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
+    border-radius: var(--radius);
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .placeholder-icon { color: var(--text-muted); opacity: 0.35; }
+  .placeholder-name { font-family: var(--font-mono); font-size: 0.775rem; color: var(--accent); }
+  .placeholder-hint { font-size: 0.775rem; color: var(--text-muted); max-width: 480px; line-height: 1.5; }
+  figcaption { font-size: 0.775rem; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+
   .doc-header { margin-bottom: 32px; }
 
   .doc-title {

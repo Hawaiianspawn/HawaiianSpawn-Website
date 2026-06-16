@@ -63,6 +63,15 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
     </div>
 
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">job-type-mono-row.webp</span>
+        <span class="placeholder-hint">Queue row with Job Type set to "Mono" — Capture Data and Identity cells filled, status showing "Ready"</span>
+      </div>
+      <figcaption>A Mono job row in the queue — Identity and Capture Data assigned, ready to process</figcaption>
+    </figure>
+
     <h3 class="sub-heading">Mono-specific options</h3>
     <div class="option-list">
       <div class="option-row">
@@ -133,6 +142,15 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
     </div>
 
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">job-type-stereo-depth-gen.webp</span>
+        <span class="placeholder-hint">A Stereo job mid-process at the "Generate Depth" stage — progress bar visible, stage label highlighted</span>
+      </div>
+      <figcaption>A Stereo job during depth generation — the stage before the performance solve</figcaption>
+    </figure>
+
     <div class="callout callout-note">
       <strong>Depth generation is serial.</strong> Even when <strong>Max Concurrent Jobs</strong> is set
       above 1, depth generation for all stereo jobs completes before any job enters the concurrent processing pool.
@@ -196,6 +214,15 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <span>Must contain an audio track; video tracks are ignored</span>
       </div>
     </div>
+
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">job-type-audio-row.webp</span>
+        <span class="placeholder-hint">Queue showing an Audio job row — only Capture Data assigned, Identity cell is greyed out / not required</span>
+      </div>
+      <figcaption>An Audio job requires only Capture Data — Identity and Calibration columns are inactive</figcaption>
+    </figure>
 
     <div class="callout callout-tip">
       Audio jobs do <strong>not</strong> require a MetaHuman Identity or Camera Calibration asset.
@@ -267,6 +294,24 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 </DocsLayout>
 
 <style>
+  /* Image placeholders */
+  .doc-figure { margin: 20px 0 4px; }
+  .doc-img-placeholder {
+    background: #0a0a0a;
+    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
+    border-radius: var(--radius);
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .placeholder-icon { color: var(--text-muted); opacity: 0.35; }
+  .placeholder-name { font-family: var(--font-mono); font-size: 0.775rem; color: var(--accent); }
+  .placeholder-hint { font-size: 0.775rem; color: var(--text-muted); max-width: 480px; line-height: 1.5; }
+  figcaption { font-size: 0.775rem; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+
   .doc-header { margin-bottom: 40px; }
 
   .doc-title {

@@ -105,6 +105,25 @@ const typeLabels: Record<string, { label: string; cls: string }> = {
     </p>
   </div>
 
+  <div class="overview-figures">
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">ts-validation-error.webp</span>
+        <span class="placeholder-hint">Queue row with red X icon visible — tooltip showing "Missing Identity asset" or similar validation message</span>
+      </div>
+      <figcaption>A validation error on a job row — hover the red X to see the specific missing asset</figcaption>
+    </figure>
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">ts-log-panel-error.webp</span>
+        <span class="placeholder-hint">Log panel at the bottom of the batch tab — error message visible in red, stage name shown before it</span>
+      </div>
+      <figcaption>The log panel showing a solve failure — stage name and error message are your first debugging clues</figcaption>
+    </figure>
+  </div>
+
   <nav class="filter-nav" aria-label="Filter by category">
     {Object.entries(typeLabels).map(([key, val]) => (
       <button class="filter-btn" data-filter={key}>{val.label}</button>
@@ -153,6 +172,29 @@ const typeLabels: Record<string, { label: string; cls: string }> = {
 </DocsLayout>
 
 <style>
+  /* Image placeholders */
+  .overview-figures { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .doc-figure { margin: 0; }
+  .doc-img-placeholder {
+    background: #0a0a0a;
+    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
+    border-radius: var(--radius);
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  .placeholder-icon { color: var(--text-muted); opacity: 0.35; }
+  .placeholder-name { font-family: var(--font-mono); font-size: 0.775rem; color: var(--accent); }
+  .placeholder-hint { font-size: 0.775rem; color: var(--text-muted); max-width: 320px; line-height: 1.5; }
+  figcaption { font-size: 0.775rem; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+
+  @media (max-width: 640px) { .overview-figures { grid-template-columns: 1fr; } }
+
   .doc-header { margin-bottom: 32px; }
 
   .doc-title {
