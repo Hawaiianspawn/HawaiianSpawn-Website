@@ -1,0 +1,598 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Installation — MetaHuman Batch Processor"
+  description="Install the MetaHuman Batch Processor plugin via precompiled binaries or from source."
+  currentSlug="installation"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Installation</h1>
+    <p class="doc-lead">
+      Two ways to get the plugin into your project. Precompiled binaries are the fastest path —
+      no Visual Studio required. Build from source if you need to modify the plugin or target
+      a specific engine build.
+    </p>
+  </div>
+
+  <!-- Track selector -->
+  <div class="track-selector" role="tablist">
+    <button class="track-btn active" data-track="binaries" role="tab" aria-selected="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Precompiled Binaries
+    </button>
+    <button class="track-btn" data-track="source" role="tab" aria-selected="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      From Source
+    </button>
+  </div>
+
+  <!-- Precompiled track -->
+  <div class="track-panel" data-panel="binaries">
+
+    <div class="callout callout-tip">
+      <strong>Recommended for most users.</strong> No compiler or Visual Studio needed — just unzip and open your project.
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 class="step-title">Download the plugin</h3>
+          <p class="step-desc">
+            Grab the latest release archive from the
+            <a href="https://github.com/hawaiianspawn/MHABatchProcessor/releases" target="_blank" rel="noopener noreferrer">GitHub Releases page</a>.
+            Download the file named <code>MHABatchProcessor-UE5.7-Win64.zip</code> (or the version matching your engine).
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 class="step-title">Copy to your project's Plugins folder</h3>
+          <p class="step-desc">
+            Extract the archive. Inside you'll find a single folder named <code>MHABatchProcessor</code>.
+            Copy that folder into your project's <code>Plugins/</code> directory, creating it if it doesn't exist:
+          </p>
+          <div class="code-block">
+            <pre><code>YourProject/
+└── Plugins/
+    └── MHABatchProcessor/       ← paste here
+        ├── MHABatchProcessor.uplugin
+        └── Source/</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 class="step-title">Open your project</h3>
+          <p class="step-desc">
+            Double-click your <code>.uproject</code> file to open Unreal Editor. If prompted that
+            modules are missing and need to be rebuilt, click <strong>No</strong> — the precompiled
+            binaries should load without recompiling. If you see this prompt repeatedly, you may need
+            the <a href="#from-source">From Source</a> path instead.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3 class="step-title">Enable required engine plugins</h3>
+          <p class="step-desc">
+            Go to <strong>Edit → Plugins</strong> and verify that all of these are enabled. If any are
+            disabled, enable them and restart the editor when prompted.
+          </p>
+          <div class="plugin-table">
+            <div class="plugin-row header">
+              <span>Plugin name</span>
+              <span>Category in Plugins browser</span>
+              <span>Required for</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCharacter</code></span>
+              <span>MetaHuman</span>
+              <span>All job types</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCharacterUAF</code></span>
+              <span>MetaHuman</span>
+              <span>All job types</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCalibrationProcessing</code></span>
+              <span>MetaHuman</span>
+              <span>Stereo jobs, camera calibration</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCalibrationDiagnostics</code></span>
+              <span>MetaHuman</span>
+              <span>Stereo jobs, calibration validation</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanDepthProcessing</code></span>
+              <span>MetaHuman</span>
+              <span>Stereo depth generation and cleaning</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>CaptureData</code></span>
+              <span>Virtual Production</span>
+              <span>All job types — footage import assets</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>ImgMedia</code></span>
+              <span>Media</span>
+              <span>Stereo depth image sequences</span>
+            </div>
+          </div>
+          <div class="callout callout-tip" style="margin-top: 14px;">
+            <strong>MetaHuman Core Data:</strong> If you plan to use MetaHuman characters in-game
+            (not just for performance capture), also download <strong>MetaHuman Core Data</strong>
+            from Quixel Bridge or the MetaHuman Creator export flow. This is not a plugin — it is a
+            content package that provides the base skeleton, materials, and LODs your MetaHuman
+            characters depend on at runtime.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3 class="step-title">Verify the plugin is active</h3>
+          <p class="step-desc">
+            Search for <strong>MHA Batch Processor</strong> in the Plugins browser — it should show
+            as enabled. Then open <strong>Window → MHA Batch Processor</strong> from the menu bar.
+            The queue panel should appear. You're ready.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- From Source track -->
+  <div class="track-panel hidden" data-panel="source">
+
+    <div class="callout callout-note">
+      <strong>Prerequisites:</strong> Visual Studio 2022 with the <em>Game development with C++</em> workload and <em>.NET desktop development</em> workload installed.
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 class="step-title">Get the source</h3>
+          <p class="step-desc">
+            Clone the repository or download the source archive from GitHub:
+          </p>
+          <div class="code-block">
+            <pre><code>git clone https://github.com/hawaiianspawn/MHABatchProcessor.git</code></pre>
+          </div>
+          <p class="step-desc" style="margin-top: 10px;">
+            Alternatively, download the <code>Source code (zip)</code> from the
+            <a href="https://github.com/hawaiianspawn/MHABatchProcessor/releases" target="_blank" rel="noopener noreferrer">Releases page</a>
+            and extract it.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 class="step-title">Copy to your project's Plugins folder</h3>
+          <p class="step-desc">
+            Copy the <code>MHABatchProcessor</code> folder into your project's <code>Plugins/</code> directory:
+          </p>
+          <div class="code-block">
+            <pre><code>YourProject/
+└── Plugins/
+    └── MHABatchProcessor/       ← paste here
+        ├── MHABatchProcessor.uplugin
+        └── Source/
+            └── MHABatchProcessorEditor/</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 class="step-title">Enable required engine plugins</h3>
+          <p class="step-desc">
+            Before generating project files, make sure these plugins are listed as enabled in your
+            <code>.uproject</code> file, or enable them via <strong>Edit → Plugins</strong> after
+            the first editor launch. The build will fail if the MetaHuman or CaptureData headers
+            are not present.
+          </p>
+          <div class="plugin-table">
+            <div class="plugin-row header">
+              <span>Plugin name</span>
+              <span>Category in Plugins browser</span>
+              <span>Required for</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCharacter</code></span>
+              <span>MetaHuman</span>
+              <span>All job types</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCharacterUAF</code></span>
+              <span>MetaHuman</span>
+              <span>All job types</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCalibrationProcessing</code></span>
+              <span>MetaHuman</span>
+              <span>Stereo jobs, camera calibration</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanCalibrationDiagnostics</code></span>
+              <span>MetaHuman</span>
+              <span>Stereo jobs, calibration validation</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanDepthProcessing</code></span>
+              <span>MetaHuman</span>
+              <span>Stereo depth generation and cleaning</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>CaptureData</code></span>
+              <span>Virtual Production</span>
+              <span>All job types — footage import assets</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>ImgMedia</code></span>
+              <span>Media</span>
+              <span>Stereo depth image sequences</span>
+            </div>
+          </div>
+          <div class="callout callout-tip" style="margin-top: 14px;">
+            <strong>MetaHuman Core Data:</strong> If you plan to use MetaHuman characters in-game,
+            also download <strong>MetaHuman Core Data</strong> from Quixel Bridge or the MetaHuman
+            Creator export flow. This is not a plugin — it is a content package providing the base
+            skeleton, materials, and LODs your characters depend on at runtime.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3 class="step-title">Generate Visual Studio project files</h3>
+          <p class="step-desc">
+            Right-click your <code>.uproject</code> file in Windows Explorer and choose
+            <strong>Generate Visual Studio project files</strong>. This produces a <code>.sln</code>
+            solution file in the same directory.
+          </p>
+          <div class="callout callout-tip" style="margin-top: 12px;">
+            If you don't see this context menu option, open the Unreal Editor first (it will prompt
+            to rebuild), or run <code>UnrealBuildTool.exe</code> manually via the Engine's <code>Build/BatchFiles/</code> directory.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3 class="step-title">Build in Visual Studio</h3>
+          <p class="step-desc">
+            Open the generated <code>.sln</code> in Visual Studio 2022. Set the build configuration
+            to <strong>Development Editor</strong> and the platform to <strong>Win64</strong>, then build:
+          </p>
+          <div class="code-block">
+            <pre><code>Configuration: Development Editor
+Platform:      Win64
+Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
+          </div>
+          <p class="step-desc" style="margin-top: 10px;">
+            A full build typically takes 5–15 minutes depending on hardware. Subsequent incremental
+            builds are much faster.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3 class="step-title">Open the editor and verify</h3>
+          <p class="step-desc">
+            Launch the editor by double-clicking your <code>.uproject</code>. Search for
+            <strong>MHA Batch Processor</strong> in <strong>Edit → Plugins</strong> — it should show
+            as enabled. Open <strong>Window → MHA Batch Processor</strong> to confirm the panel loads.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Next page -->
+  <div class="doc-footer">
+    <a href="/marketplace/metahuman-batch-processor/docs/quick-start" class="next-link">
+      <span class="next-label">Next</span>
+      <span class="next-title">
+        Quick Start
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </div>
+
+</DocsLayout>
+
+<style>
+  .doc-header {
+    margin-bottom: 36px;
+  }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  /* Track selector */
+  .track-selector {
+    display: flex;
+    gap: 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+    margin-bottom: 32px;
+    width: fit-content;
+  }
+
+  .track-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .track-btn:hover { color: var(--text); }
+
+  .track-btn.active {
+    color: var(--text);
+    background: var(--bg-card);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  /* Panels */
+  .track-panel { }
+  .track-panel.hidden { display: none; }
+
+  /* Callouts */
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-bottom: 28px;
+    border-left: 3px solid;
+  }
+
+  .callout-tip {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .callout-note {
+    background: color-mix(in srgb, #f0a500 8%, transparent);
+    border-color: #f0a500;
+    color: var(--text);
+  }
+
+  .callout strong { font-weight: 600; }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; }
+
+  .step {
+    display: flex;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .step-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .step-desc a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .step-desc a:hover { text-decoration: underline; }
+
+  .step-desc strong { color: var(--text); font-weight: 500; }
+
+  .step-desc em { color: var(--text); font-style: italic; }
+
+  /* Code blocks */
+  .code-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 12px;
+    overflow-x: auto;
+  }
+
+  .code-block pre { margin: 0; }
+
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #c9d1d9;
+    line-height: 1.7;
+    white-space: pre;
+  }
+
+  /* Inline code */
+  .step-desc code,
+  .callout code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+
+  /* Plugin table */
+  .plugin-table {
+    margin-top: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .plugin-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1.4fr 1fr;
+    gap: 16px;
+    padding: 10px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .plugin-row:last-child { border-bottom: none; }
+
+  .plugin-row.header {
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .plugin-row code {
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    color: var(--accent);
+  }
+
+  /* Footer nav */
+  .doc-footer {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .next-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--text);
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+
+  .next-link:hover { border-color: var(--accent); }
+
+  .next-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  .next-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .step { flex-direction: column; gap: 12px; }
+    .plugin-row { grid-template-columns: 1fr 1fr; }
+    .plugin-row span:last-child { display: none; }
+    .plugin-row.header span:last-child { display: none; }
+    .track-selector { width: 100%; }
+    .track-btn { flex: 1; justify-content: center; }
+  }
+</style>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('.track-btn');
+  const panels = document.querySelectorAll<HTMLElement>('.track-panel');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.track;
+
+      btns.forEach(b => {
+        b.classList.toggle('active', b === btn);
+        b.setAttribute('aria-selected', String(b === btn));
+      });
+
+      panels.forEach(panel => {
+        panel.classList.toggle('hidden', panel.dataset.panel !== target);
+      });
+    });
+  });
+</script>

@@ -1,0 +1,220 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+
+const topics = [
+  {
+    group: 'Getting Started',
+    items: [
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/installation',
+        label: 'Installation',
+        desc: 'Install via precompiled binaries or build from source. Enable required engine plugins.',
+      },
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/quick-start',
+        label: 'Quick Start',
+        desc: 'Run your first batch in five steps using a Mono job — the fastest path to results.',
+      },
+    ],
+  },
+  {
+    group: 'Reference',
+    items: [
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/job-types',
+        label: 'Job Types',
+        desc: 'Mono, Stereo, and Audio — required assets, depth generation, and when to use each.',
+      },
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/global-settings',
+        label: 'Global Settings',
+        desc: 'Output path, concurrent jobs, export format, re-process toggle, and D3D12 override.',
+      },
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/job-options',
+        label: 'Per-Job Options',
+        desc: 'All 35+ solve parameters exposed per job — frame exclusion, depth cleaning, tongue solve, and more.',
+      },
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/manifests',
+        label: 'Manifest Format',
+        desc: 'The .mhajson schema — saving, loading, and sharing queues across machines.',
+      },
+    ],
+  },
+  {
+    group: 'Advanced',
+    items: [
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/ci-mode',
+        label: 'Headless / CI Mode',
+        desc: 'Run batches from the command line with -run=MHABatch. Exit codes, logging, and example scripts.',
+      },
+      {
+        href: '/marketplace/metahuman-batch-processor/docs/troubleshooting',
+        label: 'Troubleshooting',
+        desc: 'Validation errors, depth generation failures, memory limits, and common crash causes.',
+      },
+    ],
+  },
+];
+---
+
+<DocsLayout
+  title="Documentation — MetaHuman Batch Processor"
+  description="Full documentation for the MetaHuman Batch Processor UE5 plugin."
+  currentSlug="index"
+>
+
+  <div class="doc-header">
+    <div class="doc-header-meta">
+      <span class="version-chip">v1.0</span>
+      <span class="version-chip">UE 5.7+</span>
+    </div>
+    <h1 class="doc-title">Documentation</h1>
+    <p class="doc-lead">
+      Everything you need to get MetaHuman Batch Processor running, configured, and integrated
+      into your production pipeline.
+    </p>
+    <a href="/marketplace/metahuman-batch-processor/docs/installation" class="btn btn-primary start-btn">
+      Get started — Installation
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+  {topics.map(section => (
+    <section class="topic-section">
+      <h2 class="topic-group-label">{section.group}</h2>
+      <div class="topic-grid">
+        {section.items.map(item => (
+          <a href={item.href} class="topic-card">
+            <div class="topic-card-body">
+              <span class="topic-title">{item.label}</span>
+              <p class="topic-desc">{item.desc}</p>
+            </div>
+            <svg class="topic-arrow" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+</DocsLayout>
+
+<style>
+  .doc-header {
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .doc-header-meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .version-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .start-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Topic sections */
+  .topic-section {
+    margin-bottom: 40px;
+  }
+
+  .topic-group-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topic-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .topic-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .topic-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    background: var(--bg-surface);
+  }
+
+  .topic-card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .topic-title {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .topic-desc {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .topic-arrow {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .topic-card:hover .topic-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+</style>

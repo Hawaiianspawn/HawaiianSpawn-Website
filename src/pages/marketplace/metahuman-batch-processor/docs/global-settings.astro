@@ -1,0 +1,243 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+
+const settings = [
+  {
+    name: 'Output Path',
+    default: '/Game/MHA_Batch',
+    desc: 'Content Browser path where all generated Performance, AnimSequence, and LevelSequence assets are written. The folder is created automatically if it does not exist. Use a project-relative path starting with <code>/Game/</code>.',
+    note: null,
+  },
+  {
+    name: 'Do Not Re-Process Solved Takes',
+    default: 'Enabled',
+    desc: 'When enabled, any job whose <code>UMetaHumanPerformance</code> asset already exists at the output path is skipped automatically. Useful when re-running a batch after a partial failure — completed jobs are not duplicated.',
+    note: null,
+  },
+  {
+    name: 'Max Concurrent Jobs',
+    default: '1',
+    desc: 'Maximum number of jobs that can be in active processing simultaneously. Sequential mode (1) is the safest and lowest-memory option. Higher values overlap pipeline stages across jobs — one job\'s export while another\'s tracking runs — rather than true parallel solves.',
+    note: 'Requires 32+ GB RAM for values above 1. Epic\'s MetaHuman pipeline enforces a global processing lock, so parallel solves within a single editor instance are not possible.',
+  },
+  {
+    name: 'Export AnimSequence',
+    default: 'Enabled',
+    desc: 'Bakes the solved performance into a <code>UAnimSequence</code> asset on the MetaHuman skeleton. Disable if you only need the raw Performance asset.',
+    note: null,
+  },
+  {
+    name: 'Export LevelSequence',
+    default: 'Disabled',
+    desc: 'Additionally bakes the animation into a <code>ULevelSequence</code> asset with a Sequencer track ready for cinematic use.',
+    note: null,
+  },
+  {
+    name: 'Use MetaHuman ID for Output Mesh',
+    default: 'Enabled',
+    desc: 'When enabled, the exported AnimSequence targets the skeleton of the specific <code>UMetaHumanIdentity</code> assigned to the job. When disabled, a generic archetype skeleton is used instead — useful if the Identity is a placeholder.',
+    note: null,
+  },
+  {
+    name: 'Reduce Keys',
+    default: 'Disabled',
+    desc: 'Applies keyframe reduction as a post-process step after export. Removes redundant keys to reduce AnimSequence file size and runtime cost. May introduce subtle smoothing on fast facial motion.',
+    note: null,
+  },
+  {
+    name: 'Force D3D12',
+    default: 'Disabled',
+    desc: 'Forces the Direct3D 12 graphics backend for the performance solve. Some systems see better GPU utilization with D3D12. Leave disabled unless you have a specific reason to override the project\'s default RHI.',
+    note: null,
+  },
+];
+---
+
+<DocsLayout
+  title="Global Settings — MetaHuman Batch Processor"
+  description="Reference for all global settings in the MetaHuman Batch Processor plugin."
+  currentSlug="global-settings"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Global Settings</h1>
+    <p class="doc-lead">
+      Global settings apply to every job in the queue. They are configured once in the settings
+      panel at the top of the MHA Batch Processor tab. Settings persist between sessions and
+      are saved in the batch manifest.
+    </p>
+  </div>
+
+  <div class="settings-list">
+    {settings.map(s => (
+      <div class="setting-row">
+        <div class="setting-meta">
+          <span class="setting-name">{s.name}</span>
+          <span class="setting-default">Default: <code>{s.default}</code></span>
+        </div>
+        <div class="setting-body">
+          <p class="setting-desc" set:html={s.desc} />
+          {s.note && (
+            <div class="callout callout-note">
+              <Fragment set:html={s.note} />
+            </div>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="doc-footer">
+    <a href="/marketplace/metahuman-batch-processor/docs/job-types" class="prev-link">
+      <span class="nav-label">Previous</span>
+      <span class="nav-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Job Types
+      </span>
+    </a>
+    <a href="/marketplace/metahuman-batch-processor/docs/job-options" class="next-link">
+      <span class="nav-label">Next</span>
+      <span class="nav-title">
+        Per-Job Options
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </div>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  .settings-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .setting-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .setting-row:last-child { border-bottom: none; }
+
+  .setting-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 2px;
+  }
+
+  .setting-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .setting-default {
+    font-size: 0.775rem;
+    color: var(--text-muted);
+  }
+
+  .setting-default code {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .setting-body { min-width: 0; }
+
+  .setting-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  :global(.setting-desc code) {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .callout {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 0.825rem;
+    line-height: 1.6;
+    margin-top: 12px;
+    border-left: 3px solid;
+  }
+
+  .callout-note {
+    background: color-mix(in srgb, #f0a500 8%, transparent);
+    border-color: #f0a500;
+    color: var(--text-muted);
+  }
+
+  .doc-footer {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .prev-link, .next-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+    min-width: 140px;
+  }
+
+  .prev-link { align-items: flex-start; }
+  .next-link { align-items: flex-end; }
+  .prev-link:hover, .next-link:hover { border-color: var(--accent); }
+
+  .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+
+  .nav-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .setting-row { grid-template-columns: 1fr; gap: 8px; }
+  }
+</style>

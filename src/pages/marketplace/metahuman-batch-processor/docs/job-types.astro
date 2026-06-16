@@ -1,0 +1,496 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Job Types — MetaHuman Batch Processor"
+  description="Mono, Stereo, and Audio job types — required assets, workflows, and when to use each."
+  currentSlug="job-types"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Job Types</h1>
+    <p class="doc-lead">
+      Each job in the queue has a type that determines which MetaHuman Animator pipeline it runs,
+      what assets it requires, and which per-job options are available.
+    </p>
+  </div>
+
+  <!-- Mono -->
+  <section class="type-section">
+    <div class="type-header">
+      <span class="type-badge type-mono">Mono</span>
+      <h2 class="type-title">Mono Video</h2>
+    </div>
+    <p class="type-desc">
+      Processes a single color camera recording. This is the standard path for footage captured
+      with a head-mounted camera or any single-lens setup. It is the fastest job type and the
+      right default for most productions.
+    </p>
+
+    <h3 class="sub-heading">Required assets</h3>
+    <div class="asset-table">
+      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
+      <div class="asset-row">
+        <span><strong>Capture Data</strong></span>
+        <span><code>UFootageCaptureData</code></span>
+        <span>Your video footage import asset</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>Identity</strong></span>
+        <span><code>UMetaHumanIdentity</code></span>
+        <span>Auto-discovered if under a standard folder structure</span>
+      </div>
+    </div>
+
+    <h3 class="sub-heading">Pipeline stages</h3>
+    <div class="pipeline">
+      <div class="pipeline-stage">
+        <span class="stage-name">Validate Input</span>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <span class="stage-name">Process Performance</span>
+        <span class="stage-note">Tracking + Fitting</span>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <span class="stage-name">Export Outputs</span>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <span class="stage-name">Save Assets</span>
+      </div>
+    </div>
+
+    <h3 class="sub-heading">Mono-specific options</h3>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Head Stabilization</span>
+        <span class="option-desc">Corrects for head movement drift during the solve. Recommended when the subject moves significantly.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Tongue Solve</span>
+        <span class="option-desc">Enables tongue tracking. Requires UE 5.7+ and appropriate capture quality. Disabled by default.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stereo -->
+  <section class="type-section">
+    <div class="type-header">
+      <span class="type-badge type-stereo">Stereo</span>
+      <h2 class="type-title">Stereo HMC</h2>
+    </div>
+    <p class="type-desc">
+      Processes footage from a multi-camera head-mounted capture rig. Stereo jobs provide depth
+      information that improves solve accuracy, particularly for facial geometry that is ambiguous
+      in monocular footage. Depth sequences can be pre-generated or produced automatically by the plugin.
+    </p>
+
+    <h3 class="sub-heading">Required assets</h3>
+    <div class="asset-table">
+      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
+      <div class="asset-row">
+        <span><strong>Capture Data</strong></span>
+        <span><code>UFootageCaptureData</code></span>
+        <span>Must reference both camera image sequences</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>Identity</strong></span>
+        <span><code>UMetaHumanIdentity</code></span>
+        <span>Auto-discovered if under a standard folder structure</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>Camera Calibration</strong></span>
+        <span><code>UCameraCalibrationData</code></span>
+        <span>Required for depth generation; auto-discovered if available</span>
+      </div>
+    </div>
+
+    <h3 class="sub-heading">Pipeline stages</h3>
+    <div class="pipeline">
+      <div class="pipeline-stage">
+        <span class="stage-name">Validate Input</span>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage highlight">
+        <span class="stage-name">Generate Depth</span>
+        <span class="stage-note">Stereo only</span>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage highlight">
+        <span class="stage-name">Clean Depth</span>
+        <span class="stage-note">Optional</span>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <span class="stage-name">Process Performance</span>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <span class="stage-name">Export + Save</span>
+      </div>
+    </div>
+
+    <div class="callout callout-note">
+      <strong>Depth generation is serial.</strong> Even when <strong>Max Concurrent Jobs</strong> is set
+      above 1, depth generation for all stereo jobs completes before any job enters the concurrent processing pool.
+    </div>
+
+    <h3 class="sub-heading">Stereo-specific options</h3>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Solve Type</span>
+        <span class="option-desc">Selects the stereo solver variant. Leave at default unless directed by Epic support.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Head Movement Reference Frame</span>
+        <span class="option-desc">Frame number used as the reference pose for head movement correction.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Neutral Pose Calibration</span>
+        <span class="option-desc">Uses a neutral expression frame for calibrating the face geometry baseline.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Face Coverage Threshold</span>
+        <span class="option-desc">Minimum proportion of the face that must be visible in depth for a frame to be used.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Face Width Threshold</span>
+        <span class="option-desc">Minimum face width in depth pixels required to include a frame.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Baseline / Scale Tolerance</span>
+        <span class="option-desc">Acceptable deviation between the stereo baseline in calibration and the live footage.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Enable Depth Cleaning</span>
+        <span class="option-desc">Runs NNE hole-filling on the depth sequence before the performance solve. Preserves GrayF EXR format.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Depth Clamp Min / Max</span>
+        <span class="option-desc">Clips depth values outside this range before cleaning. Useful for eliminating background noise.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Audio -->
+  <section class="type-section">
+    <div class="type-header">
+      <span class="type-badge type-audio">Audio</span>
+      <h2 class="type-title">Audio Only</h2>
+    </div>
+    <p class="type-desc">
+      Drives facial animation from an audio track alone — no video footage required. Useful for
+      generating lip-sync and expression animation from dialogue recordings when no performance
+      capture footage is available.
+    </p>
+
+    <h3 class="sub-heading">Required assets</h3>
+    <div class="asset-table">
+      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
+      <div class="asset-row">
+        <span><strong>Capture Data</strong></span>
+        <span><code>UFootageCaptureData</code></span>
+        <span>Must contain an audio track; video tracks are ignored</span>
+      </div>
+    </div>
+
+    <div class="callout callout-tip">
+      Audio jobs do <strong>not</strong> require a MetaHuman Identity or Camera Calibration asset.
+      They are the simplest job type to configure.
+    </div>
+
+    <h3 class="sub-heading">Audio-specific options</h3>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Solver Mode</span>
+        <span class="option-desc">Realtime (faster, lower quality) or Offline (slower, higher quality). Use Offline for final output.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Mood Preset</span>
+        <span class="option-desc">Sets the emotional tone used to color the generated animation — Neutral, Happy, Sad, Angry, etc.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Blink Generation</span>
+        <span class="option-desc">Auto-generates blinks when no blink data is present in the audio solve result.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Audio Channel</span>
+        <span class="option-desc">Which channel from a multi-track audio asset to use for the solve (0-indexed).</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Lookahead Window</span>
+        <span class="option-desc">Number of frames the solver looks ahead in the audio signal for anticipation cues.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Universal options -->
+  <section class="type-section">
+    <h2 class="section-title">Universal Options</h2>
+    <p class="type-desc">These options appear on every job regardless of type.</p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Frame Exclusion Ranges</span>
+        <span class="option-desc">One or more frame ranges to skip during the solve. Use to cut out blinks, obstructions, or bad frames.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Show Frames</span>
+        <span class="option-desc">When enabled, the solver renders preview frames during processing. Useful for debugging; slower in production.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Capture Frame Rate</span>
+        <span class="option-desc">Override the frame rate detected from the capture data. Leave blank to use auto-detection.</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="doc-footer">
+    <a href="/marketplace/metahuman-batch-processor/docs/quick-start" class="prev-link">
+      <span class="nav-label">Previous</span>
+      <span class="nav-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Quick Start
+      </span>
+    </a>
+    <a href="/marketplace/metahuman-batch-processor/docs/global-settings" class="next-link">
+      <span class="nav-label">Next</span>
+      <span class="nav-title">
+        Global Settings
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </div>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  .type-section {
+    margin-bottom: 64px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .type-section:last-of-type { border-bottom: none; }
+
+  .type-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .type-mono  { background: color-mix(in srgb, #4a9eff 12%, transparent); color: #4a9eff; border: 1px solid color-mix(in srgb, #4a9eff 30%, transparent); }
+  .type-stereo { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+  .type-audio  { background: color-mix(in srgb, #c084fc 12%, transparent); color: #c084fc; border: 1px solid color-mix(in srgb, #c084fc 30%, transparent); }
+
+  .type-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .type-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 620px;
+    margin-bottom: 24px;
+  }
+
+  .sub-heading {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    margin: 24px 0 10px;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .asset-table {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+
+  .asset-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1.3fr 1.4fr;
+    gap: 16px;
+    padding: 10px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .asset-row:last-child { border-bottom: none; }
+
+  .asset-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .asset-row strong { color: var(--text); font-weight: 500; }
+
+  .asset-row code {
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    color: var(--accent);
+  }
+
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 8px;
+  }
+
+  .pipeline-stage {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .pipeline-stage.highlight {
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  .stage-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .stage-note {
+    font-size: 0.7rem;
+    color: var(--accent);
+  }
+
+  .pipeline-arrow { color: var(--text-muted); font-size: 0.9rem; }
+
+  .option-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .option-row {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 20px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .option-row:last-child { border-bottom: none; }
+
+  .option-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.825rem;
+  }
+
+  .option-desc { color: var(--text-muted); line-height: 1.5; }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 16px 0;
+    border-left: 3px solid;
+  }
+
+  .callout-tip  { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+  .callout-note { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  .doc-footer {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .prev-link, .next-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+    min-width: 140px;
+  }
+
+  .prev-link { align-items: flex-start; }
+  .next-link { align-items: flex-end; }
+  .prev-link:hover, .next-link:hover { border-color: var(--accent); }
+
+  .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+
+  .nav-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .asset-row { grid-template-columns: 1fr 1fr; }
+    .asset-row span:last-child { display: none; }
+    .asset-row.header span:last-child { display: none; }
+    .option-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
