@@ -1,0 +1,53 @@
+# ai.txt — AI Crawler Policy
+# https://site.ai/ai-txt
+#
+# Portfolio content, project writeups, and plugin documentation
+# may be indexed for AI search and assistant grounding.
+# Training-only crawlers are disallowed.
+
+# --- Allowed: search / grounding ---
+
+# Anthropic (Claude web search + grounding)
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Google (Gemini grounding)
+User-agent: Google-Extended
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# ChatGPT search (distinct from GPTBot training crawler)
+User-agent: ChatGPT-User
+Allow: /
+
+# --- Disallowed: training-only crawlers ---
+
+# OpenAI training crawler
+User-agent: GPTBot
+Disallow: /
+
+# Common Crawl (bulk scraping)
+User-agent: CCBot
+Disallow: /
+
+# Meta AI training
+User-agent: FacebookBot
+Disallow: /
+
+# Diffbot (data extraction)
+User-agent: Diffbot
+Disallow: /

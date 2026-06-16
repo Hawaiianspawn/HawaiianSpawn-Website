@@ -1,0 +1,6 @@
+# ads.txt — Authorized Digital Sellers
+# https://iabtechlab.com/ads-txt/
+#
+# This is a personal portfolio site with no programmatic advertising.
+# No sellers are authorized to serve ads on hawaiianspawn.com.
+placeholder.example.com, placeholder, DIRECT, placeholder
