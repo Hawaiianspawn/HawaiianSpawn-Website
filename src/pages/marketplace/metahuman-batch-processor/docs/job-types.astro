@@ -220,6 +220,38 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <span class="option-desc">Clips depth values outside this range before cleaning. Useful for eliminating background noise.</span>
       </div>
     </div>
+
+    <h3 class="sub-heading">Depth Clean-Up Pass</h3>
+    <p class="type-desc" style="margin-bottom: 12px;">
+      Depth cleaning is a dedicated <strong>Clean Depth</strong> pipeline stage that runs between
+      depth generation and the performance solve. It is not a blur or a global denoise — it
+      distinguishes background from the subject by flood-filling inward from the image border, then
+      only patches genuine interior gaps (dropouts inside the face/body silhouette) using a
+      distance-weighted average of the surrounding valid depth pixels. Background and out-of-range
+      pixels outside the clamp range are left alone rather than smeared.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Non-destructive</span>
+        <span class="option-desc">Writes a new <code>_Cleaned</code> copy of the depth sequence on disk and as a new <code>UImgMediaSource</code> asset — the original capture data is never modified.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Runs asynchronously</span>
+        <span class="option-desc">EXR I/O and pixel processing run on the thread pool, not the game thread — the editor stays responsive, and the pass is cooperatively cancellable mid-run.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Idempotent</span>
+        <span class="option-desc">Re-running a job that already has a cleaned sequence re-cleans from the newest source instead of stacking cleaning passes on top of each other.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Timed separately</span>
+        <span class="option-desc">Depth cleaning time is tracked independently from solve time (<code>DepthCleaningTimeSecs</code>) and reported in the job log alongside frames-cleaned and sequence counts.</span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      See <a href="/marketplace/metahuman-batch-processor/docs/job-options#stereo">Per-Job Options</a>
+      for Enable Depth Cleaning and the Depth Clamp Min/Max parameters that control it.
+    </div>
   </section>
 
   <!-- Audio -->
