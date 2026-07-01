@@ -83,6 +83,35 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <span class="option-desc">Enables tongue tracking. Requires UE 5.7+ and appropriate capture quality. Disabled by default.</span>
       </div>
     </div>
+
+    <h3 class="sub-heading">Body Tracking (UE 5.8+)</h3>
+    <p class="type-desc" style="margin-bottom: 12px;">
+      Mono jobs can optionally solve body motion alongside the face, using the SMPLX-based body
+      tracker. Requires the <strong>MetaHumanBodyTracker</strong> plugin. Choose Face only, Body
+      only, or Face + Body per job.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Body Height, Detection/Tracking Confidence</span>
+        <span class="option-desc">Auto-infers subject height from footage by default (145–190cm recommended range), with tunable acquire and maintain-lock thresholds.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Foot Locking, Head Rotation Limits</span>
+        <span class="option-desc">Stabilizes foot contact and defines yaw/pitch limits beyond which a frame falls back to a neutral head pose (or is left unsolved).</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Body Export</span>
+        <span class="option-desc">Export the solved body onto its own performer-shaped mesh, or retarget it onto an existing skeleton via an auto-generated IK Retargeter (<strong>+ Create Retargeter...</strong> in the job panel).</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Visualization Blueprint</span>
+        <span class="option-desc">Body-tracked jobs need an Actor Blueprint (not a plain mesh) for the A|B viewport. Use <strong>Create Blueprint...</strong> in the job panel to auto-build one that leader-poses Face to Body.</span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      See <a href="/marketplace/metahuman-batch-processor/docs/job-options#body-tracking">Per-Job Options</a>
+      for the full Body Tracking, Body Export, and Visualization option references.
+    </div>
   </section>
 
   <!-- Stereo -->

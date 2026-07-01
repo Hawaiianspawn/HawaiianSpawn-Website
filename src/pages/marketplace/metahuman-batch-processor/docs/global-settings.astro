@@ -33,6 +33,18 @@ const settings = [
     note: null,
   },
   {
+    name: 'Force Export Animation',
+    default: 'Disabled',
+    desc: 'Re-exports a job\'s AnimSequence even when <strong>Overwrite Existing Assets</strong> is off and an AnimSequence already exists at the output path. Only affects AnimSequence export — other asset types (Performance, LevelSequence) still respect the overwrite setting.',
+    note: 'Use this when you\'ve changed export settings (curve interpolation, head movement, etc.) and want updated animation without re-running the full solve or touching other output assets.',
+  },
+  {
+    name: 'Auto-Open After Export',
+    default: 'Disabled',
+    desc: 'Opens the exported AnimSequence in its asset editor automatically when a job completes. Has no effect in headless/CI runs.',
+    note: null,
+  },
+  {
     name: 'Use MetaHuman ID for Output Mesh',
     default: 'Enabled',
     desc: 'When enabled, the exported AnimSequence targets the skeleton of the specific <code>UMetaHumanIdentity</code> assigned to the job. When disabled, a generic archetype skeleton is used instead — useful if the Identity is a placeholder.',
@@ -48,6 +60,36 @@ const settings = [
     name: 'Force D3D12',
     default: 'Disabled',
     desc: 'Forces the Direct3D 12 graphics backend for the performance solve. Some systems see better GPU utilization with D3D12. Leave disabled unless you have a specific reason to override the project\'s default RHI.',
+    note: null,
+  },
+  {
+    name: 'Add Skeleton Compatibility',
+    default: 'Enabled',
+    desc: 'Auto-registers a body export\'s target skeleton as compatible with the MetaHuman base skeleton, so Face and Body animation can be retargeted and played back together without a manual compatibility setup step.',
+    note: null,
+  },
+  {
+    name: 'Body Target Skeletal Mesh',
+    default: 'Plugin default (SKM_Body)',
+    desc: 'Global default <code>USkeletalMesh</code> used for body-tracked jobs whose Body Export Skeleton is set to Existing Skeleton. Any per-job Body Target Mesh override takes priority over this.',
+    note: null,
+  },
+  {
+    name: 'Retargeter Output Path',
+    default: '/Game/CaptureManager/BodyTrackerTargets',
+    desc: 'Content Browser folder where <strong>+ Create Retargeter...</strong> saves new IK Retargeter assets, named <code>RTG_SMPL_&lt;MeshName&gt;</code> automatically.',
+    note: null,
+  },
+  {
+    name: 'Blueprint Name Prefix',
+    default: 'BP_',
+    desc: 'Name prefix used by <strong>Create Blueprint...</strong> for Visualization Blueprints, saved to <code>RetargeterOutputPath/&lt;MeshName&gt;/&lt;Prefix&gt;&lt;MeshName&gt;</code>. Change this to something distinct from <code>BP_</code> so intermediary visualization Blueprints sort or filter apart from your regular gameplay Blueprints in the Content Browser.',
+    note: null,
+  },
+  {
+    name: 'Default Control Rig Class',
+    default: 'Engine default',
+    desc: 'Global default <code>UControlRig</code> class applied to a job\'s Performance visualization object when the job has no per-job Control Rig override.',
     note: null,
   },
 ];

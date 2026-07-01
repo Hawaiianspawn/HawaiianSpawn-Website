@@ -24,6 +24,46 @@ const groups = [
     ],
   },
   {
+    id: 'body-tracking',
+    label: 'Body Tracking',
+    badge: 'Mono jobs only · UE 5.8+',
+    badgeClass: 'badge-body',
+    options: [
+      { name: 'Body Tracking', type: 'Bool', desc: 'Enables the SMPLX-based body solver alongside the face solve. Requires the <strong>MetaHumanBodyTracker</strong> plugin. Disabled by default — face-only tracking is unaffected when this is off.' },
+      { name: 'Face Tracking', type: 'Bool', desc: 'Enabled by default. Disable to skip the face solve entirely for body-only runs — useful when you only need body motion and want to save solve time.' },
+      { name: 'Body Height', type: 'Bool + Float (cm)', desc: 'Auto-infers the subject\'s height from footage by default. Disable Auto Body Height to enter a fixed value instead. Epic recommends 145–190cm for best tracking quality.' },
+      { name: 'Body Detection Confidence', type: 'Float (0–1)', desc: 'Threshold for initially acquiring a body lock on the subject. Default 0.7. Lower this if the tracker struggles to acquire lock in cluttered or dim footage.' },
+      { name: 'Body Tracking Confidence', type: 'Float (0–1)', desc: 'Threshold for maintaining an existing body lock once acquired. Default 0.5. Lower this if the tracker frequently drops lock during fast motion.' },
+      { name: 'Enable Foot Locking', type: 'Bool', desc: 'Stabilizes foot contact points to reduce foot sliding during the solve. Enabled by default.' },
+      { name: 'Head Allowed Rotation (Left/Right, Up/Down)', type: 'Float (degrees)', desc: 'Yaw and pitch limits beyond which a frame is treated as unsolved for head rotation. Defaults: 45deg left/right, 30deg up/down.' },
+      { name: 'Head Rotation Handler', type: 'Enum', desc: 'What to do with frames outside the allowed head rotation range: <strong>None</strong> (leave unsolved) or <strong>Neutral Pose</strong> (substitute a neutral head pose).' },
+    ],
+  },
+  {
+    id: 'body-export',
+    label: 'Body Export',
+    badge: 'Mono jobs only · UE 5.8+ · requires Body Tracking',
+    badgeClass: 'badge-body',
+    options: [
+      { name: 'Export Face / Export Body', type: 'Bool', desc: 'Toggle which solved data streams get baked into the exported AnimSequence. Both enabled by default.' },
+      { name: 'Body Export Skeleton', type: 'Enum', desc: '<strong>Performer Skeleton</strong> builds a mesh matching the solve\'s own body-shape betas. <strong>Existing Skeleton</strong> retargets the solved body onto a mesh you choose, via an IK Retargeter.' },
+      { name: 'Body Target Mesh', type: 'Object (USkeletalMesh)', desc: 'Shown only when Body Export Skeleton is Existing Skeleton. Per-job override of the global default target mesh; empty falls back to the global default, then the plugin\'s SKM_Body.' },
+      { name: 'Body Retargeter', type: 'Object (UIKRetargeter)', desc: 'Shown only when Body Export Skeleton is Existing Skeleton. IK Retargeter used to retarget the solved body onto the Target Mesh. Use the panel\'s <strong>+ Create Retargeter...</strong> button to auto-generate one pre-wired to the SMPL body-tracker source rig — you only need to configure the target chain mapping in the editor that opens.' },
+      { name: 'Unsolved Frames', type: 'Enum', desc: 'Fallback for frames the body tracker couldn\'t solve: hold the <strong>Last Valid Frame</strong>, or fall back to a <strong>Neutral Pose</strong>.' },
+    ],
+  },
+  {
+    id: 'visualization',
+    label: 'Visualization',
+    badge: 'All job types',
+    badgeClass: 'badge-all',
+    options: [
+      { name: 'Visualization Mesh / Blueprint', type: 'Object', desc: 'A Skeletal Mesh for face-only jobs, or an Actor Blueprint for body-tracked Mono jobs — MetaHuman Performance requires a Blueprint once body tracking is enabled, since a single mesh can\'t carry both Face and Body. Use the panel\'s <strong>Create Blueprint...</strong> button to auto-build one that leader-poses Face to Body and satisfies MetaHuman Performance\'s requirements.' },
+      { name: 'Control Rig', type: 'Class (UControlRig)', desc: 'Overrides the control rig driving this job\'s Performance visualization object. Per-job override takes priority over the global default; empty falls back to the global default, then the engine default.' },
+      { name: 'Head Movement Mode', type: 'Enum', desc: 'How head movement is represented on the visualization object: <strong>Transform Track</strong>, <strong>Control Rig</strong>, or <strong>Disabled</strong>.' },
+    ],
+  },
+  {
     id: 'stereo',
     label: 'Stereo',
     badge: 'Stereo jobs only',
@@ -59,7 +99,7 @@ const groups = [
 
 <DocsLayout
   title="Per-Job Options — MetaHuman Batch Processor"
-  description="Complete reference for all 35+ per-job solve options in the MetaHuman Batch Processor."
+  description="Complete reference for all 45+ per-job solve options in the MetaHuman Batch Processor."
   currentSlug="job-options"
 >
 
@@ -218,6 +258,7 @@ const groups = [
   .badge-mono   { background: color-mix(in srgb, #4a9eff 10%, transparent); color: #4a9eff; border-color: color-mix(in srgb, #4a9eff 25%, transparent); }
   .badge-stereo { background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 25%, transparent); }
   .badge-audio  { background: color-mix(in srgb, #c084fc 10%, transparent); color: #c084fc; border-color: color-mix(in srgb, #c084fc 25%, transparent); }
+  .badge-body   { background: color-mix(in srgb, #4ade80 10%, transparent); color: #4ade80; border-color: color-mix(in srgb, #4ade80 25%, transparent); }
 
   /* Option groups */
   .option-group {
