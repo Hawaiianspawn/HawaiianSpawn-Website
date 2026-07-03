@@ -3,8 +3,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 ---
 
 <DocsLayout
-  title="Installation — MetaHuman Batch Processor"
-  description="Install the MetaHuman Batch Processor plugin via precompiled binaries or from source."
+  title="Installation — MHA Manager"
+  description="Install the MHA Manager plugin via precompiled binaries or from source."
   currentSlug="installation"
 >
 
@@ -77,7 +77,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
             <h3 class="step-title">Find the plugin in your Vault</h3>
             <p class="step-desc">
               Scroll down past your engine installations to the <strong>Vault</strong> section.
-              Find <strong>MHA Batch Processor</strong> — use the search bar if you have many items.
+              Find <strong>MHA Manager</strong> — use the search bar if you have many items.
               If it isn't in your Vault yet, purchase or claim it from the
               <a href="https://www.unrealengine.com/marketplace" target="_blank" rel="noopener noreferrer">Unreal Engine Marketplace</a> first.
             </p>
@@ -85,9 +85,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
               <div class="doc-img-placeholder">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
                 <span class="placeholder-name">launcher-vault-plugin.webp</span>
-                <span class="placeholder-hint">Vault section showing the MHA Batch Processor plugin card with "Install to Engine" and "Add to Project" buttons visible</span>
+                <span class="placeholder-hint">Vault section showing the MHA Manager plugin card with "Install to Engine" and "Add to Project" buttons visible</span>
               </div>
-              <figcaption>The MHA Batch Processor card in the Vault — two install options are shown</figcaption>
+              <figcaption>The MHA Manager card in the Vault — two install options are shown</figcaption>
             </figure>
           </div>
         </div>
@@ -108,7 +108,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
                   <strong>Edit → Plugins</strong>.
                 </p>
                 <div class="install-option-path">
-                  <code>Engine/Plugins/Marketplace/MHABatchProcessor/</code>
+                  <code>Engine/Plugins/Marketplace/MHAManager/</code>
                 </div>
               </div>
               <div class="install-option">
@@ -119,7 +119,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
                   need it for one project.
                 </p>
                 <div class="install-option-path">
-                  <code>YourProject/Plugins/MHABatchProcessor/</code>
+                  <code>YourProject/Plugins/MHAManager/</code>
                 </div>
               </div>
             </div>
@@ -199,15 +199,15 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <div class="step-body">
           <h3 class="step-title">Verify the plugin is active</h3>
           <p class="step-desc">
-            Search for <strong>MHA Batch Processor</strong> in the Plugins browser — it should show
-            as enabled. Then open <strong>Window → MHA Batch Processor</strong> from the menu bar.
+            Search for <strong>MHA Manager</strong> in the Plugins browser — it should show
+            as enabled. Then open <strong>Window → MHA Manager</strong> from the menu bar.
             The queue panel should appear. You're ready.
           </p>
           <figure class="doc-figure">
             <div class="doc-img-placeholder">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
               <span class="placeholder-name">install-plugins-browser.webp</span>
-              <span class="placeholder-hint">Edit → Plugins → search "MHA Batch Processor" — show it enabled</span>
+              <span class="placeholder-hint">Edit → Plugins → search "MHA Manager" — show it enabled</span>
             </div>
             <figcaption>The plugin showing as enabled in the Plugins browser</figcaption>
           </figure>
@@ -215,9 +215,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
             <div class="doc-img-placeholder">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
               <span class="placeholder-name">install-window-menu.webp</span>
-              <span class="placeholder-hint">Window menu open — highlight "MHA Batch Processor" entry</span>
+              <span class="placeholder-hint">Window menu open — highlight "MHA Manager" entry</span>
             </div>
-            <figcaption>Opening the batch processor from the Window menu</figcaption>
+            <figcaption>Opening MHA Manager from the Window menu</figcaption>
           </figure>
         </div>
       </div>
@@ -235,8 +235,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
             <h3 class="step-title">Download the plugin archive</h3>
             <p class="step-desc">
               Grab the latest release from the
-              <a href="https://github.com/hawaiianspawn/MHABatchProcessor/releases" target="_blank" rel="noopener noreferrer">GitHub Releases page</a>.
-              Download <code>MHABatchProcessor-UE5.7-Win64.zip</code> (or the version matching your engine).
+              <a href="https://github.com/Hawaiianspawn/mha-manager/releases" target="_blank" rel="noopener noreferrer">GitHub Releases page</a>.
+              Download <code>MHAManager-UE5.7-Win64.zip</code> (or the version matching your engine).
             </p>
           </div>
         </div>
@@ -246,14 +246,14 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           <div class="step-body">
             <h3 class="step-title">Copy to your project's Plugins folder</h3>
             <p class="step-desc">
-              Extract the archive. Inside you'll find a single folder named <code>MHABatchProcessor</code>.
+              Extract the archive. Inside you'll find a single folder named <code>MHAManager</code>.
               Copy it into your project's <code>Plugins/</code> directory, creating it if it doesn't exist:
             </p>
             <div class="code-block">
               <pre><code>YourProject/
 └── Plugins/
-    └── MHABatchProcessor/       ← paste here
-        ├── MHABatchProcessor.uplugin
+    └── MHAManager/       ← paste here
+        ├── MHAManager.uplugin
         └── Binaries/</code></pre>
             </div>
           </div>
@@ -288,8 +288,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           <div class="step-body">
             <h3 class="step-title">Verify the plugin is active</h3>
             <p class="step-desc">
-              Search for <strong>MHA Batch Processor</strong> in the Plugins browser — it should show as
-              enabled. Then open <strong>Window → MHA Batch Processor</strong>. The queue panel should appear.
+              Search for <strong>MHA Manager</strong> in the Plugins browser — it should show as
+              enabled. Then open <strong>Window → MHA Manager</strong>. The queue panel should appear.
             </p>
           </div>
         </div>
@@ -316,11 +316,11 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
             Clone the repository or download the source archive from GitHub:
           </p>
           <div class="code-block">
-            <pre><code>git clone https://github.com/hawaiianspawn/MHABatchProcessor.git</code></pre>
+            <pre><code>git clone https://github.com/Hawaiianspawn/mha-manager.git</code></pre>
           </div>
           <p class="step-desc" style="margin-top: 10px;">
             Alternatively, download the <code>Source code (zip)</code> from the
-            <a href="https://github.com/hawaiianspawn/MHABatchProcessor/releases" target="_blank" rel="noopener noreferrer">Releases page</a>
+            <a href="https://github.com/Hawaiianspawn/mha-manager/releases" target="_blank" rel="noopener noreferrer">Releases page</a>
             and extract it.
           </p>
         </div>
@@ -331,15 +331,15 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <div class="step-body">
           <h3 class="step-title">Copy to your project's Plugins folder</h3>
           <p class="step-desc">
-            Copy the <code>MHABatchProcessor</code> folder into your project's <code>Plugins/</code> directory:
+            Copy the <code>MHAManager</code> folder into your project's <code>Plugins/</code> directory:
           </p>
           <div class="code-block">
             <pre><code>YourProject/
 └── Plugins/
-    └── MHABatchProcessor/       ← paste here
-        ├── MHABatchProcessor.uplugin
+    └── MHAManager/       ← paste here
+        ├── MHAManager.uplugin
         └── Source/
-            └── MHABatchProcessorEditor/</code></pre>
+            └── MHAManagerEditor/</code></pre>
           </div>
         </div>
       </div>
@@ -463,8 +463,8 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
           <h3 class="step-title">Open the editor and verify</h3>
           <p class="step-desc">
             Launch the editor by double-clicking your <code>.uproject</code>. Search for
-            <strong>MHA Batch Processor</strong> in <strong>Edit → Plugins</strong> — it should show
-            as enabled. Open <strong>Window → MHA Batch Processor</strong> to confirm the panel loads.
+            <strong>MHA Manager</strong> in <strong>Edit → Plugins</strong> — it should show
+            as enabled. Open <strong>Window → MHA Manager</strong> to confirm the panel loads.
           </p>
         </div>
       </div>
@@ -474,7 +474,7 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
 
   <!-- Next page -->
   <div class="doc-footer">
-    <a href="/marketplace/metahuman-batch-processor/docs/quick-start" class="next-link">
+    <a href="/marketplace/mha-manager/docs/quick-start" class="next-link">
       <span class="next-label">Next</span>
       <span class="next-title">
         Quick Start

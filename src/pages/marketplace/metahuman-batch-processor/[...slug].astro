@@ -1,0 +1,36 @@
+---
+// ponytail: GitHub Pages is static (no server redirects), so the old
+// metahuman-batch-processor URLs are kept as meta-refresh stubs pointing
+// at the renamed mha-manager pages.
+export function getStaticPaths() {
+  const pages = [
+    undefined,
+    'docs',
+    'docs/installation',
+    'docs/quick-start',
+    'docs/job-types',
+    'docs/global-settings',
+    'docs/job-options',
+    'docs/manifests',
+    'docs/ci-mode',
+    'docs/troubleshooting',
+  ];
+  return pages.map((slug) => ({ params: { slug } }));
+}
+const { slug } = Astro.params;
+const target = `/marketplace/mha-manager${slug ? `/${slug}` : ''}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Moved — MHA Manager</title>
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={`https://hawaiianspawn.com${target}`} />
+    <meta name="robots" content="noindex" />
+    <script is:inline define:vars={{ target }}>location.replace(target);</script>
+  </head>
+  <body>
+    <p>This page has moved to <a href={target}>{target}</a>.</p>
+  </body>
+</html>
