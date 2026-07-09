@@ -59,34 +59,22 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <h3 class="step-title">Add a Mono job</h3>
+        <h3 class="step-title">Add a job</h3>
         <p class="step-desc">
-          Click <strong>Add Job</strong>. A new row appears in the queue. Set the job type
-          to <strong>Mono</strong>, then assign your assets in the row's cells:
+          Click <strong>Add Jobs</strong> and pick your Capture Data. A new row appears in the
+          queue with its job type already set — the plugin classifies the take and applies the
+          matching solve template automatically.
         </p>
-        <div class="asset-table">
-          <div class="asset-row header">
-            <span>Column</span>
-            <span>What to assign</span>
-          </div>
-          <div class="asset-row">
-            <span><strong>Capture Data</strong></span>
-            <span>Your <code>UFootageCaptureData</code> asset</span>
-          </div>
-          <div class="asset-row">
-            <span><strong>Identity</strong></span>
-            <span>Your <code>UMetaHumanIdentity</code> asset</span>
-          </div>
-        </div>
         <p class="step-desc" style="margin-top:12px;">
-          If both assets are under a predictable folder structure, the plugin may auto-discover
-          the Identity — check the cell before assigning manually. On UE 5.8, a first-frame
-          framing probe also classifies the take (full body / upper body / headshot) and applies
-          the matching solve template automatically.
+          Any dependent data the job type needs is auto-discovered where possible — check the
+          row's cells and fill in anything missing. The classification is just a default: you
+          can change the job type on the row at any time. See
+          <a href="/marketplace/mha-manager/docs/job-types">Job Types</a> for what each type
+          requires.
         </p>
         <figure class="doc-figure">
           <img src="/assets/docs/mha/qs-job-configured.webp" alt="The MHA Manager queue with the Add Jobs and Start Batch controls and Job Settings panel" loading="lazy" />
-          <figcaption>A configured Mono job — Capture Data and Identity assigned, job type set to Mono</figcaption>
+          <figcaption>A configured job — capture data assigned, type classified automatically</figcaption>
         </figure>
       </div>
     </div>
