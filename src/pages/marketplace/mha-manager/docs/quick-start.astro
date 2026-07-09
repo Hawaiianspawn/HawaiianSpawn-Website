@@ -33,11 +33,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           The panel will dock into the editor. You can float or re-dock it anywhere.
         </p>
         <figure class="doc-figure">
-          <div class="doc-img-placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-            <span class="placeholder-name">qs-panel-empty.webp</span>
-            <span class="placeholder-hint">The MHA Manager tab open and docked — empty queue, Global Settings panel visible at top</span>
-          </div>
+          <img src="/assets/docs/mha/qs-panel-empty.webp" alt="The MHA Manager tab open and docked in the Unreal editor" loading="lazy" />
           <figcaption>The MHA Manager panel on first open — empty queue with Global Settings at the top</figcaption>
         </figure>
       </div>
@@ -46,12 +42,17 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <h3 class="step-title">Set your output path</h3>
+        <h3 class="step-title">Choose where outputs land</h3>
         <p class="step-desc">
-          In the <strong>Global Settings</strong> panel at the top, set <strong>Output Path</strong>
-          to a Content Browser folder where generated assets should land — for example
-          <code>/Game/Captures/Processed</code>. The default is <code>/Game/MHA_Batch</code>.
+          By default, generated assets are saved next to the source Capture Data asset. To collect
+          everything in one place instead, enable <strong>UE Export Directory</strong> in the
+          settings panel and point it at a Content Browser folder — for example
+          <code>/Game/MHA_Batch</code> (the default when enabled).
         </p>
+        <figure class="doc-figure">
+          <img src="/assets/docs/mha/qs-global-settings.webp" alt="The Global Settings panel showing the Ingest options and Watch Folder field" loading="lazy" />
+          <figcaption>The Global Settings panel — output and ingest options live here</figcaption>
+        </figure>
       </div>
     </div>
 
@@ -79,14 +80,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         </div>
         <p class="step-desc" style="margin-top:12px;">
           If both assets are under a predictable folder structure, the plugin may auto-discover
-          the Identity — check the cell before assigning manually.
+          the Identity — check the cell before assigning manually. On UE 5.8, a first-frame
+          framing probe also classifies the take (full body / upper body / headshot) and applies
+          the matching solve template automatically.
         </p>
         <figure class="doc-figure">
-          <div class="doc-img-placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-            <span class="placeholder-name">qs-job-configured.webp</span>
-            <span class="placeholder-hint">Queue showing one Mono job row with Capture Data and Identity cells filled in</span>
-          </div>
+          <img src="/assets/docs/mha/qs-job-configured.webp" alt="The MHA Manager queue with the Add Jobs and Start Batch controls and Job Settings panel" loading="lazy" />
           <figcaption>A configured Mono job — Capture Data and Identity assigned, job type set to Mono</figcaption>
         </figure>
       </div>
@@ -114,11 +113,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           live output from the solver.
         </p>
         <figure class="doc-figure">
-          <div class="doc-img-placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-            <span class="placeholder-name">qs-batch-running.webp</span>
-            <span class="placeholder-hint">Panel mid-process — job row showing progress bar and current stage label, log panel scrolling below</span>
-          </div>
+          <img src="/assets/docs/mha/qs-batch-running.webp" alt="A Mono job in the queue with status and progress columns as the batch starts" loading="lazy" />
           <figcaption>The batch running — per-job progress bar and live log output visible</figcaption>
         </figure>
       </div>
@@ -164,8 +159,16 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 
   <div class="callout callout-note" style="margin-top:32px;">
     <strong>Processing multiple takes?</strong> Add more jobs before clicking Start Batch —
-    you don't need to run them one at a time. The queue processes them sequentially and saves
+    you don't need to run them one at a time. The queue processes them sequentially (or in
+    parallel worker processes when <strong>Max Concurrent Jobs</strong> is raised) and saves
     a manifest automatically at <code>Saved/MHAManager/batch.mhajson</code> when done.
+  </div>
+
+  <div class="callout callout-tip">
+    <strong>Even faster:</strong> select one or more <code>UFootageCaptureData</code> assets in the
+    Content Browser, right-click, and choose <strong>Process Selected Takes</strong>. The dialog
+    detects each take's type, lets you pick a visualization asset, and runs without touching the
+    queue panel at all.
   </div>
 
   <div class="doc-footer">
@@ -190,6 +193,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 <style>
   /* Image placeholders */
   .doc-figure { margin: 20px 0 4px; }
+  .doc-figure img {
+    display: block;
+    width: 100%;
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+    border-radius: var(--radius);
+  }
   .doc-img-placeholder {
     background: #0a0a0a;
     border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
