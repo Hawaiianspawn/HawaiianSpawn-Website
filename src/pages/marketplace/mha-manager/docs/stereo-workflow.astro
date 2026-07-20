@@ -22,12 +22,11 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="type-section">
     <h2 class="sub-heading">Pipeline stages</h2>
     <div class="fork">
-      <div class="pipeline-stage fork-source"><span class="stage-name">Validate Input</span></div>
       <div class="fork-branches">
         <div class="fork-branch">
           <span class="branch-tag">Requires</span>
           <div class="pipeline">
-            <div class="pipeline-stage node-calib"><span class="stage-name">Camera Calibration</span><span class="stage-note">CalibrateStereo</span></div>
+            <div class="pipeline-stage node-calib"><span class="stage-name">Camera Calibration Create</span><span class="stage-note">CalibrateStereo</span></div>
             <div class="pipeline-arrow">-&gt;</div>
             <div class="pipeline-stage node-identity"><span class="stage-name">Identity Create</span><span class="stage-note">MHID_&lt;Actor&gt;</span></div>
           </div>
@@ -35,6 +34,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <div class="fork-branch">
           <span class="branch-tag">Then solves</span>
           <div class="pipeline">
+            <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
             <div class="pipeline-stage node-calib"><span class="stage-name">Camera Calibration</span></div>
             <div class="pipeline-arrow">-&gt;</div>
             <div class="pipeline-stage highlight"><span class="stage-name">Generate Depth</span><span class="stage-note">Stereo only</span></div>
