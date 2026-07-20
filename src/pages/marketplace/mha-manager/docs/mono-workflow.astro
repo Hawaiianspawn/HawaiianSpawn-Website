@@ -12,10 +12,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <span class="type-badge type-mono">Mono</span>
     <h1 class="doc-title">Mono Workflow</h1>
     <p class="doc-lead">
-      Mono processes a single color camera recording — a head-mounted camera or any single-lens
-      setup. It is the fastest job type and the right default for most productions: no calibration,
-      no identity, no depth. The realtime solver processes the footage directly, with optional body
-      tracking on UE 5.8.
+      Mono processes a single color camera — head-mounted or any single lens. It is the fastest job
+      type and the right default: no calibration, identity, or depth. The realtime solver runs on the
+      footage directly, with optional body tracking on UE 5.8.
     </p>
   </div>
 
@@ -30,9 +29,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
     </div>
     <div class="callout callout-tip">
-      Mono is the simplest performance type to configure — no MetaHuman Identity and no Camera
-      Calibration. Get the Capture Data from the
-      <a href="/marketplace/mha-manager/docs/ingest">Ingest</a> step, then add it to the queue.
+      No MetaHuman Identity or Camera Calibration needed. Get the Capture Data from
+      <a href="/marketplace/mha-manager/docs/ingest">Ingest</a>, then add it to the queue.
     </div>
 
     <h2 class="sub-heading">Pipeline stages</h2>
@@ -54,9 +52,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="type-section">
     <h2 class="section-title">Take auto-categorization — the framing probe (UE 5.8+)</h2>
     <p class="type-desc">
-      When a Mono job is queued — manually or via the ingest watcher — MHA Manager probes the take's
-      first footage frame with a pose model and classifies its framing, so the right solve template
-      is applied automatically:
+      When a Mono job is queued, MHA Manager probes the take's first frame with a pose model and
+      classifies its framing, applying the right solve template automatically:
     </p>
     <div class="option-list">
       <div class="option-row">
@@ -73,10 +70,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
     </div>
     <p class="type-desc" style="margin: 16px 0 12px;">
-      The verdict is advisory: it never overrides a choice you already made and never flips a running
-      job. A <strong>Re-check</strong> button re-runs the probe, and the verdict persists in the
-      manifest so re-loaded queues do not re-probe. If frame 1 shows nothing (slates, subject
-      stepping in), one fallback probe runs at ~25% into the take.
+      The verdict is advisory — it never overrides your choice or flips a running job.
+      <strong>Re-check</strong> re-runs the probe; the verdict persists in the manifest so re-loaded
+      queues do not re-probe. If frame 1 shows nothing (slates, subject stepping in), a fallback probe
+      runs at ~25% into the take.
     </p>
     <div class="callout callout-note">
       <strong>Requirements:</strong> UE 5.8+, the <strong>MetaHumanBodyTracker</strong> plugin, and

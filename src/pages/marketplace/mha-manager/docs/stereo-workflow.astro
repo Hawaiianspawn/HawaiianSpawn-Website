@@ -12,11 +12,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <span class="type-badge type-stereo">Stereo</span>
     <h1 class="doc-title">Stereo Workflow</h1>
     <p class="doc-lead">
-      Stereo (HMC) is the highest-fidelity job type — the solve is depth-constrained, which resolves
-      facial geometry that is ambiguous in monocular footage. In exchange it needs two parent assets
-      for its actor first: a <strong>camera calibration</strong> and a prepared
-      <strong>MetaHuman Identity</strong>. The queue produces both as their own job types and chains
-      them for you.
+      Stereo (HMC) is the highest-fidelity job type — the depth-constrained solve resolves facial
+      geometry that monocular footage cannot. In exchange each take needs two parent assets for its
+      actor first: a <strong>camera calibration</strong> and a prepared
+      <strong>MetaHuman Identity</strong>. The queue produces both and chains them for you.
     </p>
   </div>
 
@@ -82,13 +81,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="type-section">
     <h2 class="section-title">Queue in any order</h2>
     <p class="type-desc">
-      Execution order ignores queue row order. The batch always runs
-      <strong>CalibrateStereo first, Identity Create second, everything else third</strong>, so a
-      take's prerequisites exist by the time it preflights. The queue is strictly serial (Epic's
-      single-performance lock), and takes are classified automatically by name — <code>grid</code> /
-      <code>calib</code> tokens become CalibrateStereo, <code>identity</code> / <code>dna</code> become
-      Identity Create. Drop a whole actor folder into the queue at once and let the tiers sort
-      themselves out.
+      Execution ignores row order: the batch runs <strong>CalibrateStereo first, Identity Create
+      second, everything else third</strong>, so prerequisites exist by the time a take preflights.
+      The queue is strictly serial (Epic's single-performance lock), and takes classify by name —
+      <code>grid</code> / <code>calib</code> tokens become CalibrateStereo, <code>identity</code> /
+      <code>dna</code> become Identity Create. Drop a whole actor folder in at once and let the tiers
+      sort themselves out.
     </p>
     <div class="callout callout-tip">
       <strong>Worked example.</strong> Queue everything under <code>Imports/Aaron/</code> in any order

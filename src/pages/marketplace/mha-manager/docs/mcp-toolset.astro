@@ -147,9 +147,9 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
     <h1 class="doc-title">MCP Toolset</h1>
     <p class="doc-lead">
       MHA Manager exposes its batch queue to Model Context Protocol (MCP) clients, so an agent or
-      external tool can inspect the queue, add and edit jobs, start processing, and ingest footage —
-      the same operations the panel offers, driven programmatically. It rides Unreal Engine 5.8's
-      native MCP stack; every tool is a thin wrapper over the plugin's own queue logic.
+      external tool can inspect, add, and edit jobs, start processing, and ingest footage — the same
+      operations the panel offers, driven programmatically. It rides Unreal Engine 5.8's native MCP
+      stack; every tool is a thin wrapper over the plugin's queue logic.
     </p>
   </div>
 
@@ -178,11 +178,10 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
   <section class="doc-section">
     <h2 class="section-title">How it works</h2>
     <p class="section-desc">
-      At editor startup the plugin's Python entry point registers a toolset definition with the
-      engine's <code>ToolsetRegistry</code>. Each of the {totalTools} tools is a thin delegation to a
-      reflected function on the MHA Manager subsystem — the C++ side owns all queue state, execution,
-      and quality-gate logic, so the tools add no behavior of their own. That means everything the
-      MCP surface does obeys the same rules as the panel:
+      At editor startup the plugin registers a toolset with the engine's <code>ToolsetRegistry</code>.
+      Each of the {totalTools} tools delegates to a reflected function on the MHA Manager subsystem —
+      the C++ side owns all state, execution, and quality-gate logic, so the tools add no behavior of
+      their own. Everything the MCP surface does obeys the same rules as the panel:
     </p>
     <ul class="bullet-list">
       <li>Processing is <strong>strictly serial</strong> — one solve at a time (Epic's single-performance lock).</li>

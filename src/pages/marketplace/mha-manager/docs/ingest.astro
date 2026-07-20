@@ -11,9 +11,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <div class="doc-header">
     <h1 class="doc-title">Ingest Footage</h1>
     <p class="doc-lead">
-      Every job runs on a <code>UFootageCaptureData</code> asset. Ingest turns raw capture footage on
-      disk into that asset and queues a job for it in one step — by hand for a single take, or
-      automatically as takes arrive from a capture tool.
+      Every job runs on a <code>UFootageCaptureData</code> asset. Ingest turns raw footage on disk
+      into that asset and queues a job in one step — by hand for a single take, or automatically as
+      takes arrive.
     </p>
   </div>
 
@@ -27,11 +27,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">Ingest a take folder</h2>
     <p class="section-desc">
-      In the MHA Manager panel, the Ingest section's <strong>Ingest Folder...</strong> button takes a
-      raw take folder of image sequences on disk. It scans the folder, creates the media assets
-      (<code>UImgMediaSource</code> and, if present, audio), assembles them into a
-      <code>UFootageCaptureData</code> asset, and queues a job — auto-detecting mono, stereo, or
-      depth from what it finds in the folder.
+      The Ingest section's <strong>Ingest Folder...</strong> button takes a raw take folder of image
+      sequences. It creates the media assets (<code>UImgMediaSource</code>, plus audio if present),
+      assembles them into a <code>UFootageCaptureData</code> asset, and queues a job — auto-detecting
+      mono, stereo, or depth from the folder.
     </p>
     <figure class="doc-figure">
       <div class="doc-img-placeholder">
