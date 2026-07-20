@@ -21,16 +21,32 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 
   <section class="type-section">
     <h2 class="sub-heading">Pipeline stages</h2>
-    <div class="pipeline">
-      <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage highlight"><span class="stage-name">Generate Depth</span><span class="stage-note">Stereo only</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage highlight"><span class="stage-name">Clean Depth</span><span class="stage-note">Optional</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage"><span class="stage-name">Process Performance</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage"><span class="stage-name">Export + Save</span></div>
+    <div class="fork">
+      <div class="pipeline-stage fork-source"><span class="stage-name">Validate Input</span></div>
+      <div class="fork-branches">
+        <div class="fork-branch">
+          <span class="branch-tag">Requires</span>
+          <div class="pipeline">
+            <div class="pipeline-stage node-calib"><span class="stage-name">Camera Calibration</span><span class="stage-note">CalibrateStereo</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage node-identity"><span class="stage-name">Identity Create</span><span class="stage-note">MHID_&lt;Actor&gt;</span></div>
+          </div>
+        </div>
+        <div class="fork-branch">
+          <span class="branch-tag">Then solves</span>
+          <div class="pipeline">
+            <div class="pipeline-stage node-calib"><span class="stage-name">Camera Calibration</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage highlight"><span class="stage-name">Generate Depth</span><span class="stage-note">Stereo only</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage highlight"><span class="stage-name">Clean Depth</span><span class="stage-note">Optional</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage"><span class="stage-name">Process Performance</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage"><span class="stage-name">Export + Save</span></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="callout callout-note">
       <strong>Depth generation is serial.</strong> Even when Max Concurrent Jobs is above 1, depth
@@ -395,6 +411,54 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   .stage-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
   .stage-note { font-size: 0.7rem; color: var(--accent); }
   .pipeline-arrow { color: var(--text-muted); font-size: 0.9rem; font-family: var(--font-mono); }
+
+  .fork {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 4px 0 12px;
+    flex-wrap: wrap;
+  }
+
+  .fork-source { flex-shrink: 0; }
+
+  .fork-branches {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-left: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    padding-left: 16px;
+  }
+
+  .fork-branch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .branch-tag {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 74px;
+  }
+
+  .pipeline-stage.node-calib {
+    border-color: color-mix(in srgb, #f0a500 45%, transparent);
+    background: color-mix(in srgb, #f0a500 9%, transparent);
+  }
+  .pipeline-stage.node-calib .stage-name,
+  .pipeline-stage.node-calib .stage-note { color: #f0a500; }
+
+  .pipeline-stage.node-identity {
+    border-color: color-mix(in srgb, #4ade80 45%, transparent);
+    background: color-mix(in srgb, #4ade80 9%, transparent);
+  }
+  .pipeline-stage.node-identity .stage-name,
+  .pipeline-stage.node-identity .stage-note { color: #4ade80; }
 
   .option-list {
     border: 1px solid var(--border);
