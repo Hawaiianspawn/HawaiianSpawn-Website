@@ -11,21 +11,66 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <div class="doc-header">
     <h1 class="doc-title">Ingest Footage</h1>
     <p class="doc-lead">
-      Every job runs on a <code>UFootageCaptureData</code> asset. Ingest turns raw footage on disk
-      into that asset and queues a job in one step — by hand for a single take, or automatically as
-      takes arrive.
+      Every job runs on a <code>UFootageCaptureData</code> asset. Getting your raw footage into the
+      project as that asset is <em>ingest</em>. The recommended path is Epic's Live Link Hub; MHA
+      Manager also ingests footage itself for projects that can't install it.
     </p>
   </div>
 
-  <div class="callout callout-note">
-    <strong>Requires Capture Manager.</strong> Ingest uses the engine's <code>CaptureManager</code>
-    plugin (UE 5.7+, included with the engine). When it is unavailable the Ingest controls hide
-    themselves — you can still create Capture Data through Epic's own MetaHuman Animator workflow and
-    add it to the queue manually.
-  </div>
+  <section class="doc-section">
+    <h2 class="section-title">Recommended: Live Link Hub</h2>
+    <p class="section-desc">
+      <strong>Live Link Hub</strong> is Epic's first-party capture application and the recommended
+      input for MHA Manager. It bundles Capture Manager: connect your capture source (Live Link Face
+      on iPhone, a stereo head-mounted camera, or an existing take archive), import the takes, and
+      ingest them into your Unreal project. Each take lands in the Content Browser as a
+      <code>UFootageCaptureData</code> asset — exactly what every job runs on — with none of the
+      manual asset assembly the in-editor routes below have to do.
+    </p>
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">llh-capture-manager.webp</span>
+        <span class="placeholder-hint">Live Link Hub — Capture Manager view with takes selected, ingesting into the Unreal project</span>
+      </div>
+      <figcaption>Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data</figcaption>
+    </figure>
+    <p class="section-desc">
+      Because Live Link Hub writes finished Capture Data directly into the project, MHA Manager needs
+      no manual ingest step. Turn on <strong>Auto-Queue Ingested Takes</strong> (see below) and every
+      take Live Link Hub delivers is classified and queued automatically — capture in one window,
+      watch jobs appear in the other.
+    </p>
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">llh-autoqueue-result.webp</span>
+        <span class="placeholder-hint">Content Browser with newly ingested Capture Data assets beside the MHA Manager panel showing matching auto-queued job rows</span>
+      </div>
+      <figcaption>With Auto-Queue on, takes ingested by Live Link Hub arrive as queued jobs on their own</figcaption>
+    </figure>
+    <div class="callout callout-note">
+      Live Link Hub is a separate Epic download and depends on the Live Link / Virtual Production
+      plugins. See Epic's Live Link Hub and MetaHuman Animator capture documentation for device
+      setup and recording — that side of the workflow is Epic's, not this plugin's.
+    </div>
+  </section>
 
   <section class="doc-section">
-    <h2 class="section-title">Ingest a take folder</h2>
+    <h2 class="section-title">Alternative: ingest in the editor</h2>
+    <p class="section-desc">
+      When Live Link Hub isn't an option — locked-down build machines, CI runners, or an engine build
+      without it — MHA Manager can ingest footage itself, directly from the panel, no external app
+      required.
+    </p>
+    <div class="callout callout-note">
+      <strong>Requires Capture Manager.</strong> In-editor ingest uses the engine's
+      <code>CaptureManager</code> plugin (UE 5.7+, included with the engine). When it is unavailable
+      the Ingest controls hide themselves — you can still create Capture Data through Epic's own
+      MetaHuman Animator workflow and add it to the queue manually.
+    </div>
+
+    <h3 class="subsection-title">Ingest a take folder</h3>
     <p class="section-desc">
       The Ingest section's <strong>Ingest Folder...</strong> button takes a raw take folder of image
       sequences. It creates the media assets (<code>UImgMediaSource</code>, plus audio if present),
@@ -40,10 +85,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <figcaption>The Ingest Folder button — pick a take folder, get a Capture Data asset and a queued job</figcaption>
     </figure>
-  </section>
 
-  <section class="doc-section">
-    <h2 class="section-title">Ingest video files</h2>
+    <h3 class="subsection-title">Ingest video files</h3>
     <p class="section-desc">
       Folder ingest understands image-sequence takes only. For <code>.mov</code> / <code>.mp4</code>
       sources, use the video-ingest path on UE 5.8, exposed through the
@@ -64,10 +107,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">Auto-queue on ingest</h2>
     <p class="section-desc">
-      For a hands-off pipeline, the <strong>Ingest</strong> section of
-      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
-      project and queue takes as they appear — for example takes pushed from Live Link Hub or Capture
-      Manager straight into the Content Browser:
+      However takes arrive — Live Link Hub or in-editor ingest — the <strong>Ingest</strong> section
+      of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
+      project and queue them the moment they appear in the Content Browser:
     </p>
     <div class="field-list">
       <div class="opt-row header">
@@ -165,6 +207,13 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     margin-bottom: 14px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
+  }
+
+  .subsection-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 32px 0 12px;
   }
 
   .section-desc {
