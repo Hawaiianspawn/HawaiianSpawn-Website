@@ -20,6 +20,26 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </div>
 
   <section class="type-section">
+    <h2 class="sub-heading">Pipeline stages</h2>
+    <div class="pipeline">
+      <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage highlight"><span class="stage-name">Generate Depth</span><span class="stage-note">Stereo only</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage highlight"><span class="stage-name">Clean Depth</span><span class="stage-note">Optional</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Process Performance</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Export + Save</span></div>
+    </div>
+    <div class="callout callout-note">
+      <strong>Depth generation is serial.</strong> Even when Max Concurrent Jobs is above 1, depth
+      generation for all stereo jobs completes before any job enters the concurrent processing pool.
+      Depth is skipped when the take already has a linked depth sequence.
+    </div>
+  </section>
+
+  <section class="type-section">
     <h2 class="sub-heading">Required assets</h2>
     <div class="asset-table">
       <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
@@ -97,26 +117,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <li><code>Aaron_Take01..N</code> run last (Stereo): preflight links the calibration and <code>MHID_Aaron</code>, and each take produces a Performance + AnimSequence.</li>
         <li>Takes queued before their prerequisites simply wait as a blocked status and resume automatically once the parent completes.</li>
       </ol>
-    </div>
-  </section>
-
-  <section class="type-section">
-    <h2 class="sub-heading">Pipeline stages</h2>
-    <div class="pipeline">
-      <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage highlight"><span class="stage-name">Generate Depth</span><span class="stage-note">Stereo only</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage highlight"><span class="stage-name">Clean Depth</span><span class="stage-note">Optional</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage"><span class="stage-name">Process Performance</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage"><span class="stage-name">Export + Save</span></div>
-    </div>
-    <div class="callout callout-note">
-      <strong>Depth generation is serial.</strong> Even when Max Concurrent Jobs is above 1, depth
-      generation for all stereo jobs completes before any job enters the concurrent processing pool.
-      Depth is skipped when the take already has a linked depth sequence.
     </div>
   </section>
 

@@ -19,20 +19,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </div>
 
   <section class="type-section">
-    <h2 class="sub-heading">Required input</h2>
-    <div class="asset-table">
-      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
-      <div class="asset-row">
-        <span><strong>Capture Data</strong></span>
-        <span><code>UFootageCaptureData</code></span>
-        <span>Your video footage import — the only required input</span>
-      </div>
-    </div>
-    <div class="callout callout-tip">
-      No MetaHuman Identity or Camera Calibration needed. Get the Capture Data from
-      <a href="/marketplace/mha-manager/docs/ingest">Ingest</a>, then add it to the queue.
-    </div>
-
     <h2 class="sub-heading">Pipeline stages</h2>
     <div class="pipeline">
       <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
@@ -47,6 +33,20 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       With body tracking enabled, the body solve (detect -&gt; 2D keypoints -&gt; 3D pose -&gt; merge)
       runs after the face solve, before export.
     </p>
+
+    <h2 class="sub-heading">Required input</h2>
+    <div class="asset-table">
+      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
+      <div class="asset-row">
+        <span><strong>Capture Data</strong></span>
+        <span><code>UFootageCaptureData</code></span>
+        <span>Your video footage import — the only required input</span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      No MetaHuman Identity or Camera Calibration needed. Get the Capture Data from
+      <a href="/marketplace/mha-manager/docs/ingest">Ingest</a>, then add it to the queue.
+    </div>
   </section>
 
   <section class="type-section">

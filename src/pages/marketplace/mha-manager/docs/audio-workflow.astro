@@ -19,6 +19,17 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </div>
 
   <section class="type-section">
+    <h2 class="sub-heading">Pipeline stages</h2>
+    <div class="pipeline">
+      <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Audio Solve</span><span class="stage-note">Voice -&gt; controls</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Export Outputs</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Save Assets</span></div>
+    </div>
+
     <h2 class="sub-heading">Required input</h2>
     <div class="asset-table">
       <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
@@ -32,17 +43,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       Audio jobs do <strong>not</strong> require a MetaHuman Identity or Camera Calibration. If your
       voice track isn't in a Capture Data asset yet, bring it in via the
       <a href="/marketplace/mha-manager/docs/ingest">Ingest</a> step.
-    </div>
-
-    <h2 class="sub-heading">Pipeline stages</h2>
-    <div class="pipeline">
-      <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage"><span class="stage-name">Audio Solve</span><span class="stage-note">Voice -&gt; controls</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage"><span class="stage-name">Export Outputs</span></div>
-      <div class="pipeline-arrow">-&gt;</div>
-      <div class="pipeline-stage"><span class="stage-name">Save Assets</span></div>
     </div>
   </section>
 
