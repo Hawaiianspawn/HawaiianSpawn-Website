@@ -1,0 +1,417 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Mono Workflow — MHA Manager"
+  description="Process single-camera footage end to end: framing probe, optional body tracking, solve, and export."
+  currentSlug="mono-workflow"
+>
+
+  <div class="doc-header">
+    <span class="type-badge type-mono">Mono</span>
+    <h1 class="doc-title">Mono Workflow</h1>
+    <p class="doc-lead">
+      Mono processes a single color camera recording — a head-mounted camera or any single-lens
+      setup. It is the fastest job type and the right default for most productions: no calibration,
+      no identity, no depth. The realtime solver processes the footage directly, with optional body
+      tracking on UE 5.8.
+    </p>
+  </div>
+
+  <section class="type-section">
+    <h2 class="sub-heading">Required input</h2>
+    <div class="asset-table">
+      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
+      <div class="asset-row">
+        <span><strong>Capture Data</strong></span>
+        <span><code>UFootageCaptureData</code></span>
+        <span>Your video footage import — the only required input</span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      Mono is the simplest performance type to configure — no MetaHuman Identity and no Camera
+      Calibration. Get the Capture Data from the
+      <a href="/marketplace/mha-manager/docs/ingest">Ingest</a> step, then add it to the queue.
+    </div>
+
+    <h2 class="sub-heading">Pipeline stages</h2>
+    <div class="pipeline">
+      <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Process Performance</span><span class="stage-note">Tracking + Fitting</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Export Outputs</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Save Assets</span></div>
+    </div>
+    <p class="type-desc" style="margin-top: 12px;">
+      With body tracking enabled, the body solve (detect -&gt; 2D keypoints -&gt; 3D pose -&gt; merge)
+      runs after the face solve, before export.
+    </p>
+  </section>
+
+  <section class="type-section">
+    <h2 class="section-title">Take auto-categorization — the framing probe (UE 5.8+)</h2>
+    <p class="type-desc">
+      When a Mono job is queued — manually or via the ingest watcher — MHA Manager probes the take's
+      first footage frame with a pose model and classifies its framing, so the right solve template
+      is applied automatically:
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Full body</span>
+        <span class="option-desc">Hips and ankles confidently visible — Body Tracking is enabled on the freshly queued job.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Upper body / Headshot</span>
+        <span class="option-desc">Ankles cut off, or face only — the job stays face-only, with an amber warning if you enable body tracking anyway. The 5.8 body solver invents joints below the frame edge on a headshot, so this guard matters.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Not analyzed</span>
+        <span class="option-desc">Nothing confidently visible, or the probe is unavailable — the job stays face-only with no badge.</span>
+      </div>
+    </div>
+    <p class="type-desc" style="margin: 16px 0 12px;">
+      The verdict is advisory: it never overrides a choice you already made and never flips a running
+      job. A <strong>Re-check</strong> button re-runs the probe, and the verdict persists in the
+      manifest so re-loaded queues do not re-probe. If frame 1 shows nothing (slates, subject
+      stepping in), one fallback probe runs at ~25% into the take.
+    </p>
+    <div class="callout callout-note">
+      <strong>Requirements:</strong> UE 5.8+, the <strong>MetaHumanBodyTracker</strong> plugin, and
+      the <strong>NNERuntimeORT</strong> plugin enabled. When any is missing the probe quietly reports
+      "Not analyzed". After any body-tracked solve the job also reports <strong>body coverage</strong>
+      — below 80% it gets a "Body track gaps" warning, since undetected frames export as held pose.
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="sub-heading">Face options</h2>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Head Stabilization</span>
+        <span class="option-desc">Corrects for head-movement drift during the solve. Enabled by default; disable only if it degrades a locked-off, tripod-style take.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Tongue Solve</span>
+        <span class="option-desc">Enables tongue tracking. Requires UE 5.7+ and close framing with good lighting. Disabled by default.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Neutral Pose Calibration</span>
+        <span class="option-desc">Uses a neutral expression frame to calibrate the facial geometry baseline before solving, with a blend weight (alpha).</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="section-title">Body Tracking (UE 5.8+)</h2>
+    <p class="type-desc">
+      Mono jobs can optionally solve body motion alongside the face, using the SMPLX-based body
+      tracker. Requires the <strong>MetaHumanBodyTracker</strong> plugin. Choose Face only, Body only,
+      or Face + Body per job.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Body / Face Tracking</span>
+        <span class="option-desc">Toggle each solve independently. Disable Face Tracking for a body-only run to save solve time.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Body Height</span>
+        <span class="option-desc">Auto-infers subject height from footage by default (Epic recommends 145-190cm); disable Auto Body Height to pin a fixed value.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Detection / Tracking Confidence</span>
+        <span class="option-desc">Thresholds for acquiring a body lock (default 0.7) and maintaining it (default 0.5). Lower detection for dim/cluttered footage; lower tracking if lock drops during fast motion.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Foot Locking, Head Rotation Limits</span>
+        <span class="option-desc">Stabilizes foot contact, and sets yaw/pitch limits (defaults 45deg / 30deg) beyond which a frame falls back to a neutral head pose or is left unsolved.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="section-title">Body export</h2>
+    <p class="type-desc">
+      A body-tracked solve exports onto either its own performer-shaped mesh or an existing skeleton.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Body Export Skeleton</span>
+        <span class="option-desc"><strong>Performer Skeleton</strong> builds a mesh matching the solve's own body-shape betas. <strong>Existing Skeleton</strong> retargets the solved body onto a mesh you choose, via an IK Retargeter.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Target Mesh + Retargeter</span>
+        <span class="option-desc">Shown for Existing Skeleton. Use <strong>+ Create Retargeter...</strong> to auto-generate one pre-wired to the SMPL body-tracker source rig — you only configure the target chain mapping.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Visualization Blueprint</span>
+        <span class="option-desc">Body-tracked jobs need an Actor Blueprint (not a plain mesh) for the A|B viewport, since one mesh can't carry both Face and Body. Use <strong>Create Blueprint...</strong> to auto-build one that leader-poses Face to Body.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Unsolved Frames</span>
+        <span class="option-desc">Fallback for frames the tracker couldn't solve: hold the last valid frame, or fall back to a neutral pose.</span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      See <a href="/marketplace/mha-manager/docs/job-options#body-tracking">Per-Job Options</a> for the
+      full Body Tracking, Body Export, and Visualization reference.
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="sub-heading">Outputs</h2>
+    <div class="asset-table">
+      <div class="asset-row header"><span>Output</span><span>When</span><span>Notes</span></div>
+      <div class="asset-row">
+        <span><strong>Performance + AnimSequence</strong></span>
+        <span>Always</span>
+        <span>Solved performance plus baked face animation on the MetaHuman skeleton</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>Body animation</strong></span>
+        <span>Body tracking on</span>
+        <span>Exported per skeleton mode — performer skeleton, retargeted existing skeleton, or both passes</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>FBX exports</strong></span>
+        <span>Optional</span>
+        <span>Enabled in Global Settings; body-tracking jobs get the baked-joint <code>_DCC</code> form</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="doc-footer">
+    <a href="/marketplace/mha-manager/docs/ingest" class="prev-link">
+      <span class="nav-label">Previous</span>
+      <span class="nav-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Ingest Footage
+      </span>
+    </a>
+    <a href="/marketplace/mha-manager/docs/stereo-workflow" class="next-link">
+      <span class="nav-label">Next</span>
+      <span class="nav-title">
+        Stereo Workflow
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </div>
+
+</DocsLayout>
+
+<style>
+  .doc-figure { margin: 20px 0 4px; }
+  .doc-img-placeholder {
+    background: #0a0a0a;
+    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
+    border-radius: var(--radius);
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .placeholder-icon { color: var(--text-muted); opacity: 0.35; }
+  .placeholder-name { font-family: var(--font-mono); font-size: 0.775rem; color: var(--accent); }
+  .placeholder-hint { font-size: 0.775rem; color: var(--text-muted); max-width: 480px; line-height: 1.5; }
+  figcaption { font-size: 0.775rem; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+
+  .doc-header { margin-bottom: 40px; }
+
+  .type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .type-mono  { background: color-mix(in srgb, #4a9eff 12%, transparent); color: #4a9eff; border: 1px solid color-mix(in srgb, #4a9eff 30%, transparent); }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead code, .type-desc code, .callout code, .asset-row code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  .type-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .type-section:last-of-type { border-bottom: none; }
+
+  .type-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 620px;
+    margin-bottom: 24px;
+  }
+
+  .sub-heading {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    margin: 24px 0 10px;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .asset-table {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+
+  .asset-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1.3fr 1.4fr;
+    gap: 16px;
+    padding: 10px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .asset-row:last-child { border-bottom: none; }
+
+  .asset-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .asset-row strong { color: var(--text); font-weight: 500; }
+
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 8px;
+  }
+
+  .pipeline-stage {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stage-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+  .stage-note { font-size: 0.7rem; color: var(--accent); }
+  .pipeline-arrow { color: var(--text-muted); font-size: 0.9rem; font-family: var(--font-mono); }
+
+  .option-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .option-row {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 20px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .option-row:last-child { border-bottom: none; }
+  .option-name { font-weight: 600; color: var(--text); font-size: 0.825rem; }
+  .option-desc { color: var(--text-muted); line-height: 1.5; }
+  .option-desc strong { color: var(--text); font-weight: 500; }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 16px 0;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+  .callout-tip  { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+  .callout-note { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout strong { color: var(--text); font-weight: 600; }
+  .callout code { color: var(--accent); }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .doc-footer {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .prev-link, .next-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+    min-width: 140px;
+  }
+
+  .prev-link { align-items: flex-start; }
+  .next-link { align-items: flex-end; }
+  .prev-link:hover, .next-link:hover { border-color: var(--accent); }
+
+  .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+
+  .nav-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .asset-row { grid-template-columns: 1fr 1fr; }
+    .asset-row span:last-child { display: none; }
+    .asset-row.header span:last-child { display: none; }
+    .option-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

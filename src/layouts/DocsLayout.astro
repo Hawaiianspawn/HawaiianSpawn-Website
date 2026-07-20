@@ -22,10 +22,17 @@ const navGroups = [
     ],
   },
   {
+    label: 'Workflows',
+    items: [
+      { slug: 'mono-workflow',   label: 'Mono Workflow',   href: `${pluginBase}/docs/mono-workflow` },
+      { slug: 'stereo-workflow', label: 'Stereo Workflow', href: `${pluginBase}/docs/stereo-workflow` },
+      { slug: 'audio-workflow',  label: 'Audio Workflow',  href: `${pluginBase}/docs/audio-workflow` },
+    ],
+  },
+  {
     label: 'Reference',
     items: [
       { slug: 'job-types',        label: 'Job Types',         href: `${pluginBase}/docs/job-types` },
-      { slug: 'stereo-workflow',  label: 'Stereo Workflow',   href: `${pluginBase}/docs/stereo-workflow` },
       { slug: 'global-settings',  label: 'Global Settings',   href: `${pluginBase}/docs/global-settings` },
       { slug: 'job-options',      label: 'Per-Job Options',   href: `${pluginBase}/docs/job-options` },
       { slug: 'manifests',        label: 'Manifest Format',   href: `${pluginBase}/docs/manifests` },

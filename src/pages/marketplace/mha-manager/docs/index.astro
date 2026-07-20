@@ -23,17 +23,32 @@ const topics = [
     ],
   },
   {
+    group: 'Workflows',
+    items: [
+      {
+        href: '/marketplace/mha-manager/docs/mono-workflow',
+        label: 'Mono Workflow',
+        desc: 'Single-camera footage end to end — framing probe, optional UE 5.8 body tracking, solve, and export.',
+      },
+      {
+        href: '/marketplace/mha-manager/docs/stereo-workflow',
+        label: 'Stereo Workflow',
+        desc: 'The highest-fidelity path — the calibration to identity to performance chain, depth generation, and the depth-constrained solve.',
+      },
+      {
+        href: '/marketplace/mha-manager/docs/audio-workflow',
+        label: 'Audio Workflow',
+        desc: 'Facial animation from a voice track alone — solver mode, mood, output controls, and export.',
+      },
+    ],
+  },
+  {
     group: 'Reference',
     items: [
       {
         href: '/marketplace/mha-manager/docs/job-types',
         label: 'Job Types',
-        desc: 'Mono, Stereo, and Audio solves plus Stereo Calibration and Identity Create jobs — required assets, framing auto-categorization, and when to use each.',
-      },
-      {
-        href: '/marketplace/mha-manager/docs/stereo-workflow',
-        label: 'Stereo Workflow',
-        desc: 'How calibration, identity, and performance jobs chain — queue a whole actor in any order and let prerequisites resolve automatically.',
+        desc: 'A one-screen chooser — which type to use, what each requires, and what it produces, linking to the workflow guides.',
       },
       {
         href: '/marketplace/mha-manager/docs/global-settings',

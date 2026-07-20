@@ -4,43 +4,64 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 
 <DocsLayout
   title="Stereo Workflow — MHA Manager"
-  description="How CalibrateStereo, Identity Create, and stereo performance jobs chain together — queue a whole actor in any order and let prerequisites resolve."
+  description="Process stereo HMC footage end to end: the calibration -> identity -> performance chain, depth generation, the solve, and export."
   currentSlug="stereo-workflow"
 >
 
   <div class="doc-header">
+    <span class="type-badge type-stereo">Stereo</span>
     <h1 class="doc-title">Stereo Workflow</h1>
     <p class="doc-lead">
-      A stereo (HMC) performance take is the highest-fidelity job type, but it cannot solve alone: it
-      needs a <strong>camera calibration</strong> and a prepared <strong>MetaHuman Identity</strong>
-      for its actor first. The queue produces both as their own job types and chains them for you —
-      so you can queue an entire shoot in any order and let the dependencies resolve.
+      Stereo (HMC) is the highest-fidelity job type — the solve is depth-constrained, which resolves
+      facial geometry that is ambiguous in monocular footage. In exchange it needs two parent assets
+      for its actor first: a <strong>camera calibration</strong> and a prepared
+      <strong>MetaHuman Identity</strong>. The queue produces both as their own job types and chains
+      them for you.
     </p>
   </div>
 
-  <section class="doc-section">
+  <section class="type-section">
+    <h2 class="sub-heading">Required assets</h2>
+    <div class="asset-table">
+      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
+      <div class="asset-row">
+        <span><strong>Capture Data</strong></span>
+        <span><code>UFootageCaptureData</code></span>
+        <span>Must reference both camera image sequences</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>Identity</strong></span>
+        <span><code>UMetaHumanIdentity</code></span>
+        <span>Auto-discovered under the actor folder; built by an Identity Create job</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>Camera Calibration</strong></span>
+        <span><code>UCameraCalibration</code></span>
+        <span>Required for depth generation; auto-discovered, or built by a Calibration job</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="type-section">
     <h2 class="section-title">The parent chain</h2>
-    <p class="section-desc">
+    <p class="type-desc">
       Stereo is a family of three job types in a strict dependency order. The first two exist only to
       produce the assets the third consumes:
     </p>
-    <div class="field-list">
+    <div class="tier-table">
       <div class="tier-row header">
-        <span>Tier</span>
-        <span>Job</span>
-        <span>Produces</span>
-        <span>Blocks until ready</span>
+        <span>Tier</span><span>Job</span><span>Produces</span><span>Blocks until ready</span>
       </div>
       <div class="tier-row">
         <span>1</span>
         <span><strong>CalibrateStereo</strong></span>
-        <span>A <code>CameraCalibration</code> asset from a checkerboard take, linked to the take and discoverable by the actor's other takes.</span>
-        <span>—</span>
+        <span>A <code>CameraCalibration</code> from a checkerboard take, linked to the take and discoverable by the actor's other takes.</span>
+        <span>-</span>
       </div>
       <div class="tier-row">
         <span>2</span>
         <span><strong>Identity Create</strong></span>
-        <span>A rigged, prepared <code>MetaHumanIdentity</code> (<code>MHID_&lt;Actor&gt;</code>), built from an identity take using the calibration above.</span>
+        <span>A rigged, prepared <code>MetaHumanIdentity</code> (<code>MHID_&lt;Actor&gt;</code>), built from an identity take using the calibration.</span>
         <span>Needs the calibration (for depth). Runs in an interactive editor (cloud AutoRig login).</span>
       </div>
       <div class="tier-row">
@@ -53,64 +74,150 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <div class="callout callout-note">
       <strong>The iron rule:</strong> a stereo take never processes without both parent assets for its
       actor. Depth is generated from the calibration before the solve, so a bad calibration would
-      poison every take built on it — which is why the <a href="/marketplace/mha-manager/docs/global-settings">calibration quality gates</a>
-      sit upstream. Mono and Audio jobs depend on neither and never wait.
+      poison every take built on it — which is why the calibration quality gates sit upstream. Mono
+      and Audio jobs depend on neither and never wait.
     </div>
   </section>
 
-  <section class="doc-section">
+  <section class="type-section">
     <h2 class="section-title">Queue in any order</h2>
-    <p class="section-desc">
+    <p class="type-desc">
       Execution order ignores queue row order. The batch always runs
       <strong>CalibrateStereo first, Identity Create second, everything else third</strong>, so a
       take's prerequisites exist by the time it preflights. The queue is strictly serial (Epic's
       single-performance lock), and takes are classified automatically by name — <code>grid</code> /
       <code>calib</code> tokens become CalibrateStereo, <code>identity</code> / <code>dna</code> become
-      Identity Create. That means you can drop a whole actor folder into the queue at once and let the
-      tiers sort themselves out.
+      Identity Create. Drop a whole actor folder into the queue at once and let the tiers sort
+      themselves out.
     </p>
+    <div class="callout callout-tip">
+      <strong>Worked example.</strong> Queue everything under <code>Imports/Aaron/</code> in any order
+      and press Start:
+      <ol class="inline-list">
+        <li><code>Aaron_Calib_Grid</code> runs first (CalibrateStereo) -&gt; a Camera Calibration next to the take.</li>
+        <li><code>Aaron_Identity_DNA</code> runs second (Identity Create): depth with that calibration -&gt; neutral track -&gt; conform -&gt; AutoRig -&gt; <code>MHID_Aaron</code>.</li>
+        <li><code>Aaron_Take01..N</code> run last (Stereo): preflight links the calibration and <code>MHID_Aaron</code>, and each take produces a Performance + AnimSequence.</li>
+        <li>Takes queued before their prerequisites simply wait as a blocked status and resume automatically once the parent completes.</li>
+      </ol>
+    </div>
   </section>
 
-  <section class="doc-section">
-    <h2 class="section-title">Worked example — one actor folder</h2>
-    <p class="section-desc">
-      An actor <strong>Aaron</strong> was shot with a checkerboard take, an identity take, and several
-      performance takes, all under <code>Imports/Aaron/</code>. Queue everything, in any order, and
-      press Start:
-    </p>
-    <ol class="numbered-list">
-      <li><code>Aaron_Calib_Grid</code> runs first as a <strong>CalibrateStereo</strong> job — producing a Camera Calibration asset next to the take.</li>
-      <li><code>Aaron_Identity_DNA</code> runs second as <strong>Identity Create</strong>: depth is generated with that calibration, the neutral frame is tracked and conformed, cloud AutoRig runs, and Prepare for Performance produces <code>MHID_Aaron</code>.</li>
-      <li><code>Aaron_Take01…N</code> run last as <strong>Stereo</strong> jobs: preflight links the calibration and <code>MHID_Aaron</code>, the diagnostics gate passes, and each take produces a Performance asset and AnimSequence.</li>
-      <li>Any take you happened to queue <em>before</em> its prerequisites simply waits as a blocked status and resumes automatically once the parent completes — the tiers force grid -&gt; identity -&gt; performances regardless of the order you added them.</li>
-    </ol>
-    <figure class="doc-figure">
-      <div class="doc-img-placeholder">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-        <span class="placeholder-name">stereo-actor-queue.webp</span>
-        <span class="placeholder-hint">Queue with a full actor folder loaded — a Calibration job, an Identity Create job, and several Stereo take rows, some showing a Missing* blocked status waiting on their parents</span>
+  <section class="type-section">
+    <h2 class="sub-heading">Pipeline stages</h2>
+    <div class="pipeline">
+      <div class="pipeline-stage"><span class="stage-name">Validate Input</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage highlight"><span class="stage-name">Generate Depth</span><span class="stage-note">Stereo only</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage highlight"><span class="stage-name">Clean Depth</span><span class="stage-note">Optional</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Process Performance</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Export + Save</span></div>
+    </div>
+    <div class="callout callout-note">
+      <strong>Depth generation is serial.</strong> Even when Max Concurrent Jobs is above 1, depth
+      generation for all stereo jobs completes before any job enters the concurrent processing pool.
+      Depth is skipped when the take already has a linked depth sequence.
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="sub-heading">Stereo-specific options</h2>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Solve Type</span>
+        <span class="option-desc">Selects the internal stereo solver variant. Leave at default unless directed by Epic support.</span>
       </div>
-      <figcaption>A full actor folder queued at once — calibration and identity run first, performance takes follow</figcaption>
-    </figure>
+      <div class="option-row">
+        <span class="option-name">Head Movement Reference Frame</span>
+        <span class="option-desc">Frame used as the identity reference for head-movement correction. Set to a neutral, stable, forward-facing frame.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Face Coverage / Width Thresholds</span>
+        <span class="option-desc">Minimum proportion of the face visible in depth, and minimum face width in depth pixels, for a frame to be used. Raise to filter partial-face or too-distant frames.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Baseline / Scale Tolerance</span>
+        <span class="option-desc">Acceptable deviation between the calibrated stereo geometry and the live footage. Increase if the rig was adjusted between calibration and capture.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Enable Depth Cleaning + Depth Clamp Min/Max</span>
+        <span class="option-desc">Runs the hole-filling pass (below) before the solve; the clamp clips out-of-range depth before cleaning to eliminate background noise.</span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      See <a href="/marketplace/mha-manager/docs/job-options#stereo">Per-Job Options</a> for the full
+      stereo parameter reference.
+    </div>
   </section>
 
-  <section class="doc-section">
+  <section class="type-section">
+    <h2 class="section-title">Depth Clean-Up Pass</h2>
+    <p class="type-desc">
+      An optional <strong>Clean Depth</strong> stage between depth generation and the solve. It is not
+      a blur or global denoise — it distinguishes background from subject by flood-filling inward from
+      the image border, then patches only genuine interior gaps (dropouts inside the face/body
+      silhouette) with a distance-weighted average of surrounding valid depth. Background and
+      out-of-range pixels are left alone rather than smeared.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Non-destructive</span>
+        <span class="option-desc">Writes a new <code>_Cleaned</code> copy of the depth sequence on disk and as a new asset — the original capture data is never modified.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Asynchronous</span>
+        <span class="option-desc">EXR I/O and pixel work run on the thread pool, not the game thread — the editor stays responsive and the pass is cancellable mid-run.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Idempotent</span>
+        <span class="option-desc">Re-running a job that already has a cleaned sequence re-cleans from the newest source rather than stacking passes.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="type-section" id="calibration-identity">
+    <h2 class="section-title">Calibration &amp; Identity jobs</h2>
+    <h3 class="sub-heading">Stereo Calibration</h3>
+    <p class="type-desc">
+      Right-click a checkerboard take and choose <strong>Generate Stereo Calibration (Checkerboard
+      Take)</strong>, or let name tokens (<code>grid</code>/<code>calib</code>) classify it. It drives
+      Epic's MetaHuman Calibration Processing plugin (UE 5.7+) and produces a
+      <code>CC_&lt;TakeName&gt;</code> asset linked to the Capture Data, plus an optional OpenCV
+      <code>calib.json</code> on disk. The board is measured in <strong>squares</strong>, not inner
+      corners (Epic's shipped board is 11 x 16 at 0.75 cm), and Auto-Detect probes candidate sizes
+      before the full scan. Frame selection, sharpness, board override, and the quality gates live
+      under <a href="/marketplace/mha-manager/docs/global-settings">Global Settings -&gt; Stereo Calibration</a>.
+    </p>
+    <h3 class="sub-heading">Identity Create</h3>
+    <p class="type-desc">
+      Right-click a stereo identity take and choose <strong>Create MetaHuman Identity (Stereo)</strong>,
+      or let <code>identity</code>/<code>dna</code> tokens classify it. It generates depth, tracks the
+      neutral frame, conforms the template mesh, runs Epic's cloud AutoRig, and prepares the identity
+      for performance (<code>MHID_&lt;Actor&gt;</code>). A finished identity is reused across the
+      actor's takes — delete the asset to force a rebuild.
+    </p>
+    <div class="callout callout-note">
+      Identity Create needs an interactive editor session for the cloud AutoRig login, so it is
+      <strong>not available in headless / CI runs</strong>. Build identities in the editor first, then
+      batch the performance solves.
+    </div>
+  </section>
+
+  <section class="type-section">
     <h2 class="section-title">Discovery and blocked states</h2>
-    <p class="section-desc">
-      Discovery is scoped to the actor's folders, which is why keeping a shoot's takes under one
-      actor folder matters:
+    <p class="type-desc">
+      Discovery is scoped to the actor's folders, which is why keeping a shoot's takes under one actor
+      folder matters:
     </p>
     <ul class="bullet-list">
       <li><strong>Calibration lookup:</strong> already linked on the Capture Data -&gt; capture parent folder -&gt; take folder -&gt; sibling take folders -&gt; one level higher, never past <code>/Game</code>.</li>
       <li><strong>Identity lookup:</strong> capture parent folder -&gt; actor folder, preferring <code>MHID_&lt;Actor&gt;</code>.</li>
       <li><strong>Rejected calibrations</strong> (set aside for poor quality) are invisible to every lookup until you accept or re-solve them.</li>
     </ul>
-    <p class="section-desc">A blocked take shows one of three statuses, and each clears differently:</p>
-    <div class="field-list">
-      <div class="blk-row header">
-        <span>Status</span>
-        <span>Meaning &amp; how it clears</span>
-      </div>
+    <div class="tier-table" style="margin-top: 16px;">
+      <div class="blk-row header"><span>Status</span><span>Meaning &amp; how it clears</span></div>
       <div class="blk-row">
         <span><strong>MissingCalibration</strong></span>
         <span>No calibration found for the actor yet. Requeues automatically the moment one appears (a Calibration job finishes, or you link the asset).</span>
@@ -127,17 +234,17 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </section>
 
   <div class="doc-footer">
-    <a href="/marketplace/mha-manager/docs/job-types" class="prev-link">
+    <a href="/marketplace/mha-manager/docs/mono-workflow" class="prev-link">
       <span class="nav-label">Previous</span>
       <span class="nav-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Job Types
+        Mono Workflow
       </span>
     </a>
-    <a href="/marketplace/mha-manager/docs/global-settings" class="next-link">
+    <a href="/marketplace/mha-manager/docs/audio-workflow" class="next-link">
       <span class="nav-label">Next</span>
       <span class="nav-title">
-        Global Settings
+        Audio Workflow
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </span>
     </a>
@@ -146,7 +253,19 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 </DocsLayout>
 
 <style>
-  .doc-header { margin-bottom: 32px; }
+  .doc-header { margin-bottom: 40px; }
+
+  .type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .type-stereo { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
   .doc-title {
     font-size: clamp(1.8rem, 4vw, 2.4rem);
@@ -162,48 +281,60 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     line-height: 1.7;
   }
 
-  .doc-lead code,
-  .section-desc code,
-  .tier-row code,
-  .blk-row code,
-  .bullet-list code,
-  .numbered-list code,
-  .callout code {
+  .doc-lead strong, .type-desc strong { color: var(--text); font-weight: 500; }
+  .doc-lead code, .type-desc code, .callout code, .asset-row code, .tier-row code, .blk-row code, .bullet-list code {
     font-family: var(--font-mono);
     font-size: 0.8rem;
     color: var(--accent);
-    background: var(--bg-surface);
-    padding: 1px 5px;
-    border-radius: 3px;
-    border: 1px solid var(--border);
   }
 
-  .doc-lead strong,
-  .section-desc strong { color: var(--text); font-weight: 500; }
-
-  .doc-section { margin-bottom: 44px; }
-
-  .section-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
+  .type-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
     border-bottom: 1px solid var(--border);
   }
+  .type-section:last-of-type { border-bottom: none; }
 
-  .section-desc {
+  .type-desc {
     font-size: 0.9rem;
     color: var(--text-muted);
-    line-height: 1.7;
-    margin: 0 0 12px;
+    line-height: 1.75;
+    max-width: 640px;
+    margin-bottom: 16px;
   }
 
-  .field-list {
+  .sub-heading {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    margin: 24px 0 10px;
+  }
+  .sub-heading:first-child { margin-top: 0; }
+
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .asset-table, .tier-table {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
+  }
+
+  .asset-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1.3fr 1.4fr;
+    gap: 16px;
+    padding: 10px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
   }
 
   .tier-row {
@@ -230,98 +361,93 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     line-height: 1.55;
   }
 
-  .tier-row:last-child,
-  .blk-row:last-child { border-bottom: none; }
+  .asset-row:last-child, .tier-row:last-child, .blk-row:last-child { border-bottom: none; }
 
-  .tier-row.header,
-  .blk-row.header {
+  .asset-row.header, .tier-row.header, .blk-row.header {
     background: var(--bg-surface);
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--text-muted);
   }
 
-  .tier-row strong,
-  .blk-row strong { color: var(--text); font-weight: 500; }
+  .asset-row strong, .tier-row strong, .blk-row strong { color: var(--text); font-weight: 500; }
+
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 12px;
+  }
+
+  .pipeline-stage {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .pipeline-stage.highlight {
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+  .stage-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+  .stage-note { font-size: 0.7rem; color: var(--accent); }
+  .pipeline-arrow { color: var(--text-muted); font-size: 0.9rem; font-family: var(--font-mono); }
+
+  .option-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .option-row {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 20px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .option-row:last-child { border-bottom: none; }
+  .option-name { font-weight: 600; color: var(--text); font-size: 0.825rem; }
+  .option-desc { color: var(--text-muted); line-height: 1.5; }
 
   .bullet-list {
     padding-left: 20px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin: 0 0 12px;
+    margin: 0;
   }
-
-  .bullet-list li {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    padding-left: 4px;
-  }
-
+  .bullet-list li { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; padding-left: 4px; }
   .bullet-list li strong { color: var(--text); font-weight: 500; }
 
-  .numbered-list {
+  .inline-list {
+    margin: 10px 0 0;
     padding-left: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin: 0 0 12px;
+    gap: 6px;
   }
-
-  .numbered-list li {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    padding-left: 4px;
-  }
-
-  .numbered-list li strong { color: var(--text); font-weight: 500; }
-  .numbered-list li em,
-  .section-desc em { color: var(--text); font-style: italic; }
+  .inline-list li { line-height: 1.55; }
 
   .callout {
-    padding: 12px 16px;
+    padding: 14px 18px;
     border-radius: var(--radius);
-    font-size: 0.825rem;
+    font-size: 0.875rem;
     line-height: 1.6;
+    margin: 16px 0 0;
+    border-left: 3px solid;
     color: var(--text-muted);
-    margin: 4px 0 0;
-    border-left: 3px solid var(--accent);
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
   }
-
+  .callout-tip  { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+  .callout-note { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
   .callout strong { color: var(--text); font-weight: 600; }
-
-  .doc-figure { margin: 8px 0 0; }
-
-  .doc-img-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-align: center;
-    padding: 32px 20px;
-    border: 1px dashed var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-surface);
-    color: var(--text-muted);
-  }
-
-  .placeholder-icon { opacity: 0.5; }
-  .placeholder-name { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); }
-  .placeholder-hint { font-size: 0.775rem; max-width: 440px; line-height: 1.5; }
-
-  .doc-figure figcaption {
-    margin-top: 8px;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    text-align: center;
-    line-height: 1.5;
-  }
+  .callout code { color: var(--accent); }
 
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
@@ -363,9 +489,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   }
 
   @media (max-width: 720px) {
+    .asset-row { grid-template-columns: 1fr 1fr; }
+    .asset-row span:last-child, .asset-row.header span:last-child { display: none; }
     .tier-row { grid-template-columns: 0.4fr 1fr; gap: 4px 12px; }
     .tier-row span:nth-child(3), .tier-row span:nth-child(4) { grid-column: 2; }
     .tier-row.header span:nth-child(3), .tier-row.header span:nth-child(4) { display: none; }
     .blk-row { grid-template-columns: 1fr; gap: 4px; }
+    .option-row { grid-template-columns: 1fr; gap: 4px; }
   }
 </style>

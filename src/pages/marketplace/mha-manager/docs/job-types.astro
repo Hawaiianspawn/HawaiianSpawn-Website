@@ -1,462 +1,113 @@
 ---
 import DocsLayout from '../../../../layouts/DocsLayout.astro';
+
+const types = [
+  {
+    badge: 'Mono', badgeClass: 'type-mono',
+    href: '/marketplace/mha-manager/docs/mono-workflow',
+    use: 'A single color camera — head-mounted or any single-lens setup. The fastest type and the right default for most takes.',
+    requires: 'Capture Data only',
+    produces: 'Performance + face AnimSequence; optional body animation (UE 5.8)',
+  },
+  {
+    badge: 'Stereo', badgeClass: 'type-stereo',
+    href: '/marketplace/mha-manager/docs/stereo-workflow',
+    use: 'A multi-camera head-mounted rig. Highest fidelity — the depth-constrained solve resolves geometry mono footage cannot.',
+    requires: 'Capture Data + Identity + Camera Calibration',
+    produces: 'Performance + face AnimSequence (depth-constrained)',
+  },
+  {
+    badge: 'Audio', badgeClass: 'type-audio',
+    href: '/marketplace/mha-manager/docs/audio-workflow',
+    use: 'A voice track with no footage. Generates lip-sync and expression from dialogue alone.',
+    requires: 'Capture Data with an audio track',
+    produces: 'Performance + face AnimSequence (full-face or mouth-only)',
+  },
+  {
+    badge: 'Calibration', badgeClass: 'type-calib',
+    href: '/marketplace/mha-manager/docs/stereo-workflow#calibration-identity',
+    use: 'A stereo checkerboard take. Preflight step that produces the calibration every stereo take needs.',
+    requires: 'Checkerboard Capture Data (2 image sequences)',
+    produces: 'CameraCalibration asset (+ optional calib.json)',
+  },
+  {
+    badge: 'Identity', badgeClass: 'type-identity',
+    href: '/marketplace/mha-manager/docs/stereo-workflow#calibration-identity',
+    use: 'A stereo identity take. Preflight step that builds and rigs the MetaHuman Identity every stereo take needs.',
+    requires: 'Identity Capture Data + Camera Calibration',
+    produces: 'Rigged, prepared MetaHumanIdentity (MHID_<Actor>)',
+  },
+];
 ---
 
 <DocsLayout
   title="Job Types — MHA Manager"
-  description="Mono, Stereo, and Audio job types — required assets, workflows, and when to use each."
+  description="Which job type to use — a quick comparison of Mono, Stereo, Audio, Calibration, and Identity Create."
   currentSlug="job-types"
 >
 
   <div class="doc-header">
     <h1 class="doc-title">Job Types</h1>
     <p class="doc-lead">
-      Each job in the queue has a type that determines which MetaHuman Animator pipeline it runs,
-      what assets it requires, and which per-job options are available. Mono, Stereo, and Audio are
-      the performance solve types; Stereo Calibration and Identity Create are preflight jobs that
-      prepare a shoot's assets in the same queue.
+      Every job in the queue has a type that determines which MetaHuman Animator pipeline it runs and
+      what it requires. Use this page to pick the right one — then follow its workflow guide for the
+      full detail. Types are usually assigned automatically from the take, and you can change a row's
+      type at any time.
     </p>
   </div>
 
-  <!-- Mono -->
-  <section class="type-section">
-    <div class="type-header">
-      <span class="type-badge type-mono">Mono</span>
-      <h2 class="type-title">Mono Video</h2>
+  <div class="chooser">
+    <div class="chooser-row header">
+      <span>Type</span>
+      <span>Use it when</span>
+      <span>Requires</span>
+      <span>Produces</span>
     </div>
-    <p class="type-desc">
-      Processes a single color camera recording. This is the standard path for footage captured
-      with a head-mounted camera or any single-lens setup. It is the fastest job type and the
-      right default for most productions.
-    </p>
+    {types.map(t => (
+      <a class="chooser-row" href={t.href}>
+        <span><span class={`type-badge ${t.badgeClass}`}>{t.badge}</span></span>
+        <span class="cell-use">{t.use}</span>
+        <span class="cell-req">{t.requires}</span>
+        <span class="cell-prod">{t.produces}</span>
+      </a>
+    ))}
+  </div>
 
-    <h3 class="sub-heading">Required assets</h3>
-    <div class="asset-table">
-      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
-      <div class="asset-row">
-        <span><strong>Capture Data</strong></span>
-        <span><code>UFootageCaptureData</code></span>
-        <span>Your video footage import asset — the only required input</span>
-      </div>
-    </div>
-    <div class="callout callout-tip">
-      Mono is the simplest performance type to configure: no MetaHuman Identity and no Camera
-      Calibration. The realtime solver processes the footage directly.
-    </div>
+  <div class="callout callout-note">
+    <strong>Calibration</strong> and <strong>Identity Create</strong> are not performance solves —
+    they are the two preflight jobs that produce the assets every Stereo take depends on. They run
+    first in the queue automatically. See the
+    <a href="/marketplace/mha-manager/docs/stereo-workflow">Stereo Workflow</a> for how the chain
+    fits together.
+  </div>
 
-    <h3 class="sub-heading">Pipeline stages</h3>
-    <div class="pipeline">
-      <div class="pipeline-stage">
-        <span class="stage-name">Validate Input</span>
-      </div>
-      <div class="pipeline-arrow">→</div>
-      <div class="pipeline-stage">
-        <span class="stage-name">Process Performance</span>
-        <span class="stage-note">Tracking + Fitting</span>
-      </div>
-      <div class="pipeline-arrow">→</div>
-      <div class="pipeline-stage">
-        <span class="stage-name">Export Outputs</span>
-      </div>
-      <div class="pipeline-arrow">→</div>
-      <div class="pipeline-stage">
-        <span class="stage-name">Save Assets</span>
-      </div>
-    </div>
-
-    <figure class="doc-figure">
-      <div class="doc-img-placeholder">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-        <span class="placeholder-name">job-type-mono-row.webp</span>
-        <span class="placeholder-hint">Queue row with Job Type set to "Mono" — Capture Data cell filled, status showing "Ready"</span>
-      </div>
-      <figcaption>A Mono job row in the queue — Capture Data assigned, ready to process</figcaption>
-    </figure>
-
-    <h3 class="sub-heading">Mono-specific options</h3>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Head Stabilization</span>
-        <span class="option-desc">Corrects for head movement drift during the solve. Recommended when the subject moves significantly.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Tongue Solve</span>
-        <span class="option-desc">Enables tongue tracking. Requires UE 5.7+ and appropriate capture quality. Disabled by default.</span>
-      </div>
-    </div>
-
-    <h3 class="sub-heading">Body Tracking (UE 5.8+)</h3>
-    <p class="type-desc" style="margin-bottom: 12px;">
-      Mono jobs can optionally solve body motion alongside the face, using the SMPLX-based body
-      tracker. Requires the <strong>MetaHumanBodyTracker</strong> plugin. Choose Face only, Body
-      only, or Face + Body per job.
-    </p>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Body Height, Detection/Tracking Confidence</span>
-        <span class="option-desc">Auto-infers subject height from footage by default (145–190cm recommended range), with tunable acquire and maintain-lock thresholds.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Foot Locking, Head Rotation Limits</span>
-        <span class="option-desc">Stabilizes foot contact and defines yaw/pitch limits beyond which a frame falls back to a neutral head pose (or is left unsolved).</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Body Export</span>
-        <span class="option-desc">Export the solved body onto its own performer-shaped mesh, or retarget it onto an existing skeleton via an auto-generated IK Retargeter (<strong>+ Create Retargeter...</strong> in the job panel).</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Visualization Blueprint</span>
-        <span class="option-desc">Body-tracked jobs need an Actor Blueprint (not a plain mesh) for the A|B viewport. Use <strong>Create Blueprint...</strong> in the job panel to auto-build one that leader-poses Face to Body.</span>
-      </div>
-    </div>
-    <div class="callout callout-tip">
-      See <a href="/marketplace/mha-manager/docs/job-options#body-tracking">Per-Job Options</a>
-      for the full Body Tracking, Body Export, and Visualization option references.
-    </div>
-
-    <h3 class="sub-heading">Take Auto-Categorization — the Framing Probe (UE 5.8+)</h3>
-    <p class="type-desc" style="margin-bottom: 12px;">
-      When a Mono job is queued — manually or via the ingest watcher — MHA Manager probes the
-      take's first footage frame with a pose model and classifies its framing, so the right solve
-      template is applied automatically:
-    </p>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Full body</span>
-        <span class="option-desc">Hips and ankles confidently visible — Body Tracking is enabled on the freshly queued job.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Upper body / Headshot</span>
-        <span class="option-desc">Ankles cut off, or face only — the job stays face-only, with an amber warning if you enable body tracking anyway. The 5.8 body solver will invent joints below the frame edge on a headshot, so this guard matters.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Not analyzed</span>
-        <span class="option-desc">Nothing confidently visible, or the probe is unavailable — the job stays face-only with no badge.</span>
-      </div>
-    </div>
-    <p class="type-desc" style="margin: 16px 0 12px;">
-      The verdict is advisory: it never overrides a choice you already made and never flips a
-      running job. A <strong>Re-check</strong> button in the settings panel re-runs the probe, and
-      the verdict persists in the manifest so re-loaded queues do not re-probe. If frame 1 shows
-      nothing (slates, subject stepping in), one fallback probe runs at ~25% into the take.
-    </p>
-    <figure class="doc-figure">
-      <div class="doc-img-placeholder">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-        <span class="placeholder-name">job-type-framing-badge.webp</span>
-        <span class="placeholder-hint">Settings panel showing the framing badge (e.g. "Full body") with its confidence tooltip and the Re-check button next to it</span>
-      </div>
-      <figcaption>The framing badge in the settings panel — hover for the per-joint confidence summary, Re-check to re-run the probe</figcaption>
-    </figure>
-    <div class="callout callout-note">
-      <strong>Requirements:</strong> UE 5.8+, the MetaHumanBodyTracker plugin installed, and the
-      <strong>NNERuntimeORT</strong> plugin enabled in the host project. When any of these are
-      missing, the probe quietly reports "Not analyzed" and nothing else changes. After any
-      body-tracked solve, the job also reports <strong>body coverage</strong> — below 80% it gets a
-      "Body track gaps" warning, since undetected frames export as held/reference pose.
-    </div>
-  </section>
-
-  <!-- Stereo -->
-  <section class="type-section">
-    <div class="type-header">
-      <span class="type-badge type-stereo">Stereo</span>
-      <h2 class="type-title">Stereo HMC</h2>
-    </div>
-    <p class="type-desc">
-      Processes footage from a multi-camera head-mounted capture rig. Stereo jobs provide depth
-      information that improves solve accuracy, particularly for facial geometry that is ambiguous
-      in monocular footage. Depth sequences can be pre-generated or produced automatically by the plugin.
-    </p>
-
-    <h3 class="sub-heading">Required assets</h3>
-    <div class="asset-table">
-      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
-      <div class="asset-row">
-        <span><strong>Capture Data</strong></span>
-        <span><code>UFootageCaptureData</code></span>
-        <span>Must reference both camera image sequences</span>
-      </div>
-      <div class="asset-row">
-        <span><strong>Identity</strong></span>
-        <span><code>UMetaHumanIdentity</code></span>
-        <span>Auto-discovered if under a standard folder structure</span>
-      </div>
-      <div class="asset-row">
-        <span><strong>Camera Calibration</strong></span>
-        <span><code>UCameraCalibration</code></span>
-        <span>Required for depth generation; auto-discovered if available, or generated by a Calibration job</span>
-      </div>
-    </div>
-
-    <h3 class="sub-heading">Pipeline stages</h3>
-    <div class="pipeline">
-      <div class="pipeline-stage">
-        <span class="stage-name">Validate Input</span>
-      </div>
-      <div class="pipeline-arrow">→</div>
-      <div class="pipeline-stage highlight">
-        <span class="stage-name">Generate Depth</span>
-        <span class="stage-note">Stereo only</span>
-      </div>
-      <div class="pipeline-arrow">→</div>
-      <div class="pipeline-stage highlight">
-        <span class="stage-name">Clean Depth</span>
-        <span class="stage-note">Optional</span>
-      </div>
-      <div class="pipeline-arrow">→</div>
-      <div class="pipeline-stage">
-        <span class="stage-name">Process Performance</span>
-      </div>
-      <div class="pipeline-arrow">→</div>
-      <div class="pipeline-stage">
-        <span class="stage-name">Export + Save</span>
-      </div>
-    </div>
-
-    <figure class="doc-figure">
-      <div class="doc-img-placeholder">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-        <span class="placeholder-name">job-type-stereo-depth-gen.webp</span>
-        <span class="placeholder-hint">A Stereo job mid-process at the "Generate Depth" stage — progress bar visible, stage label highlighted</span>
-      </div>
-      <figcaption>A Stereo job during depth generation — the stage before the performance solve</figcaption>
-    </figure>
-
-    <div class="callout callout-note">
-      <strong>Depth generation is serial.</strong> Even when <strong>Max Concurrent Jobs</strong> is set
-      above 1, depth generation for all stereo jobs completes before any job enters the concurrent processing pool.
-    </div>
-
-    <h3 class="sub-heading">Stereo-specific options</h3>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Solve Type</span>
-        <span class="option-desc">Selects the stereo solver variant. Leave at default unless directed by Epic support.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Head Movement Reference Frame</span>
-        <span class="option-desc">Frame number used as the reference pose for head movement correction.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Neutral Pose Calibration</span>
-        <span class="option-desc">Uses a neutral expression frame for calibrating the face geometry baseline.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Face Coverage Threshold</span>
-        <span class="option-desc">Minimum proportion of the face that must be visible in depth for a frame to be used.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Face Width Threshold</span>
-        <span class="option-desc">Minimum face width in depth pixels required to include a frame.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Baseline / Scale Tolerance</span>
-        <span class="option-desc">Acceptable deviation between the stereo baseline in calibration and the live footage.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Enable Depth Cleaning</span>
-        <span class="option-desc">Runs NNE hole-filling on the depth sequence before the performance solve. Preserves GrayF EXR format.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Depth Clamp Min / Max</span>
-        <span class="option-desc">Clips depth values outside this range before cleaning. Useful for eliminating background noise.</span>
-      </div>
-    </div>
-
-    <h3 class="sub-heading">Depth Clean-Up Pass</h3>
-    <p class="type-desc" style="margin-bottom: 12px;">
-      Depth cleaning is a dedicated <strong>Clean Depth</strong> pipeline stage that runs between
-      depth generation and the performance solve. It is not a blur or a global denoise — it
-      distinguishes background from the subject by flood-filling inward from the image border, then
-      only patches genuine interior gaps (dropouts inside the face/body silhouette) using a
-      distance-weighted average of the surrounding valid depth pixels. Background and out-of-range
-      pixels outside the clamp range are left alone rather than smeared.
-    </p>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Non-destructive</span>
-        <span class="option-desc">Writes a new <code>_Cleaned</code> copy of the depth sequence on disk and as a new <code>UImgMediaSource</code> asset — the original capture data is never modified.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Runs asynchronously</span>
-        <span class="option-desc">EXR I/O and pixel processing run on the thread pool, not the game thread — the editor stays responsive, and the pass is cooperatively cancellable mid-run.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Idempotent</span>
-        <span class="option-desc">Re-running a job that already has a cleaned sequence re-cleans from the newest source instead of stacking cleaning passes on top of each other.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Timed separately</span>
-        <span class="option-desc">Depth cleaning time is tracked independently from solve time (<code>DepthCleaningTimeSecs</code>) and reported in the job log alongside frames-cleaned and sequence counts.</span>
-      </div>
-    </div>
-    <div class="callout callout-tip">
-      See <a href="/marketplace/mha-manager/docs/job-options#stereo">Per-Job Options</a>
-      for Enable Depth Cleaning and the Depth Clamp Min/Max parameters that control it.
-    </div>
-  </section>
-
-  <!-- Audio -->
-  <section class="type-section">
-    <div class="type-header">
-      <span class="type-badge type-audio">Audio</span>
-      <h2 class="type-title">Audio Only</h2>
-    </div>
-    <p class="type-desc">
-      Drives facial animation from an audio track alone — no video footage required. Useful for
-      generating lip-sync and expression animation from dialogue recordings when no performance
-      capture footage is available.
-    </p>
-
-    <h3 class="sub-heading">Required assets</h3>
-    <div class="asset-table">
-      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
-      <div class="asset-row">
-        <span><strong>Capture Data</strong></span>
-        <span><code>UFootageCaptureData</code></span>
-        <span>Must contain an audio track; video tracks are ignored</span>
-      </div>
-    </div>
-
-    <figure class="doc-figure">
-      <div class="doc-img-placeholder">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-        <span class="placeholder-name">job-type-audio-row.webp</span>
-        <span class="placeholder-hint">Queue showing an Audio job row — only Capture Data assigned, Identity cell is greyed out / not required</span>
-      </div>
-      <figcaption>An Audio job requires only Capture Data — Identity and Calibration columns are inactive</figcaption>
-    </figure>
-
-    <div class="callout callout-tip">
-      Audio jobs do <strong>not</strong> require a MetaHuman Identity or Camera Calibration asset.
-      They are the simplest job type to configure.
-    </div>
-
-    <h3 class="sub-heading">Audio-specific options</h3>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Solver Mode</span>
-        <span class="option-desc">Realtime (faster, lower quality) or Offline (slower, higher quality). Use Offline for final output.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Mood Preset</span>
-        <span class="option-desc">Sets the emotional tone used to color the generated animation — Neutral, Happy, Sad, Angry, etc.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Blink Generation</span>
-        <span class="option-desc">Auto-generates blinks when no blink data is present in the audio solve result.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Audio Channel</span>
-        <span class="option-desc">Which channel from a multi-track audio asset to use for the solve (0-indexed).</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Lookahead Window</span>
-        <span class="option-desc">How far ahead (in milliseconds) the solver reads the audio signal for anticipation cues.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Calibration -->
-  <section class="type-section">
-    <div class="type-header">
-      <span class="type-badge type-calib">Calibration</span>
-      <h2 class="type-title">Stereo Calibration</h2>
-    </div>
-    <p class="type-desc">
-      Turns a stereo checkerboard take into a Camera Calibration asset as part of the batch.
-      Right-click the checkerboard take in the Content Browser and choose
-      <strong>Generate Stereo Calibration (Checkerboard Take)</strong> to queue a standalone
-      calibration job. It drives Epic's MetaHuman Calibration Processing plugin (UE 5.7+) and produces:
-    </p>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Camera Calibration asset</span>
-        <span class="option-desc">A <code>CC_&lt;TakeName&gt;</code> asset saved in the same content folder as the take, auto-linked to the Capture Data.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">calib.json (optional)</span>
-        <span class="option-desc">An OpenCV-model <code>calib.json</code> written into the take's footage folder on disk — the same format Capture Manager's stereo HMC ingest reads. An existing calib.json is never overwritten.</span>
-      </div>
-    </div>
-
-    <h3 class="sub-heading">How the board is detected</h3>
-    <p class="type-desc" style="margin-bottom: 12px;">
-      The board pattern is measured in <strong>squares</strong>, not inner corners — Epic's shipped
-      board is 11 x 16 squares with 0.75 cm squares, and those are the defaults.
-      <strong>Auto-Detect Board Pattern</strong> (on by default) probes a handful of frames with
-      candidate board sizes — your setting, its transpose, an inner-corner misentry, Epic's board —
-      before committing to the full-take scan. If nothing detects, the job fails in seconds with a
-      clear error instead of scanning the whole take. Square Size cannot be measured from footage:
-      a wrong value silently scales the stereo baseline and all reconstructed depth, so double-check
-      it against your printed board.
-    </p>
-    <figure class="doc-figure">
-      <div class="doc-img-placeholder">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-        <span class="placeholder-name">job-type-calibration-result.webp</span>
-        <span class="placeholder-hint">A completed calibration run — the RMS result dialog (right-click run) or toast notification (batch run), with the CC_ asset visible in the Content Browser</span>
-      </div>
-      <figcaption>A finished calibration job — standalone runs show a result dialog, batch runs show per-job toasts so dialogs never stack</figcaption>
-    </figure>
-    <div class="callout callout-tip">
-      Takes that already carry a usable Camera Calibration are skipped automatically. Frame
-      selection, sharpness filtering, and quality thresholds are configured under
-      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings → Stereo Calibration</a>.
-    </div>
-  </section>
-
-  <!-- Identity Create -->
-  <section class="type-section">
-    <div class="type-header">
-      <span class="type-badge type-identity">Identity</span>
-      <h2 class="type-title">Identity Create</h2>
-    </div>
-    <p class="type-desc">
-      Builds a MetaHuman Identity end-to-end from a stereo <code>UFootageCaptureData</code> take,
-      inside the same queue. Right-click the take in the Content Browser and choose
-      <strong>Create MetaHuman Identity (Stereo)</strong>. The resulting Identity can then be
-      assigned to the shoot's performance jobs.
-    </p>
-    <div class="callout callout-note">
-      Identity Create jobs need an interactive editor session for the MetaHuman auto-rig
-      (cloud login), so they are not available in headless/CI runs.
-    </div>
-  </section>
-
-  <!-- Universal options -->
-  <section class="type-section">
-    <h2 class="section-title">Universal Options</h2>
-    <p class="type-desc">These options appear on every job regardless of type.</p>
-    <div class="option-list">
-      <div class="option-row">
-        <span class="option-name">Frame Exclusion Ranges</span>
-        <span class="option-desc">One or more frame ranges to skip during the solve. Use to cut out blinks, obstructions, or bad frames.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Show Frames</span>
-        <span class="option-desc">When enabled, the solver renders preview frames during processing. Useful for debugging; slower in production.</span>
-      </div>
-      <div class="option-row">
-        <span class="option-name">Capture Frame Rate</span>
-        <span class="option-desc">Override the frame rate detected from the capture data. Leave blank to use auto-detection.</span>
-      </div>
-    </div>
-  </section>
+  <div class="guide-links">
+    <a href="/marketplace/mha-manager/docs/mono-workflow" class="guide-link">
+      <span class="guide-label">Guide</span>
+      <span class="guide-title">Mono Workflow</span>
+    </a>
+    <a href="/marketplace/mha-manager/docs/stereo-workflow" class="guide-link">
+      <span class="guide-label">Guide</span>
+      <span class="guide-title">Stereo Workflow</span>
+    </a>
+    <a href="/marketplace/mha-manager/docs/audio-workflow" class="guide-link">
+      <span class="guide-label">Guide</span>
+      <span class="guide-title">Audio Workflow</span>
+    </a>
+  </div>
 
   <div class="doc-footer">
-    <a href="/marketplace/mha-manager/docs/ingest" class="prev-link">
+    <a href="/marketplace/mha-manager/docs/audio-workflow" class="prev-link">
       <span class="nav-label">Previous</span>
       <span class="nav-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Ingest Footage
+        Audio Workflow
       </span>
     </a>
-    <a href="/marketplace/mha-manager/docs/stereo-workflow" class="next-link">
+    <a href="/marketplace/mha-manager/docs/global-settings" class="next-link">
       <span class="nav-label">Next</span>
       <span class="nav-title">
-        Stereo Workflow
+        Global Settings
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </span>
     </a>
@@ -465,25 +116,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 </DocsLayout>
 
 <style>
-  /* Image placeholders */
-  .doc-figure { margin: 20px 0 4px; }
-  .doc-img-placeholder {
-    background: #0a0a0a;
-    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
-    border-radius: var(--radius);
-    padding: 36px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
-  }
-  .placeholder-icon { color: var(--text-muted); opacity: 0.35; }
-  .placeholder-name { font-family: var(--font-mono); font-size: 0.775rem; color: var(--accent); }
-  .placeholder-hint { font-size: 0.775rem; color: var(--text-muted); max-width: 480px; line-height: 1.5; }
-  figcaption { font-size: 0.775rem; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
-
-  .doc-header { margin-bottom: 40px; }
+  .doc-header { margin-bottom: 32px; }
 
   .doc-title {
     font-size: clamp(1.8rem, 4vw, 2.4rem);
@@ -495,179 +128,98 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   .doc-lead {
     font-size: 1rem;
     color: var(--text-muted);
-    max-width: 580px;
+    max-width: 620px;
     line-height: 1.7;
   }
 
-  .type-section {
-    margin-bottom: 64px;
-    padding-bottom: 64px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .type-section:last-of-type { border-bottom: none; }
-
-  .type-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
-  }
-
-  .type-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .type-mono  { background: color-mix(in srgb, #4a9eff 12%, transparent); color: #4a9eff; border: 1px solid color-mix(in srgb, #4a9eff 30%, transparent); }
-  .type-stereo { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
-  .type-audio  { background: color-mix(in srgb, #c084fc 12%, transparent); color: #c084fc; border: 1px solid color-mix(in srgb, #c084fc 30%, transparent); }
-  .type-calib  { background: color-mix(in srgb, #f0a500 12%, transparent); color: #f0a500; border: 1px solid color-mix(in srgb, #f0a500 30%, transparent); }
-  .type-identity { background: color-mix(in srgb, #4ade80 12%, transparent); color: #4ade80; border: 1px solid color-mix(in srgb, #4ade80 30%, transparent); }
-
-  .type-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }
-
-  .type-desc {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.75;
-    max-width: 620px;
-    margin-bottom: 24px;
-  }
-
-  .sub-heading {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--text-muted);
-    margin: 24px 0 10px;
-  }
-
-  .section-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    letter-spacing: -0.01em;
-  }
-
-  .asset-table {
+  .chooser {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
-    margin-bottom: 4px;
+    margin-bottom: 20px;
   }
 
-  .asset-row {
+  .chooser-row {
     display: grid;
-    grid-template-columns: 1.1fr 1.3fr 1.4fr;
-    gap: 16px;
-    padding: 10px 16px;
+    grid-template-columns: 0.7fr 1.8fr 1.5fr 1.6fr;
+    gap: 18px;
+    padding: 14px 18px;
     font-size: 0.825rem;
     border-bottom: 1px solid var(--border);
     color: var(--text-muted);
+    align-items: start;
+    line-height: 1.5;
+    text-decoration: none;
+    transition: background 0.15s;
   }
 
-  .asset-row:last-child { border-bottom: none; }
+  a.chooser-row:hover { background: var(--bg-surface); }
+  .chooser-row:last-child { border-bottom: none; }
 
-  .asset-row.header {
+  .chooser-row.header {
     background: var(--bg-surface);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
-  .asset-row strong { color: var(--text); font-weight: 500; }
+  .cell-req { color: var(--text); }
+  .cell-prod { color: var(--text-muted); }
 
-  .asset-row code {
-    font-family: var(--font-mono);
-    font-size: 0.775rem;
-    color: var(--accent);
-  }
-
-  .pipeline {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-    margin: 4px 0 8px;
-  }
-
-  .pipeline-stage {
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
+  .type-badge {
+    display: inline-block;
+    padding: 3px 10px;
     border-radius: 4px;
-    padding: 7px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
   }
 
-  .pipeline-stage.highlight {
-    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-    background: color-mix(in srgb, var(--accent) 6%, transparent);
-  }
-
-  .stage-name {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .stage-note {
-    font-size: 0.7rem;
-    color: var(--accent);
-  }
-
-  .pipeline-arrow { color: var(--text-muted); font-size: 0.9rem; }
-
-  .option-list {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  .option-row {
-    display: grid;
-    grid-template-columns: 1.2fr 2fr;
-    gap: 20px;
-    padding: 12px 16px;
-    font-size: 0.85rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .option-row:last-child { border-bottom: none; }
-
-  .option-name {
-    font-weight: 600;
-    color: var(--text);
-    font-size: 0.825rem;
-  }
-
-  .option-desc { color: var(--text-muted); line-height: 1.5; }
+  .type-mono   { background: color-mix(in srgb, #4a9eff 12%, transparent); color: #4a9eff; border: 1px solid color-mix(in srgb, #4a9eff 30%, transparent); }
+  .type-stereo { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+  .type-audio  { background: color-mix(in srgb, #c084fc 12%, transparent); color: #c084fc; border: 1px solid color-mix(in srgb, #c084fc 30%, transparent); }
+  .type-calib  { background: color-mix(in srgb, #f0a500 12%, transparent); color: #f0a500; border: 1px solid color-mix(in srgb, #f0a500 30%, transparent); }
+  .type-identity { background: color-mix(in srgb, #4ade80 12%, transparent); color: #4ade80; border: 1px solid color-mix(in srgb, #4ade80 30%, transparent); }
 
   .callout {
     padding: 14px 18px;
     border-radius: var(--radius);
     font-size: 0.875rem;
     line-height: 1.6;
-    margin: 16px 0;
-    border-left: 3px solid;
+    margin-bottom: 28px;
+    border-left: 3px solid #f0a500;
+    background: color-mix(in srgb, #f0a500 8%, transparent);
+    color: var(--text-muted);
+  }
+  .callout strong { color: var(--text); font-weight: 600; }
+  .callout a, .doc-lead a { color: var(--accent); text-decoration: none; }
+  .callout a:hover { text-decoration: underline; }
+
+  .guide-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
-  .callout-tip  { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
-  .callout-note { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
-  .callout strong { color: var(--text); font-weight: 600; }
+  .guide-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .guide-link:hover { border-color: var(--accent); }
+  .guide-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+  .guide-title { font-size: 0.9rem; font-weight: 600; color: var(--accent); }
 
   .doc-footer {
     margin-top: 56px;
@@ -705,10 +257,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     color: var(--accent);
   }
 
-  @media (max-width: 640px) {
-    .asset-row { grid-template-columns: 1fr 1fr; }
-    .asset-row span:last-child { display: none; }
-    .asset-row.header span:last-child { display: none; }
-    .option-row { grid-template-columns: 1fr; gap: 4px; }
+  @media (max-width: 720px) {
+    .chooser-row { grid-template-columns: 1fr; gap: 6px; }
+    .chooser-row.header { display: none; }
+    .cell-req::before { content: "Requires: "; color: var(--text-muted); font-weight: 600; }
+    .cell-prod::before { content: "Produces: "; color: var(--text-muted); font-weight: 600; }
   }
 </style>
