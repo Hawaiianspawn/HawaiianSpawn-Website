@@ -1,0 +1,482 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+
+const toolGroups = [
+  {
+    id: 'inspection',
+    label: 'Queue inspection',
+    desc: 'Read-only tools that report queue and job state as JSON.',
+    tools: [
+      {
+        sig: 'get_queue_state() -> str',
+        params: '(none)',
+        desc: 'The whole queue as JSON. Each job carries its persisted fields plus live runtime fields the saved manifest omits: <code>live_status</code> (the real status — Running, MissingCalibration, PoorCalibrationQuality — not the collapsed "pending"), <code>stage</code>, <code>progress</code>, <code>status_message</code>, and <code>estimated_seconds</code>. Log lines are omitted for size — use <code>get_job</code> for a log tail.',
+      },
+      {
+        sig: 'get_job(job_id, max_log_lines=25) -> str',
+        params: '<code>job_id</code>, <code>max_log_lines</code>',
+        desc: 'One job as JSON, including a log tail and start/complete timestamps. Returns <code>""</code> if no job has that id.',
+      },
+      {
+        sig: 'get_settings() -> str',
+        params: '(none)',
+        desc: 'The global plugin settings as JSON (<code>FMHAManagerGlobalSettings</code>) — the same key names <code>update_settings</code> accepts.',
+      },
+    ],
+  },
+  {
+    id: 'editing',
+    label: 'Queue editing',
+    desc: 'Add, remove, and modify jobs and settings. Partial updates route through the same native setters the UI uses, preserving their side effects.',
+    tools: [
+      {
+        sig: 'add_job(capture_data_path) -> str',
+        params: '<code>capture_data_path</code>',
+        desc: 'Queue a new job for a Footage Capture Data asset, auto-classifying its type by package-path name (grid/calib -> CalibrateStereo, identity/dna -> IdentityCreate, otherwise Stereo; Mono/Audio come from the asset). A first-frame framing probe runs for mono takes. Returns the new job GUID, or <code>""</code> on failure.',
+      },
+      {
+        sig: 'remove_jobs(job_ids) -> int',
+        params: '<code>job_ids</code> (list)',
+        desc: 'Remove jobs from the queue by GUID. Unknown ids are ignored. Returns the number actually removed.',
+      },
+      {
+        sig: 'clear_queue() -> bool',
+        params: '(none)',
+        desc: 'Remove every job from the queue.',
+      },
+      {
+        sig: 'update_job(job_id, fields_json) -> str',
+        params: '<code>job_id</code>, <code>fields_json</code>',
+        desc: 'Apply a partial job update — only the JSON keys present are changed. Supported keys include <code>input_type</code>, <code>identity</code>, <code>camera_calibration</code>, <code>start_frame</code>/<code>end_frame</code>, <code>body_tracking</code>, <code>export_output_path</code>, <code>custom_data</code>, and a partial <code>options</code> object. Returns <code>""</code> on success or an <code>error: ...</code> message (an unknown key lists the supported set).',
+      },
+      {
+        sig: 'update_settings(settings_json) -> str',
+        params: '<code>settings_json</code>',
+        desc: 'Apply a partial global-settings update, then persist and refresh the ingest watcher. Same key names as <code>get_settings</code> emits; invariants are normalized on apply.',
+      },
+    ],
+  },
+  {
+    id: 'execution',
+    label: 'Execution',
+    desc: 'Start, cancel, and unblock processing. The queue always runs serially (Epic\'s single-performance lock), parents before dependents.',
+    tools: [
+      {
+        sig: 'start_batch() -> bool',
+        params: '(none)',
+        desc: 'Start processing the whole queue. Returns <code>true</code> if the batch is now running.',
+      },
+      {
+        sig: 'start_jobs(job_ids) -> bool',
+        params: '<code>job_ids</code> (list)',
+        desc: 'Start processing only the given jobs (still serial).',
+      },
+      {
+        sig: 'cancel_batch() -> bool',
+        params: '(none)',
+        desc: 'Request cooperative cancellation of the running batch (cancels adapters, kills workers). Returns <code>false</code> if nothing was running or the editor is in an unattended session.',
+      },
+      {
+        sig: 'retry_jobs(job_ids) -> bool',
+        params: '<code>job_ids</code> (list)',
+        desc: 'Requeue completed/failed/skipped jobs for another run, clearing persisted timing.',
+      },
+      {
+        sig: 'retry_job_as_mono(job_id) -> bool',
+        params: '<code>job_id</code>',
+        desc: 'Convert a blocked Stereo/Depth job to a Mono solve and requeue it — a Mono solve needs neither calibration nor identity, so this unblocks a take stuck on a missing prerequisite. The camera is picked automatically.',
+      },
+      {
+        sig: 'skip_job(job_id) -> bool',
+        params: '<code>job_id</code>',
+        desc: 'Mark a job Skipped so the serial queue moves past it.',
+      },
+      {
+        sig: 'accept_poor_calibration(job_id) -> bool',
+        params: '<code>job_id</code>',
+        desc: 'Accept an over-threshold calibration on a PoorCalibrationQuality job: relinks the CameraCalibration to the take, marks the job Done, and wakes dependents paused on it. Only valid while the job\'s <code>live_status</code> is PoorCalibrationQuality.',
+      },
+    ],
+  },
+  {
+    id: 'ingest',
+    label: 'Ingest & data',
+    desc: 'Bring raw footage into Capture Data assets and prepare copies. These require the Capture Manager ingest path (UE 5.8).',
+    tools: [
+      {
+        sig: 'ingest_folder(source_folder, take_name) -> str',
+        params: '<code>source_folder</code>, <code>take_name</code>',
+        desc: 'Ingest a raw image-sequence footage folder into a new Capture Data asset and queue a job for it. Returns <code>{"job_id": "...", "error": "..."}</code>. Fails on raw video — use <code>ingest_video</code> for .mov/.mp4.',
+      },
+      {
+        sig: 'ingest_video(video_path_a, take_name, import_directory, ...) -> str',
+        params: '<code>video_path_a</code>, <code>take_name</code>, <code>import_directory</code>, opt. <code>video_path_b</code>, <code>audio_path</code>, <code>ffmpeg_path</code>',
+        desc: 'Ingest .mov/.mp4 files into a new Capture Data asset and queue a job. Supply <code>video_path_b</code> for a stereo (HMC) pair; leave empty for mono. Pass <code>ffmpeg_path</code> to enable the third-party encoder for clips the built-in decoder rejects. Give each take its own <code>import_directory</code> under one actor folder so calibration/identity discovery can find each other.',
+      },
+      {
+        sig: 'duplicate_capture_data(source_object_path, dest_folder, new_name) -> str',
+        params: '<code>source_object_path</code>, <code>dest_folder</code>, <code>new_name</code>',
+        desc: 'Duplicate a Footage Capture Data asset with its depth and calibration links cleared — the copy shares the original RGB sequences but regenerates its own depth and links its own calibration. Never overwrites an existing asset.',
+      },
+    ],
+  },
+  {
+    id: 'persistence',
+    label: 'Persistence',
+    desc: 'Write queue state to disk.',
+    tools: [
+      {
+        sig: 'save_manifest(file_path) -> bool',
+        params: '<code>file_path</code>',
+        desc: 'Write the queue manifest JSON to disk. Pass <code>""</code> to write the default autosave manifest.',
+      },
+    ],
+  },
+];
+
+const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
+---
+
+<DocsLayout
+  title="MCP Toolset — MHA Manager"
+  description="Drive the MHA Manager batch queue from an MCP client via the UE 5.8 native MCP stack."
+  currentSlug="mcp-toolset"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">MCP Toolset</h1>
+    <p class="doc-lead">
+      MHA Manager exposes its batch queue to Model Context Protocol (MCP) clients, so an agent or
+      external tool can inspect the queue, add and edit jobs, start processing, and ingest footage —
+      the same operations the panel offers, driven programmatically. It rides Unreal Engine 5.8's
+      native MCP stack; every tool is a thin wrapper over the plugin's own queue logic.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">Requirements</h2>
+    <div class="field-list">
+      <div class="req-row header">
+        <span>Requirement</span>
+        <span>Detail</span>
+      </div>
+      <div class="req-row">
+        <span><strong>UE 5.8+</strong></span>
+        <span>The toolset uses the engine's native <code>ModelContextProtocol</code> + <code>ToolsetRegistry</code> stack. On UE 5.5 / 5.7 this stack does not exist, so the toolset is unavailable — the rest of the plugin works normally.</span>
+      </div>
+      <div class="req-row">
+        <span><strong>Engine MCP plugins</strong></span>
+        <span>The <code>ModelContextProtocol</code> and <code>ToolsetRegistry</code> engine plugins must be enabled. If they are absent, registration no-ops and the status indicator stays hidden.</span>
+      </div>
+      <div class="req-row">
+        <span><strong>Enabled by default</strong></span>
+        <span>The toolset registers automatically at editor startup — there is nothing to turn on. See <a href="#status">Status & disabling</a> to opt out.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">How it works</h2>
+    <p class="section-desc">
+      At editor startup the plugin's Python entry point registers a toolset definition with the
+      engine's <code>ToolsetRegistry</code>. Each of the {totalTools} tools is a thin delegation to a
+      reflected function on the MHA Manager subsystem — the C++ side owns all queue state, execution,
+      and quality-gate logic, so the tools add no behavior of their own. That means everything the
+      MCP surface does obeys the same rules as the panel:
+    </p>
+    <ul class="bullet-list">
+      <li>Processing is <strong>strictly serial</strong> — one solve at a time (Epic's single-performance lock).</li>
+      <li>Execution order is <strong>CalibrateStereo -> IdentityCreate -> everything else</strong>, so prerequisites exist by the time dependents run.</li>
+      <li>A Stereo take cannot process until both a <strong>CameraCalibration</strong> and a prepared <strong>MetaHuman Identity</strong> exist for its actor — the tools surface the blocked status rather than working around it.</li>
+    </ul>
+  </section>
+
+  <section class="doc-section" id="status">
+    <h2 class="section-title">Status & disabling</h2>
+    <p class="section-desc">
+      When the toolset registers, an <strong>Integrations</strong> status indicator in the plugin
+      reports live state — registered or not, and the tool count — with the detailed status line in
+      its tooltip. The indicator is hidden on engines without the MCP stack and when the toolset is
+      off, so its mere presence tells you the surface is live.
+    </p>
+    <div class="callout callout-note">
+      <strong>Turning it off.</strong> There is no toggle in the settings panel — the enable flag is a
+      manifest-only escape hatch. Set <code>"enable_mcp_toolset": false</code> in the batch manifest
+      (<code>.mhajson</code>) and restart the editor; with the flag off the toolset module is never
+      imported, so it provably does not exist in any client.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Connecting a client</h2>
+    <p class="section-desc">
+      The toolset registers into Unreal Engine 5.8's native MCP server rather than hosting its own,
+      so connecting a client is the standard engine MCP flow — point your MCP-capable client at the
+      editor's MCP endpoint and the MHA Manager tools appear alongside any other registered toolsets.
+      Follow Epic's Model Context Protocol documentation for your engine build for the exact endpoint
+      and client configuration; this page documents only the tools the plugin contributes.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Tool reference</h2>
+    <p class="section-desc">
+      {totalTools} tools, grouped by purpose. Object paths use the standard UE form
+      (<code>/Game/.../Take.Take</code>); GUIDs are the <code>id</code> values reported by
+      <code>get_queue_state</code> and <code>add_job</code>.
+    </p>
+
+    {toolGroups.map(group => (
+      <div class="tool-group" id={group.id}>
+        <h3 class="tool-group-title">{group.label}</h3>
+        <p class="tool-group-desc">{group.desc}</p>
+        <div class="field-list">
+          <div class="tool-row header">
+            <span>Tool</span>
+            <span>Parameters</span>
+            <span>Description</span>
+          </div>
+          {group.tools.map(t => (
+            <div class="tool-row">
+              <span><code>{t.sig}</code></span>
+              <span set:html={t.params} />
+              <span set:html={t.desc} />
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <div class="doc-footer">
+    <a href="/marketplace/mha-manager/docs/ci-mode" class="prev-link">
+      <span class="nav-label">Previous</span>
+      <span class="nav-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Headless / CI Mode
+      </span>
+    </a>
+    <a href="/marketplace/mha-manager/docs/troubleshooting" class="next-link">
+      <span class="nav-label">Next</span>
+      <span class="nav-title">
+        Troubleshooting
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </div>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc code,
+  .req-row code,
+  .tool-row code,
+  .bullet-list code,
+  .callout code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .bullet-list {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .bullet-list li {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding-left: 4px;
+  }
+
+  .bullet-list li strong { color: var(--text); font-weight: 500; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .req-row {
+    display: grid;
+    grid-template-columns: 0.9fr 3fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .tool-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 2.6fr;
+    gap: 16px;
+    padding: 12px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .req-row:last-child,
+  .tool-row:last-child { border-bottom: none; }
+
+  .req-row.header,
+  .tool-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  .req-row.header code,
+  .tool-row.header code { background: none; border: none; padding: 0; }
+
+  .tool-row > span:first-child code {
+    color: var(--accent);
+    font-size: 0.775rem;
+    line-height: 1.5;
+    background: none;
+    border: none;
+    padding: 0;
+    display: inline-block;
+  }
+
+  .req-row strong,
+  .tool-row strong { color: var(--text); font-weight: 500; }
+
+  .tool-group { margin-bottom: 32px; }
+
+  .tool-group-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .tool-group-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 12px;
+  }
+
+  .callout {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 0.825rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  .callout-note {
+    border-left: 3px solid var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .doc-footer {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .prev-link, .next-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+    min-width: 140px;
+  }
+
+  .prev-link { align-items: flex-start; }
+  .next-link { align-items: flex-end; }
+  .prev-link:hover, .next-link:hover { border-color: var(--accent); }
+
+  .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+
+  .nav-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .req-row { grid-template-columns: 1fr; gap: 4px; }
+    .tool-row { grid-template-columns: 1fr; gap: 6px; }
+    .tool-row span:nth-child(2)::before { content: "Params: "; color: var(--text); }
+  }
+</style>

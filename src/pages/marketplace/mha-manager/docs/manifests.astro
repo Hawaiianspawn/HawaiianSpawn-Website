@@ -26,8 +26,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <pre><code>YourProject/Saved/MHAManager/batch.mhajson</code></pre>
     </div>
     <p class="section-desc" style="margin-top:12px;">
-      This file is overwritten each run. Export a named copy via <strong>File → Export Manifest</strong>
-      in the batch panel if you need to preserve a specific queue.
+      This file is overwritten each run. Save a named copy via <strong>File... → Save Manifest As</strong>
+      in the batch panel toolbar if you need to preserve a specific queue.
     </p>
   </section>
 
@@ -35,25 +35,25 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <h2 class="section-title">Top-level structure</h2>
     <div class="code-block">
       <pre><code>{`{
-  "SchemaVersion": 1,
-  "Settings": { ... },
-  "Jobs": [ ... ]
+  "schema_version": 1,
+  "settings": { ... },
+  "jobs": [ ... ]
 }`}</code></pre>
     </div>
 
     <div class="field-list">
       <div class="field-row">
-        <span class="field-name"><code>SchemaVersion</code></span>
+        <span class="field-name"><code>schema_version</code></span>
         <span class="field-type">Int</span>
-        <span class="field-desc">Always <code>1</code> for this release. Used by the loader to detect incompatible manifests from future versions.</span>
+        <span class="field-desc">Used by the loader to detect incompatible manifests from future versions.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>Settings</code></span>
+        <span class="field-name"><code>settings</code></span>
         <span class="field-type">Object</span>
-        <span class="field-desc">Snapshot of all Global Settings at the time the manifest was saved. Restored on load.</span>
+        <span class="field-desc">Snapshot of all Global Settings at the time the manifest was saved, including the per-category solve default templates. Restored on load.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>Jobs</code></span>
+        <span class="field-name"><code>jobs</code></span>
         <span class="field-type">Array</span>
         <span class="field-desc">Ordered list of job objects. Processed top to bottom.</span>
       </div>
@@ -63,28 +63,56 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">Settings block</h2>
     <div class="code-block">
-      <pre><code>{`"Settings": {
-  "OutputPath": "/Game/MHA_Batch",
-  "SkipAlreadySolved": true,
-  "MaxConcurrentJobs": 1,
-  "ExportAnimSequence": true,
-  "ExportLevelSequence": false,
-  "ForceExportAnimation": false,
-  "AutoOpenAfterExport": false,
-  "UseMetaHumanIDForOutputMesh": true,
-  "ReduceKeys": false,
-  "ForceD3D12": false,
-  "AddSkeletonCompatibility": true,
-  "BodyTargetSkeletalMesh": null,
-  "RetargeterOutputPath": "/Game/CaptureManager/BodyTrackerTargets",
-  "VisualizationBlueprintSuffix": "BP_",
-  "DefaultControlRigClass": null,
-  "ColumnLayout": [ "JobType", "CaptureData", "Identity", ... ]
+      <pre><code>{`"settings": {
+  "plugin_version": "2.5.0",
+  "use_custom_output_path": false,
+  "export_output_path": "/Game/MHA_Batch",
+  "ue_export_flat": true,
+  "skip_if_already_solved": true,
+  "max_concurrent_jobs": 1,
+  "export_anim_sequence": true,
+  "export_level_sequence": false,
+  "export_for_dcc": false,
+  "export_control_rig_fbx": false,
+  "dcc_export_directory": "",
+  "dcc_export_flat": true,
+  "overwrite_existing": true,
+  "force_export_animation": false,
+  "auto_open_after_export": false,
+  "use_metahuman_id_for_output_mesh": true,
+  "target_skeleton_or_skeletal_mesh": "",
+  "force_d3d12": false,
+  "add_skeleton_compatibility": true,
+  "retargeter_output_path": "/Game/CaptureManager/BodyTrackerTargets",
+  "default_control_rig_class": "",
+  "board_pattern_width": 11,
+  "board_pattern_height": 16,
+  "board_square_size": 0.75,
+  "auto_detect_board_pattern": true,
+  "export_calibration_json": false,
+  "auto_queue_ingested_takes": false,
+  "default_job_options_by_category": {
+    "mono":   { ... },
+    "stereo": { ... },
+    "audio":  { ... }
+  },
+  "default_job_options": { ... },
+  "column_layout": [
+    { "id": "SolveType", "visible": true, "width": 96 },
+    ...
+  ]
 }`}</code></pre>
     </div>
     <p class="section-desc">
-      <code>ColumnLayout</code> stores which columns are visible and their order in the queue view.
-      Restoring a manifest on a different machine will apply the same column layout.
+      <code>default_job_options_by_category</code> holds the per-category solve default templates —
+      one sub-object per category (Mono / Stereo / Audio) using the same keys as a job's
+      <code>options</code> block. <code>default_job_options</code> is the legacy single-template key,
+      kept so older plugin builds can still read the manifest; a manifest that has only the legacy
+      key seeds all three categories from it on load.
+    </p>
+    <p class="section-desc">
+      <code>column_layout</code> stores which columns are visible, their order, and widths in the
+      queue view. Restoring a manifest on a different machine applies the same column layout.
     </p>
   </section>
 
@@ -92,61 +120,80 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <h2 class="section-title">Job object</h2>
     <div class="code-block">
       <pre><code>{`{
-  "GUID": "a1b2c3d4-e5f6-...",
-  "Name": "Scene_01_Take_03",
-  "JobType": "Mono",
-  "CaptureDataPath": "/Game/Captures/Scene01/Take03_Capture",
-  "IdentityPath": "/Game/MetaHumans/Adam/Adam_Identity",
-  "CameraCalibrationPath": null,
-  "DepthSequencePath": null,
-  "SolveOptions": { ... },
-  "Artifacts": [ ... ]
+  "id": "A1B2C3D4-E5F6-...",
+  "name": "Scene_01_Take_03",
+  "input_type": "Mono",
+  "footage_capture_data": "/Game/Captures/Scene01/Take03.Take03",
+  "identity": "",
+  "status": "pending",
+  "processing_time_secs": 142.5,
+  "footage_framing": "FullBody",
+  "framing_detail": "frame 0001.png: face 0.82 / hips 0.71 / ...",
+  "body_coverage_pct": 0.97,
+  "options": { ... },
+  "depth_sequences": [ ... ],
+  "artifacts": [ ... ]
 }`}</code></pre>
     </div>
 
     <div class="field-list">
       <div class="field-row">
-        <span class="field-name"><code>GUID</code></span>
-        <span class="field-type">String (UUID)</span>
+        <span class="field-name"><code>id</code></span>
+        <span class="field-type">String (GUID)</span>
         <span class="field-desc">Unique identifier generated per job. Stable across re-saves — used to correlate artifact records.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>Name</code></span>
+        <span class="field-name"><code>name</code></span>
         <span class="field-type">String</span>
         <span class="field-desc">Display name shown in the queue row. Defaults to the Capture Data asset name.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>JobType</code></span>
-        <span class="field-type"><code>"Mono"</code> | <code>"Stereo"</code> | <code>"Audio"</code></span>
-        <span class="field-desc">Determines the pipeline and which solve options are used.</span>
+        <span class="field-name"><code>input_type</code></span>
+        <span class="field-type"><code>"Mono"</code> | <code>"Stereo"</code> | <code>"Audio"</code> | <code>"CalibrateStereo"</code> | <code>"IdentityCreate"</code></span>
+        <span class="field-desc">Determines the pipeline and which solve options are used. A legacy <code>"Depth"</code> value is remapped to <code>"Mono"</code> on load.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>CaptureDataPath</code></span>
-        <span class="field-type">String (content path)</span>
-        <span class="field-desc">Content Browser path to the <code>UFootageCaptureData</code> asset.</span>
+        <span class="field-name"><code>footage_capture_data</code></span>
+        <span class="field-type">String (object path)</span>
+        <span class="field-desc">Object path to the <code>UFootageCaptureData</code> asset.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>IdentityPath</code></span>
-        <span class="field-type">String | null</span>
-        <span class="field-desc">Content path to the <code>UMetaHumanIdentity</code>. Null for Audio jobs.</span>
+        <span class="field-name"><code>identity</code></span>
+        <span class="field-type">String</span>
+        <span class="field-desc">Object path to the <code>UMetaHumanIdentity</code>. Used by Stereo jobs only; empty for Mono, Audio, and Calibration jobs.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>CameraCalibrationPath</code></span>
-        <span class="field-type">String | null</span>
-        <span class="field-desc">Content path to the camera calibration asset. Stereo jobs only.</span>
+        <span class="field-name"><code>status</code></span>
+        <span class="field-type"><code>"pending"</code> | <code>"done"</code> | <code>"failed"</code> | <code>"skipped"</code></span>
+        <span class="field-desc">Job outcome from the last run. Running jobs are saved as pending.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>DepthSequencePath</code></span>
-        <span class="field-type">String | null</span>
-        <span class="field-desc">Path to a pre-existing depth sequence. If null on a Stereo job, depth is generated automatically.</span>
+        <span class="field-name"><code>processing_time_secs</code></span>
+        <span class="field-type">Number</span>
+        <span class="field-desc">Wall-clock solve time from the last run. Stereo jobs additionally record <code>depth_generation_time_secs</code> and <code>depth_cleaning_time_secs</code>.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>SolveOptions</code></span>
+        <span class="field-name"><code>footage_framing</code></span>
+        <span class="field-type"><code>"FullBody"</code> | <code>"UpperBody"</code> | <code>"Headshot"</code></span>
+        <span class="field-desc">Framing probe verdict, with <code>framing_detail</code> holding the per-joint confidence summary. Omitted until the take has been probed — persisting it means re-loaded queues don't re-probe.</span>
+      </div>
+      <div class="field-row">
+        <span class="field-name"><code>body_coverage_pct</code></span>
+        <span class="field-type">Number (0–1)</span>
+        <span class="field-desc">Post-solve body detection coverage for body-tracked jobs. Omitted until measured. Calibration jobs record <code>calibration_rms_error</code> and <code>calibration_selected_frames</code> instead.</span>
+      </div>
+      <div class="field-row">
+        <span class="field-name"><code>options</code></span>
         <span class="field-type">Object</span>
         <span class="field-desc">All per-job solve options for this take. See <a href="/marketplace/mha-manager/docs/job-options">Per-Job Options</a> for the full list.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>Artifacts</code></span>
+        <span class="field-name"><code>depth_sequences</code></span>
+        <span class="field-type">Array</span>
+        <span class="field-desc">Per-depth-sequence metadata for Stereo jobs — sequence path, frame range, depth scale, generation source, and camera name. Empty or absent for other job types.</span>
+      </div>
+      <div class="field-row">
+        <span class="field-name"><code>artifacts</code></span>
         <span class="field-type">Array</span>
         <span class="field-desc">Records of assets generated by this job. Written after processing completes.</span>
       </div>
@@ -156,42 +203,51 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">Artifact records</h2>
     <div class="code-block">
-      <pre><code>{`"Artifacts": [
+      <pre><code>{`"artifacts": [
   {
-    "Type": "Performance",
-    "AssetPath": "/Game/MHA_Batch/Scene01_Take03_Performance",
-    "State": "Complete",
-    "CreatedAt": "2025-11-14T09:32:11Z"
+    "asset_path": "/Game/MHA_Batch/Scene01_Take03_Performance.Scene01_Take03_Performance",
+    "type": "Performance",
+    "state": "Complete",
+    "stage_created_by": "ProcessPerformance",
+    "created_at": "2026-07-08T09:32:11Z",
+    "disk_path": ""
   },
   {
-    "Type": "AnimSequence",
-    "AssetPath": "/Game/MHA_Batch/Scene01_Take03_Anim",
-    "State": "Complete",
-    "CreatedAt": "2025-11-14T09:34:02Z"
+    "asset_path": "/Game/MHA_Batch/Scene01_Take03_Anim.Scene01_Take03_Anim",
+    "type": "AnimSequence",
+    "state": "Complete",
+    "stage_created_by": "ExportOutputs",
+    "created_at": "2026-07-08T09:34:02Z",
+    "disk_path": ""
   }
 ]`}</code></pre>
     </div>
 
     <div class="field-list">
       <div class="field-row">
-        <span class="field-name"><code>Type</code></span>
+        <span class="field-name"><code>type</code></span>
         <span class="field-type">String</span>
-        <span class="field-desc"><code>"Performance"</code>, <code>"AnimSequence"</code>, <code>"LevelSequence"</code>, or <code>"Log"</code>.</span>
+        <span class="field-desc"><code>"Performance"</code>, <code>"AnimSequence"</code>, <code>"LevelSequence"</code>, <code>"Identity"</code>, <code>"CaptureData"</code>, <code>"CameraCalibration"</code>, <code>"ControlRigFBX"</code>, <code>"DCCFBX"</code>, or <code>"Log"</code>.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>AssetPath</code></span>
+        <span class="field-name"><code>asset_path</code></span>
         <span class="field-type">String</span>
-        <span class="field-desc">Content Browser path where the asset was written.</span>
+        <span class="field-desc">Object path where the asset was written. FBX artifacts use <code>disk_path</code> for their filesystem location instead.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>State</code></span>
+        <span class="field-name"><code>state</code></span>
         <span class="field-type"><code>"Complete"</code> | <code>"Partial"</code> | <code>"Failed"</code></span>
-        <span class="field-desc">Outcome of this specific artifact. A job can be Complete overall while an optional LevelSequence export is Partial.</span>
+        <span class="field-desc">Outcome of this specific artifact. A job can be Complete overall while an optional export is Partial.</span>
       </div>
       <div class="field-row">
-        <span class="field-name"><code>CreatedAt</code></span>
+        <span class="field-name"><code>stage_created_by</code></span>
+        <span class="field-type">String</span>
+        <span class="field-desc">Which pipeline stage produced the artifact.</span>
+      </div>
+      <div class="field-row">
+        <span class="field-name"><code>created_at</code></span>
         <span class="field-type">ISO 8601 timestamp</span>
-        <span class="field-desc">UTC time when the asset was written to disk.</span>
+        <span class="field-desc">UTC time when the asset was written.</span>
       </div>
     </div>
   </section>

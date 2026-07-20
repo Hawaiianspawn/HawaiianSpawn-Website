@@ -17,9 +17,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </div>
 
   <div class="callout callout-tip">
-    <strong>New to MetaHuman Animator?</strong> You'll need a <code>UFootageCaptureData</code> asset
-    and a <code>UMetaHumanIdentity</code> asset already set up in your project before continuing.
-    These are created through the standard MetaHuman Animator workflow in the editor.
+    <strong>New to MetaHuman Animator?</strong> A Mono job needs only a
+    <code>UFootageCaptureData</code> asset — the footage import for your take. No MetaHuman Identity
+    or Camera Calibration is required (those are for Stereo takes). If you ingest footage through the
+    plugin's Capture Manager panel, the Capture Data asset is created for you.
   </div>
 
   <div class="steps">
@@ -167,10 +168,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         Installation
       </span>
     </a>
-    <a href="/marketplace/mha-manager/docs/job-types" class="next-link">
+    <a href="/marketplace/mha-manager/docs/ingest" class="next-link">
       <span class="nav-label">Next</span>
       <span class="nav-title">
-        Job Types
+        Ingest Footage
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </span>
     </a>

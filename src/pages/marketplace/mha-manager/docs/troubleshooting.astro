@@ -25,7 +25,7 @@ const issues = [
   },
   {
     id: 'missing-identity',
-    symptom: 'Identity column is empty after adding a Mono or Stereo job',
+    symptom: 'Identity column is empty after adding a Stereo job',
     cause: 'Auto-discovery could not find a MetaHuman Identity under a predictable folder relative to the Capture Data asset.',
     fix: 'Assign the Identity manually by clicking the Identity cell in the job row and using the asset picker. The plugin looks for <code>UMetaHumanIdentity</code> assets in a sibling or parent folder named <code>MetaHumans</code> — reorganize your Content Browser layout to match if you want auto-discovery to work.',
     type: 'queue',
@@ -73,6 +73,41 @@ const issues = [
     type: 'output',
   },
   {
+    id: 'calib-no-detect',
+    symptom: 'Calibration job fails immediately with "no board detected"',
+    cause: 'The board pattern settings do not match the printed checkerboard — the most common mistakes are entering inner corners instead of squares, or swapping width and height.',
+    fix: 'Board Pattern W/H is measured in <strong>squares</strong>, not inner corners. Leave <strong>Auto-Detect Board Pattern</strong> enabled — it probes your setting, its transpose, the inner-corner misentry, and Epic\'s shipped board (11 x 16 squares) before failing. Epic\'s own detection output appears in the Output Log under <code>LogMetaHumanCalibrationGenerator</code>.',
+    type: 'calibration',
+  },
+  {
+    id: 'calib-wrong-scale',
+    symptom: 'Calibration succeeds but reconstructed depth / face scale looks wrong',
+    cause: 'The <strong>Square Size</strong> setting does not match the physical board. It cannot be measured from footage, so a wrong value silently scales the stereo baseline and all depth.',
+    fix: 'Measure a square on your printed board and set <strong>Square Size</strong> exactly (Epic\'s shipped board is 0.75 cm). If the probe recognizes Epic\'s board while your square size differs from 0.75 cm, the job log prints a hint. Re-run the calibration job after correcting it.',
+    type: 'calibration',
+  },
+  {
+    id: 'calib-too-blurry',
+    symptom: 'Calibration fails or warns about too few usable frames',
+    cause: 'The <strong>Sharpness Threshold</strong> rejected most frames — the take is motion-blurred or out of focus.',
+    fix: 'If fewer than 10 frames pass the sharpness filter, one retry runs automatically with the filter disabled, and final quality is judged by <strong>Max RMS Error</strong> (default 1.0 px). If the solve exceeds the threshold the job pauses as <strong>PoorCalibrationQuality</strong> — Accept Anyway to use it, or reshoot the checkerboard take with slower board movement and better focus for a cleaner re-solve.',
+    type: 'calibration',
+  },
+  {
+    id: 'framing-not-analyzed',
+    symptom: 'Framing badge always shows "Not analyzed"',
+    cause: 'The framing probe requires UE 5.8+, the MetaHumanBodyTracker plugin installed, and the NNERuntimeORT plugin enabled in the host project. When any of these are missing, the probe quietly reports "Not analyzed".',
+    fix: 'Install Epic\'s free <strong>MetaHuman Animator Markerless Motion Capture</strong> plugin from Fab and enable <strong>NNERuntimeORT</strong> in <strong>Edit → Plugins</strong>. Then click <strong>Re-check</strong> next to the badge in the settings panel to re-run the probe.',
+    type: 'queue',
+  },
+  {
+    id: 'body-track-gaps',
+    symptom: 'Job completes with a "Body track gaps" warning',
+    cause: 'The body tracker detected the subject in fewer than 80% of frames — undetected frames export as held/reference pose.',
+    fix: 'Check the take\'s framing (the tracker needs the body in frame), lower <strong>Body Detection Confidence</strong> if lock is never acquired in dim or cluttered footage, or lower <strong>Body Tracking Confidence</strong> if lock drops during fast motion. The <code>body_coverage_pct</code> value in the manifest shows exactly how much of the take was tracked.',
+    type: 'queue',
+  },
+  {
     id: 'ci-exit-2',
     symptom: 'Commandlet exits with code 2 immediately',
     cause: 'The commandlet failed to initialize — usually a missing manifest path or missing required plugin.',
@@ -85,6 +120,7 @@ const typeLabels: Record<string, { label: string; cls: string }> = {
   install:     { label: 'Installation', cls: 'tag-install' },
   queue:       { label: 'Queue',        cls: 'tag-queue'   },
   stereo:      { label: 'Stereo',       cls: 'tag-stereo'  },
+  calibration: { label: 'Calibration',  cls: 'tag-calib'   },
   performance: { label: 'Performance',  cls: 'tag-perf'    },
   output:      { label: 'Output',       cls: 'tag-output'  },
   ci:          { label: 'CI Mode',      cls: 'tag-ci'      },
@@ -153,11 +189,11 @@ const typeLabels: Record<string, { label: string; cls: string }> = {
   </div>
 
   <div class="doc-footer">
-    <a href="/marketplace/mha-manager/docs/ci-mode" class="prev-link">
+    <a href="/marketplace/mha-manager/docs/mcp-toolset" class="prev-link">
       <span class="nav-label">Previous</span>
       <span class="nav-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Headless / CI Mode
+        MCP Toolset
       </span>
     </a>
     <a href="/marketplace/mha-manager/docs" class="next-link">
@@ -277,6 +313,7 @@ const typeLabels: Record<string, { label: string; cls: string }> = {
   .tag-queue   { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); border-color: color-mix(in srgb, var(--accent) 25%, transparent); }
   .tag-stereo  { color: #34d399; background: color-mix(in srgb, #34d399 10%, transparent); border-color: color-mix(in srgb, #34d399 25%, transparent); }
   .tag-perf    { color: #f0a500; background: color-mix(in srgb, #f0a500 10%, transparent); border-color: color-mix(in srgb, #f0a500 25%, transparent); }
+  .tag-calib   { color: #22d3ee; background: color-mix(in srgb, #22d3ee 10%, transparent); border-color: color-mix(in srgb, #22d3ee 25%, transparent); }
   .tag-output  { color: #c084fc; background: color-mix(in srgb, #c084fc 10%, transparent); border-color: color-mix(in srgb, #c084fc 25%, transparent); }
   .tag-ci      { color: #f87171; background: color-mix(in srgb, #f87171 10%, transparent); border-color: color-mix(in srgb, #f87171 25%, transparent); }
 

@@ -12,7 +12,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <h1 class="doc-title">Job Types</h1>
     <p class="doc-lead">
       Each job in the queue has a type that determines which MetaHuman Animator pipeline it runs,
-      what assets it requires, and which per-job options are available.
+      what assets it requires, and which per-job options are available. Mono, Stereo, and Audio are
+      the performance solve types; Stereo Calibration and Identity Create are preflight jobs that
+      prepare a shoot's assets in the same queue.
     </p>
   </div>
 
@@ -34,13 +36,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <div class="asset-row">
         <span><strong>Capture Data</strong></span>
         <span><code>UFootageCaptureData</code></span>
-        <span>Your video footage import asset</span>
+        <span>Your video footage import asset — the only required input</span>
       </div>
-      <div class="asset-row">
-        <span><strong>Identity</strong></span>
-        <span><code>UMetaHumanIdentity</code></span>
-        <span>Auto-discovered if under a standard folder structure</span>
-      </div>
+    </div>
+    <div class="callout callout-tip">
+      Mono is the simplest performance type to configure: no MetaHuman Identity and no Camera
+      Calibration. The realtime solver processes the footage directly.
     </div>
 
     <h3 class="sub-heading">Pipeline stages</h3>
@@ -67,9 +68,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <div class="doc-img-placeholder">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
         <span class="placeholder-name">job-type-mono-row.webp</span>
-        <span class="placeholder-hint">Queue row with Job Type set to "Mono" — Capture Data and Identity cells filled, status showing "Ready"</span>
+        <span class="placeholder-hint">Queue row with Job Type set to "Mono" — Capture Data cell filled, status showing "Ready"</span>
       </div>
-      <figcaption>A Mono job row in the queue — Identity and Capture Data assigned, ready to process</figcaption>
+      <figcaption>A Mono job row in the queue — Capture Data assigned, ready to process</figcaption>
     </figure>
 
     <h3 class="sub-heading">Mono-specific options</h3>
@@ -112,6 +113,48 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       See <a href="/marketplace/mha-manager/docs/job-options#body-tracking">Per-Job Options</a>
       for the full Body Tracking, Body Export, and Visualization option references.
     </div>
+
+    <h3 class="sub-heading">Take Auto-Categorization — the Framing Probe (UE 5.8+)</h3>
+    <p class="type-desc" style="margin-bottom: 12px;">
+      When a Mono job is queued — manually or via the ingest watcher — MHA Manager probes the
+      take's first footage frame with a pose model and classifies its framing, so the right solve
+      template is applied automatically:
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Full body</span>
+        <span class="option-desc">Hips and ankles confidently visible — Body Tracking is enabled on the freshly queued job.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Upper body / Headshot</span>
+        <span class="option-desc">Ankles cut off, or face only — the job stays face-only, with an amber warning if you enable body tracking anyway. The 5.8 body solver will invent joints below the frame edge on a headshot, so this guard matters.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Not analyzed</span>
+        <span class="option-desc">Nothing confidently visible, or the probe is unavailable — the job stays face-only with no badge.</span>
+      </div>
+    </div>
+    <p class="type-desc" style="margin: 16px 0 12px;">
+      The verdict is advisory: it never overrides a choice you already made and never flips a
+      running job. A <strong>Re-check</strong> button in the settings panel re-runs the probe, and
+      the verdict persists in the manifest so re-loaded queues do not re-probe. If frame 1 shows
+      nothing (slates, subject stepping in), one fallback probe runs at ~25% into the take.
+    </p>
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">job-type-framing-badge.webp</span>
+        <span class="placeholder-hint">Settings panel showing the framing badge (e.g. "Full body") with its confidence tooltip and the Re-check button next to it</span>
+      </div>
+      <figcaption>The framing badge in the settings panel — hover for the per-joint confidence summary, Re-check to re-run the probe</figcaption>
+    </figure>
+    <div class="callout callout-note">
+      <strong>Requirements:</strong> UE 5.8+, the MetaHumanBodyTracker plugin installed, and the
+      <strong>NNERuntimeORT</strong> plugin enabled in the host project. When any of these are
+      missing, the probe quietly reports "Not analyzed" and nothing else changes. After any
+      body-tracked solve, the job also reports <strong>body coverage</strong> — below 80% it gets a
+      "Body track gaps" warning, since undetected frames export as held/reference pose.
+    </div>
   </section>
 
   <!-- Stereo -->
@@ -141,8 +184,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="asset-row">
         <span><strong>Camera Calibration</strong></span>
-        <span><code>UCameraCalibrationData</code></span>
-        <span>Required for depth generation; auto-discovered if available</span>
+        <span><code>UCameraCalibration</code></span>
+        <span>Required for depth generation; auto-discovered if available, or generated by a Calibration job</span>
       </div>
     </div>
 
@@ -310,8 +353,75 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="option-row">
         <span class="option-name">Lookahead Window</span>
-        <span class="option-desc">Number of frames the solver looks ahead in the audio signal for anticipation cues.</span>
+        <span class="option-desc">How far ahead (in milliseconds) the solver reads the audio signal for anticipation cues.</span>
       </div>
+    </div>
+  </section>
+
+  <!-- Calibration -->
+  <section class="type-section">
+    <div class="type-header">
+      <span class="type-badge type-calib">Calibration</span>
+      <h2 class="type-title">Stereo Calibration</h2>
+    </div>
+    <p class="type-desc">
+      Turns a stereo checkerboard take into a Camera Calibration asset as part of the batch.
+      Right-click the checkerboard take in the Content Browser and choose
+      <strong>Generate Stereo Calibration (Checkerboard Take)</strong> to queue a standalone
+      calibration job. It drives Epic's MetaHuman Calibration Processing plugin (UE 5.7+) and produces:
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Camera Calibration asset</span>
+        <span class="option-desc">A <code>CC_&lt;TakeName&gt;</code> asset saved in the same content folder as the take, auto-linked to the Capture Data.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">calib.json (optional)</span>
+        <span class="option-desc">An OpenCV-model <code>calib.json</code> written into the take's footage folder on disk — the same format Capture Manager's stereo HMC ingest reads. An existing calib.json is never overwritten.</span>
+      </div>
+    </div>
+
+    <h3 class="sub-heading">How the board is detected</h3>
+    <p class="type-desc" style="margin-bottom: 12px;">
+      The board pattern is measured in <strong>squares</strong>, not inner corners — Epic's shipped
+      board is 11 x 16 squares with 0.75 cm squares, and those are the defaults.
+      <strong>Auto-Detect Board Pattern</strong> (on by default) probes a handful of frames with
+      candidate board sizes — your setting, its transpose, an inner-corner misentry, Epic's board —
+      before committing to the full-take scan. If nothing detects, the job fails in seconds with a
+      clear error instead of scanning the whole take. Square Size cannot be measured from footage:
+      a wrong value silently scales the stereo baseline and all reconstructed depth, so double-check
+      it against your printed board.
+    </p>
+    <figure class="doc-figure">
+      <div class="doc-img-placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
+        <span class="placeholder-name">job-type-calibration-result.webp</span>
+        <span class="placeholder-hint">A completed calibration run — the RMS result dialog (right-click run) or toast notification (batch run), with the CC_ asset visible in the Content Browser</span>
+      </div>
+      <figcaption>A finished calibration job — standalone runs show a result dialog, batch runs show per-job toasts so dialogs never stack</figcaption>
+    </figure>
+    <div class="callout callout-tip">
+      Takes that already carry a usable Camera Calibration are skipped automatically. Frame
+      selection, sharpness filtering, and quality thresholds are configured under
+      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings → Stereo Calibration</a>.
+    </div>
+  </section>
+
+  <!-- Identity Create -->
+  <section class="type-section">
+    <div class="type-header">
+      <span class="type-badge type-identity">Identity</span>
+      <h2 class="type-title">Identity Create</h2>
+    </div>
+    <p class="type-desc">
+      Builds a MetaHuman Identity end-to-end from a stereo <code>UFootageCaptureData</code> take,
+      inside the same queue. Right-click the take in the Content Browser and choose
+      <strong>Create MetaHuman Identity (Stereo)</strong>. The resulting Identity can then be
+      assigned to the shoot's performance jobs.
+    </p>
+    <div class="callout callout-note">
+      Identity Create jobs need an interactive editor session for the MetaHuman auto-rig
+      (cloud login), so they are not available in headless/CI runs.
     </div>
   </section>
 
@@ -336,17 +446,17 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </section>
 
   <div class="doc-footer">
-    <a href="/marketplace/mha-manager/docs/quick-start" class="prev-link">
+    <a href="/marketplace/mha-manager/docs/ingest" class="prev-link">
       <span class="nav-label">Previous</span>
       <span class="nav-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Quick Start
+        Ingest Footage
       </span>
     </a>
-    <a href="/marketplace/mha-manager/docs/global-settings" class="next-link">
+    <a href="/marketplace/mha-manager/docs/stereo-workflow" class="next-link">
       <span class="nav-label">Next</span>
       <span class="nav-title">
-        Global Settings
+        Stereo Workflow
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </span>
     </a>
@@ -417,6 +527,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   .type-mono  { background: color-mix(in srgb, #4a9eff 12%, transparent); color: #4a9eff; border: 1px solid color-mix(in srgb, #4a9eff 30%, transparent); }
   .type-stereo { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
   .type-audio  { background: color-mix(in srgb, #c084fc 12%, transparent); color: #c084fc; border: 1px solid color-mix(in srgb, #c084fc 30%, transparent); }
+  .type-calib  { background: color-mix(in srgb, #f0a500 12%, transparent); color: #f0a500; border: 1px solid color-mix(in srgb, #f0a500 30%, transparent); }
+  .type-identity { background: color-mix(in srgb, #4ade80 12%, transparent); color: #4ade80; border: 1px solid color-mix(in srgb, #4ade80 30%, transparent); }
 
   .type-title {
     font-size: 1.4rem;

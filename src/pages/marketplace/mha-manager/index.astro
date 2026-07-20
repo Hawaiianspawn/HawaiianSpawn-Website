@@ -4,7 +4,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="MHA Manager — Aaron Low"
-  description="An Unreal Engine 5.7+ editor plugin that automates batch processing of MetaHuman Animator footage across Mono, Stereo, and Audio job types."
+  description="An Unreal Engine 5.5–5.8 editor plugin that automates batch processing of MetaHuman Animator footage — Mono, Stereo, and Audio solves plus stereo calibration and identity creation in one queue."
 >
   <div class="page-content">
     <div class="container">
@@ -14,7 +14,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         <div class="hero-badges">
           <span class="chip">UE Marketplace</span>
           <span class="chip">Editor Plugin</span>
-          <span class="chip chip-version">v1.0 · UE 5.7+</span>
+          <span class="chip chip-version">v2.5.0 · UE 5.5–5.8</span>
         </div>
         <h1 class="hero-title">MHA Manager</h1>
         <p class="hero-tagline">
@@ -34,7 +34,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
       <!-- Stats strip -->
       <div class="stats-strip">
         <div class="stat">
-          <span class="stat-value">3</span>
+          <span class="stat-value">5</span>
           <span class="stat-label">Job Types</span>
         </div>
         <div class="stat-divider"></div>
@@ -44,12 +44,12 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <span class="stat-value">2</span>
-          <span class="stat-label">UI Panels</span>
+          <span class="stat-value">1–8</span>
+          <span class="stat-label">Parallel Workers</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <span class="stat-value">UE 5.7–5.8</span>
+          <span class="stat-value">UE 5.5–5.8</span>
           <span class="stat-label">Compatibility</span>
         </div>
       </div>
@@ -74,9 +74,9 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             <div class="feature-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
-            <h3 class="feature-title">Three Job Types</h3>
+            <h3 class="feature-title">Five Job Types</h3>
             <p class="feature-desc">
-              Supports <strong>Mono</strong> (single color camera), <strong>Stereo</strong> (multi-camera HMC rigs with optional depth generation and cleaning), and <strong>Audio</strong>-driven facial animation in the same queue.
+              <strong>Mono</strong> (single color camera, with UE 5.8 body tracking), <strong>Stereo</strong> (HMC rigs with automatic depth generation and cleaning), <strong>Audio</strong>-driven facial animation, plus <strong>Stereo Calibration</strong> and <strong>Identity Create</strong> jobs — all in the same queue.
             </p>
           </div>
 
@@ -140,6 +140,46 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             </p>
           </div>
 
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>
+            </div>
+            <h3 class="feature-title">Framing Auto-Categorization</h3>
+            <p class="feature-desc">
+              A first-frame pose probe classifies each Mono take as full body, upper body, or headshot and applies the matching solve template automatically — mixed shoots sort themselves. (UE 5.8)
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </div>
+            <h3 class="feature-title">Stereo Calibration Jobs</h3>
+            <p class="feature-desc">
+              Point the queue at checkerboard takes to generate <strong>Camera Calibration</strong> assets in batch — with automatic board-pattern detection and an optional OpenCV <code>calib.json</code> export.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="8" height="10" rx="1"/><rect x="14" y="7" width="8" height="10" rx="1"/></svg>
+            </div>
+            <h3 class="feature-title">Parallel Worker Processes</h3>
+            <p class="feature-desc">
+              Raise <strong>Max Concurrent Jobs</strong> (1–8) and MHA Manager launches separate worker processes that solve takes side by side — real parallelism, not just overlapped stages.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 19h16"/></svg>
+            </div>
+            <h3 class="feature-title">Ingest Auto-Queue</h3>
+            <p class="feature-desc">
+              Watches Capture Manager ingest and queues new <code>FootageCaptureData</code> takes as they land — start ingesting on set, come back to a filled queue. (UE 5.7+)
+            </p>
+          </div>
+
         </div>
       </section>
 
@@ -190,7 +230,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
           <div class="panel-card">
             <span class="panel-badge">Shortcut</span>
             <h3 class="panel-name">Context Menu Actions</h3>
-            <p class="panel-desc">Right-click any <code>UFootageCaptureData</code> in the Content Browser to queue or process a single take instantly.</p>
+            <p class="panel-desc">Right-click any <code>UFootageCaptureData</code> in the Content Browser to process takes directly — auto-detected or forced Mono/Stereo/Audio, generate a stereo calibration from a checkerboard take, or create a MetaHuman Identity.</p>
           </div>
         </div>
       </section>
@@ -202,10 +242,10 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
           <div class="req-block">
             <h3 class="req-heading">Engine</h3>
             <ul class="req-list">
-              <li>Unreal Engine 5.7 or later</li>
-              <li>MetaHuman plugin enabled</li>
-              <li>CaptureData plugin enabled</li>
-              <li>ImgMedia plugin (for stereo depth sequences)</li>
+              <li>Unreal Engine 5.5 – 5.8</li>
+              <li>MetaHuman, CaptureData, and ImgMedia plugins (declared dependencies — enabled automatically)</li>
+              <li>MetaHuman Animator Depth Processing plugin from Fab (Stereo jobs only)</li>
+              <li>Markerless Motion Capture plugin from Fab (body tracking, UE 5.8)</li>
             </ul>
           </div>
           <div class="req-block">

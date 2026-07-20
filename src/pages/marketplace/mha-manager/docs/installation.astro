@@ -17,6 +17,50 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     </p>
   </div>
 
+  <!-- System requirements -->
+  <div class="plugin-table" style="margin-bottom: 16px;">
+    <div class="plugin-row header">
+      <span>Requirement</span>
+      <span>Needs</span>
+      <span>Notes</span>
+    </div>
+    <div class="plugin-row">
+      <span><strong>Operating system</strong></span>
+      <span>Windows 10 / 11 (64-bit)</span>
+      <span>Editor-only plugin — no runtime, Mac, or Linux target</span>
+    </div>
+    <div class="plugin-row">
+      <span><strong>Unreal Engine</strong></span>
+      <span>5.5 – 5.8</span>
+      <span>Match the binary build to your engine version, or build from source</span>
+    </div>
+    <div class="plugin-row">
+      <span><strong>RAM</strong></span>
+      <span>16 GB minimum</span>
+      <span>Sequential is stable on 16 GB; 32 GB+ suits 2 concurrent workers, 64 GB+ for 3–4</span>
+    </div>
+    <div class="plugin-row">
+      <span><strong>GPU</strong></span>
+      <span>Discrete GPU required</span>
+      <span>The MetaHuman solver needs real hardware — headless <code>-nullrhi</code> is unsupported; RTX-class recommended</span>
+    </div>
+    <div class="plugin-row">
+      <span><strong>Disk</strong></span>
+      <span>SSD, take-dependent</span>
+      <span>Stereo depth EXR sequences run tens to hundreds of MB per take</span>
+    </div>
+    <div class="plugin-row">
+      <span><strong>Network</strong></span>
+      <span>Only for Identity Create</span>
+      <span>The cloud AutoRig login runs in an interactive editor session (see Job Types)</span>
+    </div>
+  </div>
+  <div class="callout callout-tip" style="margin-bottom: 32px;">
+    Concurrency is controlled by <strong>Max Concurrent Jobs</strong> in Global Settings — leave it
+    at 1 (sequential) unless you have the RAM and a workstation-class GPU. Optional Epic plugins are
+    needed only for specific job types; the dependency tables below cover them.
+  </div>
+
   <!-- Track selector -->
   <div class="track-selector" role="tablist">
     <button class="track-btn active" data-track="binaries" role="tab" aria-selected="true">
@@ -76,18 +120,18 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
           <div class="step-body">
             <h3 class="step-title">Find the plugin in your Vault</h3>
             <p class="step-desc">
-              Scroll down past your engine installations to the <strong>Vault</strong> section.
+              Scroll down past your engine installations to the <strong>Fab Library</strong> section.
               Find <strong>MHA Manager</strong> — use the search bar if you have many items.
-              If it isn't in your Vault yet, purchase or claim it from the
-              <a href="https://www.unrealengine.com/marketplace" target="_blank" rel="noopener noreferrer">Unreal Engine Marketplace</a> first.
+              If it isn't in your library yet, purchase or claim it on
+              <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a> first.
             </p>
             <figure class="doc-figure">
               <div class="doc-img-placeholder">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
                 <span class="placeholder-name">launcher-vault-plugin.webp</span>
-                <span class="placeholder-hint">Vault section showing the MHA Manager plugin card with "Install to Engine" and "Add to Project" buttons visible</span>
+                <span class="placeholder-hint">Fab Library section showing the MHA Manager plugin card with "Install to Engine" and "Add to Project" buttons visible</span>
               </div>
-              <figcaption>The MHA Manager card in the Vault — two install options are shown</figcaption>
+              <figcaption>The MHA Manager card in the Fab Library — two install options are shown</figcaption>
             </figure>
           </div>
         </div>
@@ -127,7 +171,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
               <div class="doc-img-placeholder">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
                 <span class="placeholder-name">launcher-install-dialog.webp</span>
-                <span class="placeholder-hint">"Install to Engine" engine version picker dialog — showing UE 5.7 selected</span>
+                <span class="placeholder-hint">"Install to Engine" engine version picker dialog — showing UE 5.8 selected</span>
               </div>
               <figcaption>Selecting the engine version when using "Install to Engine"</figcaption>
             </figure>
@@ -137,59 +181,62 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <h3 class="step-title">Enable required engine plugins</h3>
+            <h3 class="step-title">Let the editor enable the dependency plugins</h3>
           <p class="step-desc">
-            Go to <strong>Edit → Plugins</strong> and verify that all of these are enabled. If any are
-            disabled, enable them and restart the editor when prompted.
+            The engine plugins MHA Manager requires are declared as dependencies — when you enable
+            MHA Manager, the editor offers to enable them for you. Accept the prompt and restart
+            when asked. These are the auto-enabled dependencies:
           </p>
           <div class="plugin-table">
             <div class="plugin-row header">
               <span>Plugin name</span>
-              <span>Category in Plugins browser</span>
+              <span>Where it comes from</span>
               <span>Required for</span>
             </div>
             <div class="plugin-row">
-              <span><code>MetaHumanCharacter</code></span>
-              <span>MetaHuman</span>
-              <span>All job types</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanCharacterUAF</code></span>
-              <span>MetaHuman</span>
-              <span>All job types</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanCalibrationProcessing</code></span>
-              <span>MetaHuman</span>
-              <span>Stereo jobs, camera calibration</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanCalibrationDiagnostics</code></span>
-              <span>MetaHuman</span>
-              <span>Stereo jobs, calibration validation</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanDepthProcessing</code></span>
-              <span>MetaHuman</span>
-              <span>Stereo depth generation and cleaning</span>
+              <span><code>MetaHuman</code></span>
+              <span>Engine (UE 5.6+); free from Fab on UE 5.5</span>
+              <span>All job types — the MetaHuman Animator pipeline</span>
             </div>
             <div class="plugin-row">
               <span><code>CaptureData</code></span>
-              <span>Virtual Production</span>
+              <span>Engine</span>
               <span>All job types — footage import assets</span>
             </div>
             <div class="plugin-row">
               <span><code>ImgMedia</code></span>
-              <span>Media</span>
-              <span>Stereo depth image sequences</span>
+              <span>Engine</span>
+              <span>Image and depth sequence loading</span>
+            </div>
+          </div>
+          <p class="step-desc" style="margin-top: 16px;">
+            Two Epic plugins are <strong>optional</strong> — the related UI hides or labels itself
+            when they are absent, and Mono/Audio jobs need neither. Both are free from
+            <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a>;
+            install them to the engine via the Epic Games Launcher or into your project's
+            <code>Plugins/</code> folder.
+          </p>
+          <div class="plugin-table">
+            <div class="plugin-row header">
+              <span>Plugin name</span>
+              <span>Fab listing</span>
+              <span>Required for</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanDepthProcessing</code></span>
+              <span>MetaHuman Animator Depth Processing</span>
+              <span>Stereo/depth jobs — depth generation and the depth solve path</span>
+            </div>
+            <div class="plugin-row">
+              <span><code>MetaHumanBodyTracker</code></span>
+              <span>MetaHuman Animator Markerless Motion Capture</span>
+              <span>Body tracking and the framing probe (UE 5.8)</span>
             </div>
           </div>
           <div class="callout callout-tip" style="margin-top: 14px;">
-            <strong>MetaHuman Core Data:</strong> If you plan to use MetaHuman characters in-game
-            (not just for performance capture), also download <strong>MetaHuman Core Data</strong>
-            from Quixel Bridge or the MetaHuman Creator export flow. This is not a plugin — it is a
-            content package that provides the base skeleton, materials, and LODs your MetaHuman
-            characters depend on at runtime.
+            <strong>Capture Manager:</strong> the Ingest section and auto-queue of newly ingested
+            takes use the engine's <code>CaptureManager</code> plugin (UE 5.7+, included with the
+            engine). The Ingest UI hides itself when it is unavailable.
           </div>
         </div>
       </div>
@@ -236,7 +283,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
             <p class="step-desc">
               Grab the latest release from the
               <a href="https://github.com/Hawaiianspawn/mha-manager/releases" target="_blank" rel="noopener noreferrer">GitHub Releases page</a>.
-              Download <code>MHAManager-UE5.7-Win64.zip</code> (or the version matching your engine).
+              Download <code>MHAManager-v2.5.0.zip</code> (or the latest version available).
             </p>
           </div>
         </div>
@@ -349,58 +396,18 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <div class="step-body">
           <h3 class="step-title">Enable required engine plugins</h3>
           <p class="step-desc">
-            Before generating project files, make sure these plugins are listed as enabled in your
-            <code>.uproject</code> file, or enable them via <strong>Edit → Plugins</strong> after
-            the first editor launch. The build will fail if the MetaHuman or CaptureData headers
-            are not present.
+            The build needs the MetaHuman and CaptureData headers present. Make sure the
+            <code>MetaHuman</code>, <code>CaptureData</code>, and <code>ImgMedia</code> plugins are
+            enabled in your <code>.uproject</code> (they are declared as dependencies, so the editor
+            offers to enable them when you enable MHA Manager). On UE 5.5, install the free
+            MetaHuman plugin from Fab first — it ships with the engine on 5.6+.
           </p>
-          <div class="plugin-table">
-            <div class="plugin-row header">
-              <span>Plugin name</span>
-              <span>Category in Plugins browser</span>
-              <span>Required for</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanCharacter</code></span>
-              <span>MetaHuman</span>
-              <span>All job types</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanCharacterUAF</code></span>
-              <span>MetaHuman</span>
-              <span>All job types</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanCalibrationProcessing</code></span>
-              <span>MetaHuman</span>
-              <span>Stereo jobs, camera calibration</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanCalibrationDiagnostics</code></span>
-              <span>MetaHuman</span>
-              <span>Stereo jobs, calibration validation</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanDepthProcessing</code></span>
-              <span>MetaHuman</span>
-              <span>Stereo depth generation and cleaning</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>CaptureData</code></span>
-              <span>Virtual Production</span>
-              <span>All job types — footage import assets</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>ImgMedia</code></span>
-              <span>Media</span>
-              <span>Stereo depth image sequences</span>
-            </div>
-          </div>
           <div class="callout callout-tip" style="margin-top: 14px;">
-            <strong>MetaHuman Core Data:</strong> If you plan to use MetaHuman characters in-game,
-            also download <strong>MetaHuman Core Data</strong> from Quixel Bridge or the MetaHuman
-            Creator export flow. This is not a plugin — it is a content package providing the base
-            skeleton, materials, and LODs your characters depend on at runtime.
+            <strong>Optional plugins:</strong> Stereo/depth jobs need Epic's free
+            <strong>MetaHuman Animator Depth Processing</strong> plugin, and body tracking (UE 5.8)
+            needs <strong>MetaHuman Animator Markerless Motion Capture</strong> — both from
+            <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a>. Mono
+            and Audio jobs need neither, and the related UI hides itself when they are absent.
           </div>
         </div>
       </div>

@@ -26,9 +26,15 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   -log</code></pre>
     </div>
     <p class="section-desc">
-      On Linux / macOS replace <code>UnrealEditor-Cmd.exe</code> with <code>UnrealEditor-Cmd</code>
-      and use forward slashes for the manifest path.
+      The commandlet requires <code>UnrealEditor-Cmd.exe</code> (Win64) — the plugin is editor-only
+      on Windows. It loads the manifest, runs the batch to completion, saves the updated manifest
+      (statuses, timings, error messages) back to the same path, and exits.
     </p>
+    <div class="callout-note" style="padding: 12px 16px; border-radius: var(--radius); font-size: 0.825rem; line-height: 1.6; border-left: 3px solid #f0a500; background: color-mix(in srgb, #f0a500 8%, transparent); color: var(--text-muted); margin-bottom: 12px;">
+      <strong style="color: var(--text);">Identity Create jobs are not supported headless</strong> — they
+      need an interactive editor session for the MetaHuman cloud auto-rig login. Run those in the
+      editor first, then batch the solves in CI.
+    </div>
   </section>
 
   <section class="doc-section">
@@ -92,17 +98,11 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">Log output</h2>
     <p class="section-desc">
-      With <code>-log</code> active, the commandlet emits structured progress lines every 10 seconds:
+      With <code>-log</code> active, the commandlet emits a progress summary every 10 seconds
+      while the batch runs:
     </p>
     <div class="code-block">
-      <pre><code>[MHAManager] Starting batch — 12 jobs queued
-[MHAManager] Job 1/12 "Scene01_Take03" — ProcessPerformance (tracking)... 34%
-[MHAManager] Job 1/12 "Scene01_Take03" — ProcessPerformance (fitting)... 78%
-[MHAManager] Job 1/12 "Scene01_Take03" — Complete (142s)
-[MHAManager] Job 2/12 "Scene01_Take04" — ValidateInput...
-...
-[MHAManager] Batch complete — 11 succeeded, 1 failed
-[MHAManager] Manifest saved: C:/path/to/batch.mhajson</code></pre>
+      <pre><code>Progress - Pending: 3  Running: 1  Done: 2  Failed: 0</code></pre>
     </div>
     <p class="section-desc">
       Failed jobs log the stage at which they failed and the error message from the solver.
@@ -117,7 +117,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <pre><code set:html={[
         '- name: Run MHA Manager batch\n',
         '  run: |\n',
-        '    &quot;C:/Epic Games/UE_5.7/Engine/Binaries/Win64/UnrealEditor-Cmd.exe&quot; \\\n',
+        '    &quot;C:/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe&quot; \\\n',
         '      &quot;$&#123;&#123; github.workspace &#125;&#125;/MyProject.uproject&quot; \\\n',
         '      -run=MHAManager \\\n',
         '      -manifest=&quot;$&#123;&#123; github.workspace &#125;&#125;/Saved/MHAManager/batch.mhajson&quot; \\\n',
@@ -151,10 +151,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         Manifest Format
       </span>
     </a>
-    <a href="/marketplace/mha-manager/docs/troubleshooting" class="next-link">
+    <a href="/marketplace/mha-manager/docs/mcp-toolset" class="next-link">
       <span class="nav-label">Next</span>
       <span class="nav-title">
-        Troubleshooting
+        MCP Toolset
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </span>
     </a>
