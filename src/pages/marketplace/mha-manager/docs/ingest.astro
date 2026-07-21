@@ -12,20 +12,20 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <h1 class="doc-title">Ingest Footage</h1>
     <p class="doc-lead">
       Every job runs on a <code>UFootageCaptureData</code> asset. Getting your raw footage into the
-      project as that asset is <em>ingest</em>. The recommended path is Epic's Live Link Hub; MHA
-      Manager also ingests footage itself for projects that can't install it.
+      project as that asset is <em>ingest</em>. MHA Manager relies on Epic's Live Link Hub — which
+      bundles Capture Manager — to do it, then auto-queues the takes it produces.
     </p>
   </div>
 
   <section class="doc-section">
-    <h2 class="section-title">Recommended: Live Link Hub</h2>
+    <h2 class="section-title">Live Link Hub</h2>
     <p class="section-desc">
       <strong>Live Link Hub</strong> is Epic's first-party capture application and the recommended
       input for MHA Manager. It bundles Capture Manager: connect your capture source (Live Link Face
       on iPhone, a stereo head-mounted camera, or an existing take archive), import the takes, and
       ingest them into your Unreal project. Each take lands in the Content Browser as a
       <code>UFootageCaptureData</code> asset — exactly what every job runs on — with none of the
-      manual asset assembly the in-editor routes below have to do.
+      manual asset assembly you would otherwise face.
     </p>
     <figure class="doc-figure">
       <div class="doc-img-placeholder">
@@ -57,57 +57,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </section>
 
   <section class="doc-section">
-    <h2 class="section-title">Alternative: ingest in the editor</h2>
-    <p class="section-desc">
-      When Live Link Hub isn't an option — locked-down build machines, CI runners, or an engine build
-      without it — MHA Manager can ingest footage itself, directly from the panel, no external app
-      required.
-    </p>
-    <div class="callout callout-note">
-      <strong>Requires Capture Manager.</strong> In-editor ingest uses the engine's
-      <code>CaptureManager</code> plugin (UE 5.7+, included with the engine). When it is unavailable
-      the Ingest controls hide themselves — you can still create Capture Data through Epic's own
-      MetaHuman Animator workflow and add it to the queue manually.
-    </div>
-
-    <h3 class="subsection-title">Ingest a take folder</h3>
-    <p class="section-desc">
-      The Ingest section's <strong>Ingest Folder...</strong> button takes a raw take folder of image
-      sequences. It creates the media assets (<code>UImgMediaSource</code>, plus audio if present),
-      assembles them into a <code>UFootageCaptureData</code> asset, and queues a job — auto-detecting
-      mono, stereo, or depth from the folder.
-    </p>
-    <figure class="doc-figure">
-      <div class="doc-img-placeholder">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="placeholder-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="20" y1="4" x2="20" y2="4.01"/></svg>
-        <span class="placeholder-name">ingest-folder-button.webp</span>
-        <span class="placeholder-hint">MHA Manager panel Ingest section — "Ingest Folder..." button, with a queued job row appearing after ingest</span>
-      </div>
-      <figcaption>The Ingest Folder button — pick a take folder, get a Capture Data asset and a queued job</figcaption>
-    </figure>
-
-    <h3 class="subsection-title">Ingest video files</h3>
-    <p class="section-desc">
-      Folder ingest understands image-sequence takes only. For <code>.mov</code> / <code>.mp4</code>
-      sources, use the video-ingest path on UE 5.8, exposed through the
-      <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP toolset</a>'s <code>ingest_video</code>
-      tool. It extracts frames and builds the same Capture Data asset. Supply a second video for a
-      stereo (HMC) pair, or leave it empty for a mono take; pass an optional audio file, and an
-      <code>ffmpeg</code> path to enable the third-party encoder for clips the built-in decoder
-      rejects.
-    </p>
-    <div class="callout callout-note">
-      Give each take its own import directory under one actor folder (for example
-      <code>/Game/.../Imports/&lt;Actor&gt;/&lt;Take&gt;</code>). The ingest refuses to write into a
-      folder that already holds assets, and keeping takes under a shared actor folder is what lets
-      calibration and identity discovery find each other for stereo shoots.
-    </div>
-  </section>
-
-  <section class="doc-section">
     <h2 class="section-title">Auto-queue on ingest</h2>
     <p class="section-desc">
-      However takes arrive — Live Link Hub or in-editor ingest — the <strong>Ingest</strong> section
+      As takes arrive from Live Link Hub / Capture Manager, the <strong>Ingest</strong> section
       of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
       project and queue them the moment they appear in the Content Browser:
     </p>

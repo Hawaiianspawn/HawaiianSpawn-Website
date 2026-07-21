@@ -99,20 +99,10 @@ const toolGroups = [
     ],
   },
   {
-    id: 'ingest',
-    label: 'Ingest & data',
-    desc: 'Bring raw footage into Capture Data assets and prepare copies. These require the Capture Manager ingest path (UE 5.8).',
+    id: 'data',
+    label: 'Capture Data',
+    desc: 'Prepare Capture Data assets for re-solve / isolation runs. Footage ingest itself is handled outside the plugin — bring takes in through Live Link Hub / Capture Manager, then queue them with <code>add_job</code> or the auto-queue watcher.',
     tools: [
-      {
-        sig: 'ingest_folder(source_folder, take_name) -> str',
-        params: '<code>source_folder</code>, <code>take_name</code>',
-        desc: 'Ingest a raw image-sequence footage folder into a new Capture Data asset and queue a job for it. Returns <code>{"job_id": "...", "error": "..."}</code>. Fails on raw video — use <code>ingest_video</code> for .mov/.mp4.',
-      },
-      {
-        sig: 'ingest_video(video_path_a, take_name, import_directory, ...) -> str',
-        params: '<code>video_path_a</code>, <code>take_name</code>, <code>import_directory</code>, opt. <code>video_path_b</code>, <code>audio_path</code>, <code>ffmpeg_path</code>',
-        desc: 'Ingest .mov/.mp4 files into a new Capture Data asset and queue a job. Supply <code>video_path_b</code> for a stereo (HMC) pair; leave empty for mono. Pass <code>ffmpeg_path</code> to enable the third-party encoder for clips the built-in decoder rejects. Give each take its own <code>import_directory</code> under one actor folder so calibration/identity discovery can find each other.',
-      },
       {
         sig: 'duplicate_capture_data(source_object_path, dest_folder, new_name) -> str',
         params: '<code>source_object_path</code>, <code>dest_folder</code>, <code>new_name</code>',
@@ -147,7 +137,7 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
     <h1 class="doc-title">MCP Toolset</h1>
     <p class="doc-lead">
       MHA Manager exposes its batch queue to Model Context Protocol (MCP) clients, so an agent or
-      external tool can inspect, add, and edit jobs, start processing, and ingest footage — the same
+      external tool can inspect, add, and edit jobs, and start processing — the same
       operations the panel offers, driven programmatically. It rides Unreal Engine 5.8's native MCP
       stack; every tool is a thin wrapper over the plugin's queue logic.
     </p>
