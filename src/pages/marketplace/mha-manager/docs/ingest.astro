@@ -11,9 +11,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <div class="doc-header">
     <h1 class="doc-title">Ingest Footage</h1>
     <p class="doc-lead">
-      Every job runs on a <code>UFootageCaptureData</code> asset. Getting your raw footage into the
-      project as that asset is <em>ingest</em>. MHA Manager relies on Epic's Live Link Hub — which
-      bundles Capture Manager — to do it, then auto-queues the takes it produces.
+      Every footage job runs on a <code>UFootageCaptureData</code> asset. Getting your raw footage
+      into the project as that asset is <em>ingest</em>, and Epic's Live Link Hub — which bundles
+      Capture Manager — is the engine that does it. You can drive it from Live Link Hub's own
+      window, or from the plugin's <strong>Add Jobs...</strong> dialog without leaving the editor.
     </p>
   </div>
 
@@ -36,10 +37,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <figcaption>Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data</figcaption>
     </figure>
     <p class="section-desc">
-      Because Live Link Hub writes finished Capture Data directly into the project, MHA Manager needs
-      no manual ingest step. Turn on <strong>Auto-Queue Ingested Takes</strong> (see below) and every
-      take Live Link Hub delivers is classified and queued automatically — capture in one window,
-      watch jobs appear in the other.
+      Because Live Link Hub writes finished Capture Data directly into the project, nothing has to be
+      assembled by hand afterwards. Turn on <strong>Auto-Queue Ingested Takes</strong> (see below) and
+      every take Live Link Hub delivers is classified and queued automatically — capture in one
+      window, watch jobs appear in the other.
     </p>
     <figure class="doc-figure">
       <div class="doc-img-placeholder">
@@ -53,6 +54,32 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       Live Link Hub is a separate Epic download and depends on the Live Link / Virtual Production
       plugins. See Epic's Live Link Hub and MetaHuman Animator capture documentation for device
       setup and recording — that side of the workflow is Epic's, not this plugin's.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Ingest from the Add Jobs dialog</h2>
+    <p class="section-desc">
+      <strong>Add Jobs...</strong> in the MHA Manager panel covers all three ways work enters the
+      queue, including raw footage that has not been ingested yet:
+    </p>
+    <div class="field-list">
+      <div class="opt-row header">
+        <span>Source</span>
+        <span>What it queues</span>
+      </div>
+      <div class="opt-row">
+        <span><strong>External Footage (Live Link Hub)</strong></span>
+        <span>Pick a raw take folder on disk and launch Live Link Hub to ingest it into the project. Requires the <code>CaptureManagerEditor</code> plugin (UE 5.7+).</span>
+      </div>
+      <div class="opt-row">
+        <span><strong>Project Assets</strong></span>
+        <span>One job per Footage Capture Data asset already in the project — takes ingested earlier, or by someone else on the team.</span>
+      </div>
+      <div class="opt-row">
+        <span><strong>Audio</strong></span>
+        <span>Audio-driven jobs from project SoundWaves, a folder of WAVs on disk, or a Wwise container over WAAPI. No footage and no identity needed. Requires UE 5.8.</span>
+      </div>
     </div>
   </section>
 

@@ -35,6 +35,16 @@ const toolGroups = [
         desc: 'Queue a new job for a Footage Capture Data asset, auto-classifying its type by package-path name (grid/calib -> CalibrateStereo, identity/dna -> IdentityCreate, otherwise Stereo; Mono/Audio come from the asset). A first-frame framing probe runs for mono takes. Returns the new job GUID, or <code>""</code> on failure.',
       },
       {
+        sig: 'add_audio_jobs_from_folder(folder_path, recursive=True) -> list[str]',
+        params: '<code>folder_path</code>, <code>recursive</code>',
+        desc: 'Queue one audio-driven job per WAV in a folder on disk. The WAV stays where it is — each job keeps only its path and imports it as a sound wave beside the Performance at solve time. WAVs already queued are skipped, so re-running against the same folder adds nothing. Audio jobs need no Capture Data and no identity. Returns the new job GUIDs.',
+      },
+      {
+        sig: 'add_wwise_audio_jobs(container_path, waapi_url, platform, language) -> str',
+        params: '<code>container_path</code>, <code>waapi_url</code>, <code>platform</code> (default <code>Windows</code>), <code>language</code> (default <code>English(US)</code>)',
+        desc: 'Queue one audio-driven job per Wwise Sound under a container, resolved live over WAAPI — Wwise Authoring (or <code>WwiseConsole waapi-server</code>) must be running with WAAPI enabled. Each sound solves from the media Wwise\'s own conversion produced, transcoded to a WAV under <code>Saved/MHAManager/WwiseAudio</code> and imported transiently, so nothing Wwise owns is copied into the content tree. Conversions must be PCM — compressed media (Vorbis/Opus/ADPCM) is reported by name instead of queued. Exported Level Sequences carry a Wwise event track rather than a sound wave track. Empty arguments fall back to the WAAPI Endpoint and Default Container settings. Returns JSON <code>{"job_ids": [...], "count": N}</code>.',
+      },
+      {
         sig: 'remove_jobs(job_ids) -> int',
         params: '<code>job_ids</code> (list)',
         desc: 'Remove jobs from the queue by GUID. Unknown ids are ignored. Returns the number actually removed.',
@@ -96,13 +106,33 @@ const toolGroups = [
         params: '<code>job_id</code>',
         desc: 'Accept an over-threshold calibration on a PoorCalibrationQuality job: relinks the CameraCalibration to the take, marks the job Done, and wakes dependents paused on it. Only valid while the job\'s <code>live_status</code> is PoorCalibrationQuality.',
       },
+      {
+        sig: 'validate_queue() -> bool',
+        params: '(none)',
+        desc: 'Re-run dependency and asset validation across the whole queue, recomputing blocked statuses (MissingCalibration / MissingIdentity). Run it after renames or bulk edits — anything that changed assets or jobs outside the normal add/update flow.',
+      },
+      {
+        sig: 'preview_level_sequence(job_id) -> str',
+        params: '<code>job_id</code>',
+        desc: 'Open a job\'s exported Level Sequence in Sequencer for playback. The sequence carries its own lighting — an audio job\'s export bakes Epic\'s Portrait rig into it as spawnables — and opens against Epic\'s clean MetaHuman backdrop level, which <strong>replaces the currently open level</strong>: the editor offers unsaved work up for saving first, and declining that prompt cancels the preview. Both the lighting and the backdrop need the MetaHuman Character plugin. The job must have recorded a LevelSequence artifact.',
+      },
     ],
   },
   {
     id: 'data',
     label: 'Capture Data',
-    desc: 'Prepare Capture Data assets for re-solve / isolation runs. Footage ingest itself is handled outside the plugin — bring takes in through Live Link Hub / Capture Manager, then queue them with <code>add_job</code> or the auto-queue watcher.',
+    desc: 'Inspect and reshape Capture Data assets already in the project — list them, fix their layout, and prepare copies for re-solve / isolation runs. Ingest itself is interactive: bring takes in through Live Link Hub, or through the plugin\'s <strong>Add Jobs...</strong> dialog, then queue them with <code>add_job</code> or the auto-queue watcher.',
     tools: [
+      {
+        sig: 'list_capture_data(root_path="/Game") -> str',
+        params: '<code>root_path</code>',
+        desc: 'List Footage Capture Data assets under a content path. Each entry carries its <code>actor</code>, derived from the <code>Imports/&lt;Actor&gt;</code> path segment — the same rule calibration and identity discovery uses. An empty actor means the asset sits outside an Imports layout and actor-scoped discovery cannot see it.',
+      },
+      {
+        sig: 'rename_capture_data(source_object_path, dest_folder, new_name) -> str',
+        params: '<code>source_object_path</code>, <code>dest_folder</code>, <code>new_name</code>',
+        desc: 'Rename or move a Footage Capture Data asset, leaving a redirector behind; queued jobs pointing at the old path are updated in place. Folder and asset name tokens drive auto-classification (grid/calib -> Stereo Calibration, identity/dna -> Identity Create), so this is the tool for fixing a misclassified take. Never overwrites an existing asset.',
+      },
       {
         sig: 'duplicate_capture_data(source_object_path, dest_folder, new_name) -> str',
         params: '<code>source_object_path</code>, <code>dest_folder</code>, <code>new_name</code>',

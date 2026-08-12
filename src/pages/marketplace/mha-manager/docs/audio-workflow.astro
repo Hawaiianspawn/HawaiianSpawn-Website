@@ -31,18 +31,35 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     </div>
 
     <h2 class="sub-heading">Required input</h2>
+    <p class="section-desc">
+      One voice track per job, from any of three sources in the <strong>Add Jobs...</strong> dialog:
+    </p>
     <div class="asset-table">
-      <div class="asset-row header"><span>Asset</span><span>Type</span><span>Notes</span></div>
+      <div class="asset-row header"><span>Source</span><span>Type</span><span>Notes</span></div>
       <div class="asset-row">
-        <span><strong>Capture Data</strong></span>
-        <span><code>UFootageCaptureData</code></span>
-        <span>Must contain an audio track; any video tracks are ignored</span>
+        <span><strong>Project SoundWave</strong></span>
+        <span><code>USoundWave</code></span>
+        <span>A sound wave asset already in the content tree</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>WAV folder</strong></span>
+        <span>Files on disk</span>
+        <span>The WAV stays where it is; each job imports it beside the Performance at solve time</span>
+      </div>
+      <div class="asset-row">
+        <span><strong>Wwise container</strong></span>
+        <span>Resolved over WAAPI</span>
+        <span>Solves from Wwise's own converted media; conversions must be PCM</span>
       </div>
     </div>
     <div class="callout callout-tip">
-      Audio jobs do <strong>not</strong> require a MetaHuman Identity or Camera Calibration. If your
-      voice track isn't in a Capture Data asset yet, bring it in via the
-      <a href="/marketplace/mha-manager/docs/ingest">Ingest</a> step.
+      Audio jobs do <strong>not</strong> require Capture Data, a MetaHuman Identity, or a Camera
+      Calibration — a voice track is the whole input.
+    </div>
+    <div class="callout callout-note">
+      Audio solves need <strong>UE 5.8</strong>. The solve runs on 5.8-only Performance APIs, so on
+      UE 5.5 / 5.7 an audio job fails immediately with a version message; the rest of the plugin
+      works normally.
     </div>
   </section>
 
@@ -246,6 +263,13 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   .option-desc { color: var(--text-muted); line-height: 1.5; }
   .option-desc strong { color: var(--text); font-weight: 500; }
 
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
   .callout {
     padding: 14px 18px;
     border-radius: var(--radius);
@@ -256,6 +280,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     color: var(--text-muted);
   }
   .callout-tip { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+  .callout-note { background: var(--bg-surface); border-color: var(--border); }
   .callout strong { color: var(--text); font-weight: 600; }
 
   a { color: var(--accent); text-decoration: none; }
