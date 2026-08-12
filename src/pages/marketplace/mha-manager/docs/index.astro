@@ -1,9 +1,10 @@
 ---
 import DocsLayout from '../../../../layouts/DocsLayout.astro';
 
+// Same grouping and order as the sidebar in DocsLayout.astro - keep the two in step.
 const topics = [
   {
-    group: 'Getting Started',
+    group: 'Start Here',
     items: [
       {
         href: '/marketplace/mha-manager/docs/installation',
@@ -15,16 +16,26 @@ const topics = [
         label: 'Quick Start',
         desc: 'Run your first batch in five steps using a Mono job — the fastest path to results.',
       },
+    ],
+  },
+  {
+    group: 'Get Footage In',
+    items: [
       {
         href: '/marketplace/mha-manager/docs/ingest',
         label: 'Ingest Footage',
-        desc: 'Turn raw take folders and video files into Capture Data assets — manually, or auto-queued as takes arrive.',
+        desc: 'Turn raw take folders into Capture Data assets through Live Link Hub or the Add Jobs dialog — manually, or auto-queued as takes arrive.',
       },
     ],
   },
   {
-    group: 'Workflows',
+    group: 'Run a Workflow',
     items: [
+      {
+        href: '/marketplace/mha-manager/docs/job-types',
+        label: 'Job Types',
+        desc: 'A one-screen chooser — which type to use, what each requires, and what it produces, linking to the workflow guides.',
+      },
       {
         href: '/marketplace/mha-manager/docs/mono-workflow',
         label: 'Mono Workflow',
@@ -38,18 +49,13 @@ const topics = [
       {
         href: '/marketplace/mha-manager/docs/audio-workflow',
         label: 'Audio Workflow',
-        desc: 'Facial animation from a voice track alone — solver mode, mood, output controls, and export.',
+        desc: 'Facial animation from a voice track alone — SoundWave, WAV folder, or Wwise container; solver mode, mood, and export.',
       },
     ],
   },
   {
-    group: 'Reference',
+    group: 'Configure',
     items: [
-      {
-        href: '/marketplace/mha-manager/docs/job-types',
-        label: 'Job Types',
-        desc: 'A one-screen chooser — which type to use, what each requires, and what it produces, linking to the workflow guides.',
-      },
       {
         href: '/marketplace/mha-manager/docs/global-settings',
         label: 'Global Settings',
@@ -68,7 +74,7 @@ const topics = [
     ],
   },
   {
-    group: 'Advanced',
+    group: 'Automate',
     items: [
       {
         href: '/marketplace/mha-manager/docs/ci-mode',
@@ -80,6 +86,11 @@ const topics = [
         label: 'MCP Toolset',
         desc: 'Drive the queue from an MCP client on UE 5.8 — 23 tools for inspecting, editing, and running the queue, plus the tool reference.',
       },
+    ],
+  },
+  {
+    group: '',
+    items: [
       {
         href: '/marketplace/mha-manager/docs/troubleshooting',
         label: 'Troubleshooting',
@@ -114,7 +125,7 @@ const topics = [
 
   {topics.map(section => (
     <section class="topic-section">
-      <h2 class="topic-group-label">{section.group}</h2>
+      {section.group && <h2 class="topic-group-label">{section.group}</h2>}
       <div class="topic-grid">
         {section.items.map(item => (
           <a href={item.href} class="topic-card">

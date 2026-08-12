@@ -179,43 +179,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     </div>
   </section>
 
-  <div class="doc-footer">
-    <a href="/marketplace/mha-manager/docs/ingest" class="prev-link">
-      <span class="nav-label">Previous</span>
-      <span class="nav-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Ingest Footage
-      </span>
-    </a>
-    <a href="/marketplace/mha-manager/docs/stereo-workflow" class="next-link">
-      <span class="nav-label">Next</span>
-      <span class="nav-title">
-        Stereo Workflow
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </span>
-    </a>
-  </div>
-
 </DocsLayout>
 
 <style>
-  .doc-figure { margin: 20px 0 4px; }
-  .doc-img-placeholder {
-    background: #0a0a0a;
-    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
-    border-radius: var(--radius);
-    padding: 36px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
-  }
-  .placeholder-icon { color: var(--text-muted); opacity: 0.35; }
-  .placeholder-name { font-family: var(--font-mono); font-size: 0.775rem; color: var(--accent); }
-  .placeholder-hint { font-size: 0.775rem; color: var(--text-muted); max-width: 480px; line-height: 1.5; }
-  figcaption { font-size: 0.775rem; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
-
   .doc-header { margin-bottom: 40px; }
 
   .type-badge {
@@ -368,42 +334,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
-
-  .doc-footer {
-    margin-top: 56px;
-    padding-top: 28px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  .prev-link, .next-link {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    text-decoration: none;
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: border-color 0.2s;
-    min-width: 140px;
-  }
-
-  .prev-link { align-items: flex-start; }
-  .next-link { align-items: flex-end; }
-  .prev-link:hover, .next-link:hover { border-color: var(--accent); }
-
-  .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
-
-  .nav-title {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--accent);
-  }
 
   @media (max-width: 640px) {
     .asset-row { grid-template-columns: 1fr 1fr; }
