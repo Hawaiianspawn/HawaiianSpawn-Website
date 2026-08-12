@@ -36,25 +36,31 @@ const settings = [
   {
     name: 'Export LevelSequence',
     default: 'Disabled',
-    desc: 'Additionally bakes the animation into a <code>ULevelSequence</code> asset with a Sequencer track ready for cinematic use.',
+    desc: 'Additionally bakes the animation into a <code>ULevelSequence</code> asset — framed, self-lit, and playable on its own. The lighting rig, face binding, and preview backdrop have their own settings; see <a href="/marketplace/mha-manager/docs/level-sequence-preview">Level Sequence Preview</a>.',
     note: null,
   },
   {
-    name: 'Export AnimSequence For DCC',
+    name: 'Export FBX For DCC',
     default: 'Disabled',
-    desc: 'Also exports the AnimSequence as a plain skinned FBX (<code>&lt;name&gt;_DCC.fbx</code>) for Maya, Blender, and other DCC tools.',
+    desc: 'Writes the job-appropriate FBX for Maya, Blender, and other DCC tools. One toggle, not two — the form is derived from the solve: body-tracking jobs get the baked-joint <code>&lt;name&gt;_DCC.fbx</code>, face jobs get the animator-editable Control Rig <code>&lt;name&gt;_CR.fbx</code>. See <a href="/marketplace/mha-manager/docs/exports">Exports</a>.',
     note: null,
   },
   {
-    name: 'Export Control Rig For DCC',
-    default: 'Disabled',
-    desc: 'Bakes the Control Rig and exports it as <code>&lt;name&gt;_ControlRig.fbx</code>. Face jobs only.',
+    name: 'Export Take Audio (WAV)',
+    default: 'Enabled',
+    desc: 'Writes the take\'s audio beside the exported FBX as <code>&lt;AnimName&gt;.wav</code>, trimmed and timecode-aligned to the same range the FBX animation covers, so audio and animation line up at frame 0 in the DCC. Skipped when the take has no audio track.',
     note: null,
   },
   {
     name: 'DCC Export Directory',
     default: 'Saved/MHAManager/Exports',
-    desc: 'Disk folder where the DCC and Control Rig FBX files are written. A matching <strong>Flat Export (DCC)</strong> toggle controls whether files go directly into this folder or into per-take subfolders.',
+    desc: 'Disk folder where the FBX files are written. <strong>Open Export Folder</strong> in the toolbar opens whatever it is currently set to.',
+    note: null,
+  },
+  {
+    name: 'DCC Export Layout',
+    default: 'Per Take',
+    desc: 'Folder structure under the export directory: <strong>Per Take</strong> (a subfolder per source take), <strong>Actor / Part</strong> (<code>&lt;Actor&gt;/Face</code> or <code>/Body</code>), or <strong>Flat</strong> (everything in one folder).',
     note: null,
   },
   {
@@ -82,9 +88,9 @@ const settings = [
     note: null,
   },
   {
-    name: 'Reduce Keys',
+    name: 'Reduce Control Rig Keys',
     default: 'Disabled',
-    desc: 'Applies keyframe reduction as a post-process step after export. Removes redundant keys to reduce AnimSequence file size and runtime cost. May introduce subtle smoothing on fast facial motion.',
+    desc: 'Thins the Control Rig bake before FBX export. The bake writes one key per frame on every channel and Epic\'s own Control Rig FBX exporter has no key-reduction option, so dense bakes stay dense. This drops keys that do not meaningfully change the curve, refitting tangents to compensate, shrinking the file with minimal visual difference.',
     note: null,
   },
   {
@@ -109,18 +115,6 @@ const settings = [
     name: 'Retargeter Output Path',
     default: '/Game/CaptureManager/BodyTrackerTargets',
     desc: 'Content Browser folder where <strong>+ Create Retargeter...</strong> saves new IK Retargeter assets, named <code>RTG_SMPL_&lt;MeshName&gt;</code> automatically.',
-    note: null,
-  },
-  {
-    name: 'Blueprint Name Prefix',
-    default: 'BP_',
-    desc: 'Name prefix used by <strong>Create Blueprint...</strong> for Visualization Blueprints, saved to <code>RetargeterOutputPath/&lt;MeshName&gt;/&lt;Prefix&gt;&lt;MeshName&gt;</code>. Change this to something distinct from <code>BP_</code> so intermediary visualization Blueprints sort or filter apart from your regular gameplay Blueprints in the Content Browser.',
-    note: null,
-  },
-  {
-    name: 'Default Control Rig Class',
-    default: 'Engine default',
-    desc: 'Global default <code>UControlRig</code> class applied to a job\'s Performance visualization object when the job has no per-job Control Rig override.',
     note: null,
   },
 ];

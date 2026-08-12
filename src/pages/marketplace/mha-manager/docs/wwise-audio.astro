@@ -1,0 +1,289 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Wwise Audio — MHA Manager"
+  description="Solve facial animation straight from dialogue in a Wwise project, using Wwise's own converted media."
+  currentSlug="wwise-audio"
+>
+
+  <div class="doc-header">
+    <span class="type-badge type-audio">Audio</span>
+    <h1 class="doc-title">Wwise Audio</h1>
+    <p class="doc-lead">
+      When the dialogue already lives in a Wwise project, this path queues one job per Wwise Sound
+      and solves each from the media <em>Wwise's own conversion produced</em> — not the source WAV.
+      What ships in the game is what drives the face.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">Pipeline stages</h2>
+    <div class="pipeline">
+      <div class="pipeline-stage"><span class="stage-name">Resolve over WAAPI</span><span class="stage-note">At queue time</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Transcode</span><span class="stage-note">.wem -&gt; WAV</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Audio Solve</span><span class="stage-note">Voice -&gt; controls</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Export Outputs</span></div>
+      <div class="pipeline-arrow">-&gt;</div>
+      <div class="pipeline-stage"><span class="stage-name">Save Assets</span></div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      The first two stages run when you add the jobs, not when the batch starts. Enumerating over
+      WAAPI and transcoding up front means an unconvertible sound is reported now, by name, instead
+      of failing deep inside a batch hours later. From the solve onwards it is an ordinary
+      <a href="/marketplace/mha-manager/docs/audio-workflow">audio job</a>.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Required setup</h2>
+    <div class="field-list">
+      <div class="req-row header">
+        <span>Requirement</span>
+        <span>Notes</span>
+      </div>
+      <div class="req-row">
+        <span><strong>UE 5.8</strong></span>
+        <span>Audio solves use 5.8-only Performance APIs. On earlier engines an audio job fails immediately with a version message.</span>
+      </div>
+      <div class="req-row">
+        <span><strong>Wwise Authoring running, WAAPI enabled</strong></span>
+        <span><code>WwiseConsole</code>'s <code>waapi-server</code> works too. Both serve HTTP on port 8090 by default.</span>
+      </div>
+      <div class="req-row">
+        <span><strong>PCM conversions</strong></span>
+        <span>Vorbis, Opus, and ADPCM need the Wwise sound engine to decode. Those sounds are reported by name instead of queued — set the conversion to PCM for the platform you are solving from.</span>
+      </div>
+      <div class="req-row">
+        <span><strong>Wwise Unreal plugin (optional)</strong></span>
+        <span>Only needed for the event track on exported Level Sequences. Everything else works without it — no Wwise SDK is linked, and WAAPI is plain HTTP/JSON.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Queueing the sounds</h2>
+    <p class="section-desc">
+      Open <strong>Add Jobs...</strong>, pick the <strong>Audio</strong> source, then the
+      <strong>Wwise</strong> sub-source. <strong>Refresh</strong> re-checks the WAAPI connection and
+      lists the Sounds under the container; the platform and language pickers are populated from the
+      platforms and languages the open Wwise project actually defines, so there is nothing to type.
+    </p>
+    <div class="field-list">
+      <div class="req-row header">
+        <span>Field</span>
+        <span>What it does</span>
+      </div>
+      <div class="req-row">
+        <span><strong>Wwise container</strong></span>
+        <span>Object path of the work unit, folder, or actor-mixer holding the dialogue, e.g. <code>\Containers\Dialogue</code>. Every Sound beneath it becomes one job. Pre-filled from Global Settings.</span>
+      </div>
+      <div class="req-row">
+        <span><strong>Platform</strong></span>
+        <span>Which platform's converted media to resolve. Defaults to <code>Windows</code>.</span>
+      </div>
+      <div class="req-row">
+        <span><strong>Language</strong></span>
+        <span>Which language to resolve for Voice sounds. Defaults to <code>English(US)</code>.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      The endpoint and the default container live under <strong>Wwise</strong> in
+      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a>. Sounds already in
+      the queue are skipped, so re-running against a container after adding new dialogue queues only
+      what is new.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">What the plugin touches</h2>
+    <p class="section-desc">
+      Nothing Wwise owns is copied into the content tree. Each Sound's converted <code>.wem</code> is
+      repacked as a standard WAV under <code>Saved/MHAManager/WwiseAudio</code> and imported
+      transiently for the solve — Wwise's media is already RIFF, but its header carries a
+      Wwise-private extension and extra chunks the engine's importer rejects, so the PCM payload is
+      rewritten behind a plain 44-byte header.
+    </p>
+    <p class="section-desc">
+      Outputs land in a <code>Wwise</code> subfolder of the output base. Wwise take names are the
+      sound designer's, not the shoot's, so they can collide with a local WAV of the same name — and
+      two jobs sharing an output path means the second silently adopts the first's Performance.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Exported Level Sequences</h2>
+    <p class="section-desc">
+      A Wwise-sourced job's exported Level Sequence carries a <strong>Wwise event track</strong>
+      rather than a sound wave track, so the cinematic plays its dialogue through the sound engine
+      instead of a copied WAV. The track is resolved by reflection, so a project without the Wwise
+      Unreal plugin simply skips it and says so in the job's warnings — nothing fails.
+    </p>
+    <p class="section-desc">
+      If the named event asset does not exist yet, generate SoundBanks and reconcile the Wwise
+      assets in Unreal first; the event track needs a real <code>AkAudioEvent</code> asset to bind.
+    </p>
+    <div class="callout callout-warn">
+      <strong>Silent Level Sequences:</strong> the Wwise integration is often installed with Unreal's
+      own audio device disabled. In that mode every <code>USoundWave</code> is silent — including the
+      sound wave track Epic writes onto an exported Level Sequence — so a perfectly exported audio
+      cinematic plays nothing. The plugin detects this and records a warning on the job. The fix is
+      <strong>Project Settings &gt; Wwise &gt; Integration Settings &gt; Unreal Audio Routing</strong>
+      set to "Both Wwise and Unreal audio", followed by an editor restart. There is no console
+      command for it.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Driving it from a script</h2>
+    <p class="section-desc">
+      The same enumeration is available as an MCP tool, <code>add_wwise_audio_jobs</code>, which
+      takes the container path, WAAPI endpoint, platform, and language, and returns the queued job
+      ids plus the names of any sounds it could not convert. See
+      <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP Toolset</a>.
+    </p>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 12px;
+  }
+
+  .type-audio {
+    background: color-mix(in srgb, #c084fc 12%, transparent);
+    color: #c084fc;
+    border: 1px solid color-mix(in srgb, #c084fc 30%, transparent);
+  }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pipeline-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+  }
+
+  .stage-name { font-size: 0.825rem; font-weight: 600; color: var(--text); }
+  .stage-note { font-size: 0.72rem; color: var(--text-muted); }
+  .pipeline-arrow { color: var(--accent); font-size: 1rem; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .req-row {
+    display: grid;
+    grid-template-columns: 1.1fr 2.4fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .req-row:last-child { border-bottom: none; }
+
+  .req-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .req-row strong { color: var(--text); font-weight: 500; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+
+  .callout-warn { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .req-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

@@ -1,0 +1,247 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Level Sequence Preview — MHA Manager"
+  description="Export a playable, self-lit Level Sequence per job and review the solve in Sequencer without building a shot."
+  currentSlug="level-sequence-preview"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Level Sequence Preview</h1>
+    <p class="doc-lead">
+      Reviewing a solve normally means building a shot: drop a MetaHuman in a level, wire the
+      animation, light it, aim a camera. Turn on Level Sequence export and each job writes that shot
+      for you — framed, lit, and playable in whatever level you happen to have open.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">What gets exported</h2>
+    <p class="section-desc">
+      Enable <strong>Export Level Sequence</strong> in
+      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> and every job adds
+      a Level Sequence to its outputs, beside the Performance and AnimSequence. Three things make it
+      reviewable on its own:
+    </p>
+    <div class="field-list">
+      <div class="ls-row header">
+        <span>Feature</span>
+        <span>What it does</span>
+      </div>
+      <div class="ls-row">
+        <span><strong>Framed camera</strong></span>
+        <span>The camera is placed to frame the face and given a 50mm portrait lens with focus set to the subject. Without footage to match, the engine falls back to a 10mm lens, which reads as a fisheye on a face at conversational distance.</span>
+      </div>
+      <div class="ls-row">
+        <span><strong>Pinned exposure</strong></span>
+        <span>MetaHuman exposure settings are written onto the camera itself, so the face is correctly exposed no matter which level the sequence is opened in.</span>
+      </div>
+      <div class="ls-row">
+        <span><strong>Baked-in lighting</strong></span>
+        <span>The chosen lighting rig's lights are copied into the sequence as spawnables. The sequence lights its own face instead of borrowing whatever the current level has.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Face binding for audio jobs</h2>
+    <p class="section-desc">
+      The engine binds a face to an exported Level Sequence only for stereo takes, so an audio
+      cinematic would otherwise play dialogue over an empty frame. The plugin binds one itself, in
+      order of preference:
+    </p>
+    <ol class="numbered-list">
+      <li>
+        <strong>A MetaHuman actor Blueprint</strong> you nominate in settings — the better target,
+        because the engine spawns it and bakes an editable Face Control Rig into the sequence.
+      </li>
+      <li>
+        <strong>A face mesh</strong>, bound to a plain animation track playing the AnimSequence the
+        job already exported. Leave it empty and a skeletal mesh built on that AnimSequence's own
+        skeleton is found automatically.
+      </li>
+    </ol>
+    <div class="callout callout-warn">
+      An explicit face mesh on a <em>different</em> skeleton is rejected rather than bound. The
+      shipped face archetypes carry identical bones under different Skeleton assets, so a mismatched
+      pair looks correct and evaluates to nothing — a silent, still face is worse than a clear skip.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Choosing the lighting rig</h2>
+    <p class="section-desc">
+      The rig is picked by name from Epic's MetaHuman lighting environments —
+      <strong>Portrait</strong> by default, with Studio, Split, Fireside, Moonlight, Tungsten,
+      RedLantern, and TextureBooth alongside it. The list is discovered from the installed content
+      rather than hardcoded, so environments a future engine adds show up on their own.
+    </p>
+    <p class="section-desc">
+      The rigs' shared companion level (the backdrop and its post-process grade) is deliberately left
+      out of the sequence: the preview action opens the sequence against that level anyway, and a
+      second copy inside the sequence would double it up. A project without the MetaHuman Character
+      plugin content exports an <strong>unlit</strong> sequence rather than failing — the camera's
+      own exposure pin still applies.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Preview in Studio</h2>
+    <p class="section-desc">
+      Right-click any finished job with a Level Sequence artifact and choose
+      <strong>Preview in Studio</strong>. The sequence opens in Sequencer, ready to scrub.
+    </p>
+    <p class="section-desc">
+      With <strong>Load Studio Backdrop When Previewing LevelSequence</strong> on (the default), the
+      editor loads Epic's clean MetaHuman backdrop level first for a controlled background. Loading
+      it <strong>replaces the current level</strong>, so the editor offers unsaved work up for saving
+      first — declining that prompt cancels the preview rather than half-performing it. Turn the
+      setting off to open the sequence in whatever level is already loaded, with no map switch. A
+      project without the MetaHuman Character plugin content always opens in the current level, and
+      the job says so.
+    </p>
+    <div class="callout callout-note">
+      Because the lighting travels inside the sequence, the backdrop is only ever a background. The
+      face stays lit either way.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Wwise dialogue</h2>
+    <p class="section-desc">
+      A Wwise-sourced job's sequence carries a Wwise event track instead of a sound wave track, so
+      the dialogue plays through the sound engine. See
+      <a href="/marketplace/mha-manager/docs/wwise-audio">Wwise Audio</a> — including the audio
+      routing setting that silences sound wave tracks entirely.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Driving it from a script</h2>
+    <p class="section-desc">
+      <code>preview_level_sequence(job_id)</code> performs the same action from an MCP client,
+      including the backdrop load and its save prompt. See
+      <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP Toolset</a>.
+    </p>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .ls-row {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .ls-row:last-child { border-bottom: none; }
+
+  .ls-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ls-row strong { color: var(--text); font-weight: 500; }
+
+  .numbered-list {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .numbered-list li {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding-left: 4px;
+  }
+
+  .numbered-list li strong { color: var(--text); font-weight: 500; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+
+  .callout-warn { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout-note { background: var(--bg-surface); border-color: var(--border); }
+  .callout strong { color: var(--text); font-weight: 600; }
+  .callout em { color: var(--text); font-style: italic; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .ls-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

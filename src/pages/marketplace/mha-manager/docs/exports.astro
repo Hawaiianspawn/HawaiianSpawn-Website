@@ -1,0 +1,337 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Exports — MHA Manager"
+  description="What a finished job produces, where each output lands, and which FBX form a job gets."
+  currentSlug="exports"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Exports</h1>
+    <p class="doc-lead">
+      A finished job is only as useful as what it leaves behind. This page covers every output the
+      plugin can write — engine assets, FBX for a DCC, audio, Level Sequences — where each one
+      lands, and how it is named.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">What each job produces</h2>
+    <div class="field-list">
+      <div class="out-row header">
+        <span>Output</span>
+        <span>Where</span>
+        <span>Notes</span>
+      </div>
+      <div class="out-row">
+        <span><strong>Performance asset</strong></span>
+        <span>Content Browser</span>
+        <span>The solve itself. Every footage and audio job produces one.</span>
+      </div>
+      <div class="out-row">
+        <span><strong>Face AnimSequence</strong></span>
+        <span>Content Browser</span>
+        <span>The deliverable for most pipelines. On by default; turn it off for solve-only runs.</span>
+      </div>
+      <div class="out-row">
+        <span><strong>Body animation</strong></span>
+        <span>Content Browser</span>
+        <span>Body-tracking jobs only, one AnimSequence per skeleton mode (see below).</span>
+      </div>
+      <div class="out-row">
+        <span><strong>Level Sequence</strong></span>
+        <span>Content Browser</span>
+        <span>Optional. A playable cinematic of the take — see <a href="/marketplace/mha-manager/docs/level-sequence-preview">Level Sequence Preview</a>.</span>
+      </div>
+      <div class="out-row">
+        <span><strong>FBX for DCC</strong></span>
+        <span>Disk</span>
+        <span>Optional. One form per job, derived from the solve — never chosen by hand.</span>
+      </div>
+      <div class="out-row">
+        <span><strong>Take audio (WAV)</strong></span>
+        <span>Disk</span>
+        <span>Written beside the FBX, trimmed and timecode-aligned to the same range the animation covers, so audio and animation line up at frame 0 in the DCC. Skipped when the take has no audio.</span>
+      </div>
+    </div>
+    <div class="callout callout-note">
+      Every output is recorded as an <strong>artifact</strong> on the job, with a state of Complete,
+      Partial, or Failed, and round-trips through the saved manifest. A job that reports Done with no
+      artifacts is a red flag, not a success.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Where engine assets land</h2>
+    <p class="section-desc">
+      By default, generated assets are written <strong>next to the take they came from</strong> — the
+      same content folder as the source Capture Data — so outputs stay with their footage and two
+      takes can never collide.
+    </p>
+    <p class="section-desc">
+      Turning on a custom output path sends everything to one folder instead. That folder can be
+      flat, or split per take: with flat export off, each take gets a subfolder named after its
+      source Capture Data folder. Audio jobs have no capture data to derive a folder from, so they
+      always land in the output path directly — Wwise-sourced jobs get their own
+      <code>Wwise</code> subfolder underneath it, because a sound designer's take names can collide
+      with a local WAV of the same name.
+    </p>
+    <p class="section-desc">
+      Re-running a take that already has an AnimSequence is skipped by default. Force the export to
+      re-run when you need to re-cut an existing solve, and use overwrite to control whether an
+      existing asset is replaced or a new one created.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">The FBX form gate</h2>
+    <p class="section-desc">
+      There is one <strong>Export FBX for DCC</strong> toggle, not two. Which FBX form a job writes
+      is derived from the solve, never picked by hand:
+    </p>
+    <div class="field-list">
+      <div class="fbx-row header">
+        <span>Job</span>
+        <span>Form</span>
+        <span>Why</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Body tracking on</strong></span>
+        <span><code>_DCC.fbx</code></span>
+        <span>Raw baked-joint skeleton. A full-body solve has no Control Rig to export.</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Face solves</strong><br />(Mono face-only, Stereo, Audio)</span>
+        <span><code>_CR.fbx</code></span>
+        <span>The animator-editable Face Control Rig. A dense baked <em>face</em> FBX is intentionally never produced.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      The type suffix is always appended, so the two forms can never collide as <code>&lt;Name&gt;.fbx</code>.
+      Control Rig bakes write one key per frame on every channel and Epic's own FBX exporter has no
+      key-reduction option, so there is a setting to thin the bake first — it drops keys that do not
+      meaningfully change the curve and refits tangents, shrinking the file with minimal visual
+      difference.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">FBX folder layout</h2>
+    <p class="section-desc">
+      FBX files go to a folder on disk, not into the project. The default is
+      <code>&lt;ProjectSaved&gt;/MHAManager/Exports</code>; <strong>Open Export Folder</strong> in the
+      toolbar opens whatever it is currently set to. Three layouts:
+    </p>
+    <div class="field-list">
+      <div class="fbx-row header">
+        <span>Layout</span>
+        <span>Structure</span>
+        <span>Notes</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Per Take</strong></span>
+        <span><code>&lt;Take&gt;/</code></span>
+        <span>Default. A subfolder named after the source Capture Data's folder.</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Actor / Part</strong></span>
+        <span><code>&lt;Actor&gt;/Face|Body/</code></span>
+        <span>Actor parsed from the <code>Imports/&lt;Actor&gt;/</code> path; falls back to the take folder when there is no actor segment, so takes still cannot overwrite each other.</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Flat</strong></span>
+        <span>(no subfolders)</span>
+        <span>Everything in one folder. Deliberately never the default — a multi-take batch dumping every FBX together is the worst surprise.</span>
+      </div>
+    </div>
+    <div class="code-block">
+      <pre><code>{`<ProjectSaved>/MHAManager/Exports/
+  Aaron_Take01/
+    Aaron_Take01_CR.fbx        face Control Rig
+    Aaron_Take01.wav           take audio, one per job
+
+  MonoBody_Take02/             body job, Both skeleton modes
+    Performer/
+      MonoBody_Take02_Performer_DCC.fbx
+    Retarget/
+      MonoBody_Take02_Retarget_DCC.fbx
+    MonoBody_Take02.wav`}</code></pre>
+    </div>
+    <p class="section-desc">
+      The take audio carries no type suffix and no per-pass subfolder — one WAV serves every FBX in
+      the job.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Body export skeleton modes</h2>
+    <p class="section-desc">
+      Body-tracking jobs choose which skeleton the body animation is delivered on:
+    </p>
+    <div class="field-list">
+      <div class="fbx-row header">
+        <span>Mode</span>
+        <span>Output</span>
+        <span>Notes</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Performer Skeleton</strong></span>
+        <span>One pass</span>
+        <span>The performer's own proportions, straight out of the engine's flow.</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Existing Skeleton</strong></span>
+        <span>One pass</span>
+        <span>Retargeted onto a skeleton you pick, via an IK retargeter. Pre-filled with the engine's own defaults; auto-created retargeter assets land in their own content folder.</span>
+      </div>
+      <div class="fbx-row">
+        <span><strong>Both</strong></span>
+        <span>Two passes</span>
+        <span>Runs both in the same job and tolerates either pass failing alone. Outputs are labelled <code>_Performer</code> and <code>_Retarget</code>.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      Body animation can also be registered as compatible with the MetaHuman base skeleton, so a
+      body AnimSequence plays back on a MetaHuman rig without a manual compatibility step.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Where the settings live</h2>
+    <p class="section-desc">
+      All of the above is configured under <strong>Export</strong> and <strong>Output</strong> in
+      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a>. Frame range, body
+      tracking, and the other per-take choices are in
+      <a href="/marketplace/mha-manager/docs/job-options">Per-Job Options</a>. Exported paths and
+      states are recorded per job in the
+      <a href="/marketplace/mha-manager/docs/manifests">manifest</a>.
+    </p>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+  .section-desc em { color: var(--text); font-style: italic; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .out-row, .fbx-row {
+    display: grid;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .out-row { grid-template-columns: 1.1fr 0.7fr 2.4fr; }
+  .fbx-row { grid-template-columns: 1fr 0.8fr 2.4fr; }
+
+  .out-row:last-child, .fbx-row:last-child { border-bottom: none; }
+
+  .out-row.header, .fbx-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .out-row strong, .fbx-row strong { color: var(--text); font-weight: 500; }
+  .fbx-row em { font-style: italic; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .code-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 16px 0 12px;
+  }
+
+  .code-block pre { margin: 0; }
+
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #c9d1d9;
+    line-height: 1.75;
+    white-space: pre;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+
+  .callout-note { background: var(--bg-surface); border-color: var(--border); }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 760px) {
+    .out-row, .fbx-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
