@@ -1,0 +1,260 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Take Naming & Actor Layout — MHA Manager"
+  description="How folder and take names decide a job's type, and why the Imports/<Actor>/<Take> layout is what makes stereo discovery work."
+  currentSlug="take-naming"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Take Naming &amp; Actor Layout</h1>
+    <p class="doc-lead">
+      The plugin reads two things off your folder structure: what <em>kind</em> of take this is, and
+      which <em>actor</em> it belongs to. Get the layout right once and stereo takes find their own
+      calibration and identity; get it wrong and takes queue as the wrong job type or block waiting
+      for assets that are sitting right there.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">The layout</h2>
+    <p class="section-desc">
+      Capture Manager ingest lays takes out one folder per actor, one folder per take:
+    </p>
+    <div class="code-block">
+      <pre><code>{`/Game/.../Imports/
+  Aaron/
+    Aaron_Calib_Grid/       -> Stereo Calibration
+    Aaron_Identity_DNA/     -> Identity Create
+    Aaron_Take01/           -> Stereo performance
+    Aaron_Take02/
+  Bea/
+    Bea_Calib_Grid/
+    ...`}</code></pre>
+    </div>
+    <p class="section-desc">
+      The <code>Imports/&lt;Actor&gt;/</code> segment is what the plugin parses to get an actor name.
+      Calibration and identity discovery is <strong>scoped to that actor's folders</strong>, so
+      Aaron's takes can never pick up Bea's calibration. A take that sits outside an Imports layout
+      has no actor, and actor-scoped discovery cannot see it — mono and audio jobs do not care, but
+      a stereo take there will never find its parents.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Name tokens decide the job type</h2>
+    <p class="section-desc">
+      New stereo takes are classified by matching their package path against wildcard patterns,
+      case-insensitively. Calibration patterns win when both match:
+    </p>
+    <div class="field-list">
+      <div class="tok-row header">
+        <span>Tokens</span>
+        <span>Job type</span>
+      </div>
+      <div class="tok-row">
+        <span><code>*grid*</code>, <code>*calibration*</code>, <code>*calib*</code></span>
+        <span>Stereo Calibration</span>
+      </div>
+      <div class="tok-row">
+        <span><code>*identity*</code>, <code>*dna*</code></span>
+        <span>Identity Create</span>
+      </div>
+      <div class="tok-row">
+        <span>anything else</span>
+        <span>Stereo performance</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      The patterns are editable under <strong>Ingest</strong> in
+      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a>, and the whole
+      behavior can be turned off — with auto-categorization disabled, every stereo take queues as a
+      performance job and you set the two preflight types by hand.
+    </p>
+    <div class="callout callout-tip">
+      Tokens are required only for <strong>stereo</strong> takes. Mono and audio takes need none —
+      their type comes from the asset itself, and they never wait on a calibration or identity.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">The failure this prevents</h2>
+    <p class="section-desc">
+      An actor's grid take <em>must</em> carry a calibration token and their identity take an
+      identity token. Miss them and both fall through to ordinary performance jobs — which means no
+      CameraCalibration and no MetaHuman Identity is ever produced, and every stereo performance for
+      that actor blocks as <code>MissingCalibration</code> or <code>MissingIdentity</code>. The queue
+      looks stuck for no visible reason; the cause is two folder names.
+    </p>
+    <div class="callout callout-warn">
+      The mirror-image mistake is worse because it runs: those same tokens in a
+      <strong>performance</strong> take's name or folder will misclassify it. A take called
+      <code>Aaron_Calibration_Test01</code> queues as a checkerboard solve and fails on footage that
+      has no board in it. Keep <code>grid</code>, <code>calib</code>, <code>identity</code>, and
+      <code>dna</code> out of names that are not those take types — including parent folder names,
+      which are part of the matched path.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Fixing a bad layout</h2>
+    <p class="section-desc">
+      Renaming or moving Capture Data in the Content Browser is safe: the plugin's own rename leaves
+      a redirector behind and updates any queued job pointing at the old path in place. It never
+      overwrites an existing asset.
+    </p>
+    <p class="section-desc">
+      From a script or an MCP client, <code>list_capture_data</code> reports every take with the
+      actor it resolves to — an empty actor is the tell that a take sits outside an Imports layout —
+      and <code>rename_capture_data</code> performs the fix. See
+      <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP Toolset</a>.
+    </p>
+    <p class="section-desc">
+      After any rename, re-run validation so blocked jobs recompute against the new paths:
+      <code>validate_queue</code> does it in one call.
+    </p>
+    <div class="callout callout-note">
+      The <code>mha-organize-takes</code> skill automates all of this — inventory, classification
+      lint, and a proposed rename plan for raw footage on disk or Capture Data already in the
+      project, read-only until you approve it. See
+      <a href="/marketplace/mha-manager/docs/claude-skills">Claude Skills</a>.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Naming raw footage before ingest</h2>
+    <p class="section-desc">
+      The layout is easiest to get right before the footage is in the project at all. If your stage
+      lays footage out differently — an extra session level, say — the external-footage scan can be
+      taught that layout with a schema file rather than reorganizing the disk. See
+      <a href="/marketplace/mha-manager/docs/add-jobs">Add Jobs Dialog</a>.
+    </p>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead em { color: var(--text); font-style: italic; }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+  .section-desc em { color: var(--text); font-style: italic; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .tok-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: center;
+    line-height: 1.55;
+  }
+
+  .tok-row:last-child { border-bottom: none; }
+
+  .tok-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .code-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+  }
+
+  .code-block pre { margin: 0; }
+
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #c9d1d9;
+    line-height: 1.75;
+    white-space: pre;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+
+  .callout-tip  { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+  .callout-warn { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout-note { background: var(--bg-surface); border-color: var(--border); }
+  .callout strong { color: var(--text); font-weight: 600; }
+  .callout em { color: var(--text); font-style: italic; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .tok-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

@@ -3,17 +3,18 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 ---
 
 <DocsLayout
-  title="Manifest Format — MHA Manager"
-  description="The .mhajson manifest schema — saving, loading, and sharing batch queues."
+  title="Manifests & Batch Assets — MHA Manager"
+  description="The .mhajson manifest schema, and batch assets - the same queue captured as a content-tree asset that commits with the project."
   currentSlug="manifests"
 >
 
   <div class="doc-header">
-    <h1 class="doc-title">Manifest Format</h1>
+    <h1 class="doc-title">Manifests &amp; Batch Assets</h1>
     <p class="doc-lead">
       A manifest is a <code>.mhajson</code> file that captures the complete state of a batch queue —
       global settings, every job and its options, and the artifact records written after processing.
-      Manifests auto-save on completion and can be exported, shared, and reloaded.
+      Manifests auto-save on completion and can be exported, shared, and reloaded. The same state can
+      also be saved as a <a href="#batch-assets">batch asset</a> that lives in the project.
     </p>
   </div>
 
@@ -252,6 +253,54 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     </div>
   </section>
 
+  <section class="doc-section" id="batch-assets">
+    <h2 class="section-title">Batch assets</h2>
+    <p class="section-desc">
+      A <strong>batch asset</strong> is the same data wearing a different coat: the recipe (global
+      settings plus every job definition) and whatever the last run produced, captured as an asset in
+      the content tree instead of a file under <code>Saved/</code>.
+    </p>
+    <p class="section-desc">
+      It does not replace the manifest. The <code>.mhajson</code> file stays the persistence layer —
+      crash-recovery autosave, worker subprocess IPC, and MCP polling all run on it. The asset is the
+      <em>shareable</em> face of the same state: it lives in <code>/Game</code>, so it commits to
+      source control, diffs, and travels with the project. That is what puts a job's provenance — a
+      Wwise sound id and its event, say — next to the Performance it produced, instead of in a
+      gitignored file on one machine.
+    </p>
+    <div class="field-list" style="margin-bottom:14px;">
+      <div class="field-row header">
+        <span>Action</span>
+        <span>Where</span>
+        <span>What it does</span>
+      </div>
+      <div class="field-row">
+        <span><strong>Save Queue As Batch Asset...</strong></span>
+        <span>Batch Asset menu</span>
+        <span>Writes the whole queue and its global settings to a new asset in the Content Browser.</span>
+      </div>
+      <div class="field-row">
+        <span><strong>Save Batch Asset</strong></span>
+        <span>Batch Asset menu</span>
+        <span>Writes the queue back to the asset it was loaded from. Enabled only while there are unsaved changes.</span>
+      </div>
+      <div class="field-row">
+        <span><strong>Load Queue From Batch Asset...</strong></span>
+        <span>Batch Asset menu</span>
+        <span>Replaces the current queue <em>and</em> global settings with a saved asset. Unavailable while a batch is running.</span>
+      </div>
+    </div>
+    <p class="section-desc">
+      Once a queue is linked to an asset, the toolbar button shows its name, with a trailing
+      <code>*</code> for unsaved changes — the same convention the rest of the editor uses. Batch
+      assets are editor-only and never cook into a build.
+    </p>
+    <div class="callout callout-note">
+      Use a manifest for machine-to-machine handoff and automation; use a batch asset when a queue is
+      part of the project — a shot's standing setup that everyone should get on checkout.
+    </div>
+  </section>
+
   <section class="doc-section">
     <h2 class="section-title">Sharing manifests across machines</h2>
     <p class="section-desc">
@@ -262,7 +311,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <ul class="check-list">
       <li>All referenced Capture Data, Identity, and Calibration assets exist at the same content paths</li>
       <li>The output path in Settings points to a valid location for the receiving machine</li>
-      <li>The same engine plugin versions are installed (manifests do not store plugin version info)</li>
+      <li>The same engine plugin versions are installed — the manifest records the MHA Manager version that wrote it, but not the engine plugins it depended on</li>
     </ul>
   </section>
 
@@ -362,6 +411,30 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   }
 
   .field-row:last-child { border-bottom: none; }
+
+  .field-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .field-row strong { color: var(--text); font-weight: 500; }
+  .field-row em { font-style: italic; }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+  }
+
+  .callout strong { color: var(--text); font-weight: 600; }
 
   .field-name code {
     font-family: var(--font-mono);

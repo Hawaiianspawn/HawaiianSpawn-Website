@@ -1,0 +1,223 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Per-Take Overrides — MHA Manager"
+  description="Options and decisions that stick to a take rather than a job, so clearing the queue does not throw away work."
+  currentSlug="take-overrides"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Per-Take Overrides</h1>
+    <p class="doc-lead">
+      Jobs are disposable — Clear Queue drops them, and with them everything the pipeline worked out
+      about a take. Some of that is worth keeping. The plugin keeps a second record keyed by
+      <em>take</em> instead of by job, so the tuning you did and the calls you made outlive the jobs
+      that ran on them.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">Two files, two lifecycles</h2>
+    <div class="field-list">
+      <div class="store-row header">
+        <span>File</span>
+        <span>Holds</span>
+        <span>Losing it costs</span>
+      </div>
+      <div class="store-row">
+        <span><code>MHAManager/Takes.json</code><br /><strong>committed</strong></span>
+        <span>Provenance you were told and decisions a human made: actor and slate, source footage path, Wwise ids, accepted calibrations, per-take option overrides, notes, and your own custom ids.</span>
+        <span>Real work. None of it can be recomputed.</span>
+      </div>
+      <div class="store-row">
+        <span><code>Saved/MHAManager/takecache.json</code><br /><strong>gitignored</strong></span>
+        <span>Everything derivable from the project: framing verdict, frame count, discovered calibration and identity, solve quality numbers, and the artifacts of the last run.</span>
+        <span>Time only. Delete it freely.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      The durable file sits <strong>outside</strong> <code>Saved/</code> on purpose — it is meant to
+      be committed with the project and travel to the rest of the team. Disk paths inside the project
+      are stored relative to it, so a record still matches on someone else's machine, drive letter,
+      or checkout location.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Overrides are a sparse diff</h2>
+    <p class="section-desc">
+      When you edit a job's options, what gets recorded against the take is <strong>only the fields
+      that differ</strong> from its category template — the Mono, Stereo, or Audio defaults in
+      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a>. One character
+      exported as a single mesh while the studio default stays split records exactly that one field.
+    </p>
+    <p class="section-desc">
+      That sparseness is the whole point. A full copy would pin every unrelated option to whatever
+      the template happened to say the day you touched the take, and later changes to your global
+      defaults would quietly stop reaching it. With a diff, a take keeps tracking the defaults for
+      everything you never customized.
+    </p>
+    <p class="section-desc">
+      Re-adding a take seeds the job from the current category template first, then lays the recorded
+      fields on top. Delete the take's entry and it reverts fully to the defaults.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">What comes back when a take is re-added</h2>
+    <div class="field-list">
+      <div class="restore-row header">
+        <span>Restored</span>
+        <span>Source</span>
+        <span>Behavior</span>
+      </div>
+      <div class="restore-row">
+        <span><strong>Option overrides</strong></span>
+        <span>Durable</span>
+        <span>Applied on top of the category template, field by field.</span>
+      </div>
+      <div class="restore-row">
+        <span><strong>Accepted calibration</strong></span>
+        <span>Durable</span>
+        <span>Your "Accept Anyway" on the diagnostics gate. It has to survive a queue clear, or the gate re-trips on a take you already signed off.</span>
+      </div>
+      <div class="restore-row">
+        <span><strong>Framing verdict</strong></span>
+        <span>Cache</span>
+        <span>The expensive one — a hit skips rendering a probe frame and running inference again.</span>
+      </div>
+      <div class="restore-row">
+        <span><strong>Discovered identity</strong></span>
+        <span>Cache</span>
+        <span>A hint only. Preflight re-validates it and falls back to the full folder walk if stale, so a deleted or renamed asset costs a slow path, never a wrong one.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">How takes are identified</h2>
+    <p class="section-desc">
+      Records key on a take's stable identity, not on a job id:
+    </p>
+    <div class="field-list">
+      <div class="key-row header">
+        <span>Take</span>
+        <span>Key</span>
+      </div>
+      <div class="key-row">
+        <span>Footage</span>
+        <span>The Capture Data package path</span>
+      </div>
+      <div class="key-row">
+        <span>Wwise audio</span>
+        <span><code>wwise:&lt;object id&gt;</code> — so a re-transcode or a moved scratch WAV still lands on the same take</span>
+      </div>
+      <div class="key-row">
+        <span>Folder audio</span>
+        <span><code>wav:&lt;absolute path&gt;</code></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Related</h2>
+    <p class="section-desc">
+      <a href="/marketplace/mha-manager/docs/job-options">Per-Job Options</a> covers what you can
+      actually change per take. The queue itself — jobs, statuses, artifacts — persists separately
+      as a <a href="/marketplace/mha-manager/docs/manifests">manifest or batch asset</a>.
+    </p>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead em { color: var(--text); font-style: italic; }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .store-row, .restore-row, .key-row {
+    display: grid;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .store-row   { grid-template-columns: 1.2fr 2.2fr 1fr; }
+  .restore-row { grid-template-columns: 1fr 0.6fr 2.4fr; }
+  .key-row     { grid-template-columns: 0.8fr 3fr; }
+
+  .store-row:last-child, .restore-row:last-child, .key-row:last-child { border-bottom: none; }
+
+  .store-row.header, .restore-row.header, .key-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .store-row strong, .restore-row strong { color: var(--text); font-weight: 500; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 760px) {
+    .store-row, .restore-row, .key-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

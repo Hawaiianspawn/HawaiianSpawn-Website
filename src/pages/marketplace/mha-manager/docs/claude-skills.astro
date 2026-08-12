@@ -1,0 +1,208 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Claude Skills — MHA Manager"
+  description="Three Claude Code skills ship with the plugin: MCP setup, pipeline guidance and job diagnosis, and take organization."
+  currentSlug="claude-skills"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Claude Skills</h1>
+    <p class="doc-lead">
+      The plugin ships three <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer">Claude Code</a>
+      skills alongside its source. They turn the <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP
+      toolset</a> from a list of function calls into guided workflows — connect the editor, ask why a
+      job is blocked, or reorganize a shoot's worth of takes before ingest.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">What ships</h2>
+    <div class="field-list">
+      <div class="skill-row header">
+        <span>Skill</span>
+        <span>Use it when</span>
+      </div>
+      <div class="skill-row">
+        <span><code>mha-setup</code></span>
+        <span>Connecting Claude Code to the editor for the first time, or the <code>unreal</code> MCP server is not responding. Walks the two Epic MCP plugins, autostart, the ImgMedia cache size, the Capture Manager / Live Link Hub connection, pointing Claude Code at the server, and verification.</span>
+      </div>
+      <div class="skill-row">
+        <span><code>mha-guide</code></span>
+        <span>Asking why a job is blocked, what a status means, how the stereo chain fits together, or what a setting does. Reads the live queue to diagnose rather than guessing from documentation.</span>
+      </div>
+      <div class="skill-row">
+        <span><code>mha-organize-takes</code></span>
+        <span>Raw takes need sorting before ingest, take names misclassify, or Capture Data landed in the wrong actor folder. Three modes: organize on disk, verify and fix the <code>/Game</code> layout after ingest, or both as one flow.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Installing them</h2>
+    <p class="section-desc">
+      The skills live in the plugin's <code>Skills/</code> folder. Copy the ones you want into a
+      skills directory Claude Code reads — per project, or per user:
+    </p>
+    <div class="code-block">
+      <pre><code>{`# per project - commits with the project, whole team gets them
+<YourProject>/.claude/skills/mha-setup/
+<YourProject>/.claude/skills/mha-guide/
+<YourProject>/.claude/skills/mha-organize-takes/
+
+# or per user - available in every project you open
+~/.claude/skills/mha-guide/`}</code></pre>
+    </div>
+    <p class="section-desc">
+      Copy the whole folder, not just the <code>SKILL.md</code> inside it — one of them ships a
+      helper script alongside its instructions. Claude Code picks skills up on the next session; the
+      plugin itself does not have to be running for a skill to be listed, only for it to do anything
+      useful.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">What they need</h2>
+    <div class="field-list">
+      <div class="req-row header">
+        <span>Requirement</span>
+        <span>Applies to</span>
+      </div>
+      <div class="req-row">
+        <span>Claude Code</span>
+        <span>All three.</span>
+      </div>
+      <div class="req-row">
+        <span>UE 5.8 and the MCP toolset connected</span>
+        <span><code>mha-guide</code>, and the editor and full-pipeline modes of <code>mha-organize-takes</code>. Run <code>mha-setup</code> first if the <code>unreal</code> server is missing — its disk-organizing mode is the exception and needs nothing but a folder.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">How they behave</h2>
+    <p class="section-desc">
+      Reads are free; writes ask first. The skills query the queue, classify takes, and lint a layout
+      without touching anything, then present a plan and stop. Nothing is moved, renamed, queued, or
+      started until you approve it in that session — so "show me what's wrong with this shoot" is a
+      safe thing to ask.
+    </p>
+    <p class="section-desc">
+      Everything they do is available directly through the
+      <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP tools</a>; the skills add the
+      pipeline's rules, the order to apply them in, and the guardrails. The classification rules
+      <code>mha-organize-takes</code> enforces are the same ones documented under
+      <a href="/marketplace/mha-manager/docs/take-naming">Take Naming &amp; Actor Layout</a>.
+    </p>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .skill-row, .req-row {
+    display: grid;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .skill-row { grid-template-columns: 0.8fr 3fr; }
+  .req-row   { grid-template-columns: 1fr 2.4fr; }
+
+  .skill-row:last-child, .req-row:last-child { border-bottom: none; }
+
+  .skill-row.header, .req-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .code-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+  }
+
+  .code-block pre { margin: 0; }
+
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #c9d1d9;
+    line-height: 1.75;
+    white-space: pre;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .skill-row, .req-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
