@@ -1,0 +1,460 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Calibration Quality Gates — MHA Manager"
+  description="How MHA Manager judges a stereo calibration: out-of-sample validation RMS at solve time, the footage diagnostics gate at preflight, and what to do when a job pauses as Poor Calibration."
+  currentSlug="calibration-quality"
+>
+
+  <div class="doc-header">
+    <span class="type-badge type-stereo">Stereo</span>
+    <h1 class="doc-title">Calibration Quality Gates</h1>
+    <p class="doc-lead">
+      Depth is reconstructed <em>from</em> the camera calibration, so a bad calibration poisons the
+      depth and every solve built on it — quietly, and without ever failing outright. Two gates sit
+      upstream of processing to catch that: one when the calibration is solved, one when a take is
+      about to consume it. Neither gate deletes anything. Both pause and wait for you.
+    </p>
+  </div>
+
+  <section class="type-section">
+    <h2 class="sub-heading">Where the gates sit</h2>
+    <div class="fork">
+      <div class="fork-branches">
+        <div class="fork-branch">
+          <span class="branch-tag">Calibrate</span>
+          <div class="pipeline">
+            <div class="pipeline-stage"><span class="stage-name">Detect Corners</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage"><span class="stage-name">Select Frames</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage"><span class="stage-name">Solve</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage gate"><span class="stage-name">Gate 1</span><span class="stage-note">Validation RMS</span></div>
+          </div>
+        </div>
+        <div class="lane-drop"><span class="drop-arrow">&#8595;</span></div>
+        <div class="fork-branch">
+          <span class="branch-tag">Then a take</span>
+          <div class="pipeline">
+            <div class="pipeline-stage"><span class="stage-name">Preflight</span><span class="stage-note">discover calibration</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage gate"><span class="stage-name">Gate 2</span><span class="stage-note">Footage diagnostics</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage"><span class="stage-name">Generate Depth</span></div>
+            <div class="pipeline-arrow">-&gt;</div>
+            <div class="pipeline-stage"><span class="stage-name">Solve + Export</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="type-desc">
+      Gate 1 judges the calibration <strong>on its own terms</strong>: is this a self-consistent solve
+      of the checkerboard take? Gate 2 judges it <strong>against the take that wants to use it</strong>:
+      does this calibration actually describe the two cameras as they were when <em>this</em> footage
+      was shot? A calibration can pass the first and fail the second — that is the whole point of
+      having both.
+    </p>
+  </section>
+
+  <section class="type-section">
+    <h2 class="section-title">Gate 1 — Out-of-sample validation RMS</h2>
+    <p class="type-desc">
+      When a Calibration job finishes, the solve is scored on frames it was <strong>not</strong> solved
+      from. Its own solve error is not used for the verdict: a calibration built from a handful of
+      convenient frames can drive its training error down while describing the rig badly, so ranking by
+      training error rewards exactly the overfit solves the gate exists to catch. Out-of-sample error
+      does not have that blind spot.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Max RMS Error (px)<br /><span class="opt-default">Default 1.0</span></span>
+        <span class="option-desc">
+          Upper bound on validation reprojection error, in pixels. Above it, the calibration is set
+          aside and the job pauses as <strong>Poor Calibration</strong>. This is our convention — Epic
+          ships no equivalent default.
+        </span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      <strong>Reading the number.</strong> Healthy solves cluster tightly: on a reference HMC rig,
+      downstream quality was <em>flat</em> across validation RMS 0.6–1.1 px — depth coverage and solve
+      jitter were indistinguishable between them. Quality falls off a knee above that, and by 2.4 px the
+      damage is plain (noticeably lower depth coverage, markedly worse jitter, depth scale drifting off
+      true). Treat anything past roughly 2.4 as a failed solve to be reshot or re-selected, not tuned
+      around. Because the healthy band is flat, chasing a lower RMS below ~1.0 buys nothing; a gate at
+      0.5 would reject even a good rig's best achievable solve.
+    </div>
+    <div class="callout callout-note">
+      <strong>A bad calibration never fails loudly.</strong> Even a deliberately overfit solve completes,
+      exports, and produces animation. Quality decays gradually rather than breaking, which is why the
+      gate is the only place a poor calibration gets stopped — there is no downstream error to catch it.
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="section-title">Gate 2 — The footage diagnostics gate</h2>
+    <p class="type-desc">
+      Before a stereo performance take generates depth, the calibration it discovered is scored against
+      a sample of that take's <strong>own footage</strong> on Epic's 0–1 diagnostics scale. The check runs
+      at preflight, ahead of depth generation, and its result is cached for the session.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Min Score<br /><span class="opt-default">Default 0.5</span></span>
+        <span class="option-desc">
+          Minimum diagnostics score for the discovered calibration on this take. Below it, the take
+          pauses as <strong>Poor Calibration</strong> before any depth is generated.
+        </span>
+      </div>
+    </div>
+    <p class="type-desc">
+      This score is a <strong>structural</strong> check, not a quality ranking. It answers one question:
+      can this calibration relate the two camera views of this footage at all? It reliably catches
+      calibrations that are structurally wrong — a wrong-route or broken solve scores around 0.2 — but it
+      cannot tell a good calibration from a slightly worse one, and will happily score a mediocre solve a
+      hair above a better one. Leave it as a safety net; tightening it will not buy finer discrimination,
+      it will only start rejecting healthy takes.
+    </p>
+    <h3 class="sub-heading">What a low score actually means</h3>
+    <ul class="bullet-list">
+      <li><strong>The wrong grid take.</strong> The discovered calibration belongs to a different rig configuration or a different shoot day than this take.</li>
+      <li><strong>The cameras moved.</strong> The HMC was adjusted, knocked, or re-mounted between the calibration take and this performance — the solved geometry no longer describes the rig.</li>
+      <li><strong>The wrong actor folder.</strong> Discovery walked up into a shared parent and found a neighbouring actor's calibration. Keeping each shoot under one actor folder prevents this.</li>
+      <li><strong>No stereo features matched at all.</strong> A distinct message from a merely low score — usually swapped or mismatched camera views, or footage the calibration cannot possibly correspond to.</li>
+    </ul>
+    <div class="callout callout-note">
+      If the diagnostics check cannot run in your environment, it does not block: the job logs that the
+      check was skipped and proceeds. The gate is only ever a reason to pause, never a reason to fail.
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="section-title">When a job pauses</h2>
+    <p class="type-desc">
+      Both gates produce the same blocked status — <strong>Poor Calibration</strong> — but from different
+      places, and they clear differently:
+    </p>
+    <div class="tier-table">
+      <div class="blk-row header"><span>Flavor</span><span>What happened, and how it clears</span></div>
+      <div class="blk-row">
+        <span><strong>Over-threshold solve</strong><br /><span class="flavor-note">Calibration job</span></span>
+        <span>
+          The calibration solved but exceeded Max RMS Error. The asset is <strong>unlinked from the take
+          and added to the rejected list</strong>, and its artifact is marked Partial. The job's status
+          message reports both the solve and validation RMS against the threshold. Clears by
+          <strong>Accept Calibration Anyway</strong> — which relinks the asset, marks the job Done and
+          wakes its dependents — or by a better re-solve, which un-rejects the path automatically.
+        </span>
+      </div>
+      <div class="blk-row">
+        <span><strong>Footage mismatch</strong><br /><span class="flavor-note">Performance take</span></span>
+        <span>
+          The discovered calibration scored below Min Score on this take's footage. Nothing is rejected —
+          the calibration may be perfectly good for other takes. Clears by linking a different
+          calibration, re-running calibration (the take requeues automatically once a better one exists),
+          or <strong>Accept Calibration Anyway</strong>, which records the decision on the take and lets
+          it proceed with the calibration it already has.
+        </span>
+      </div>
+    </div>
+    <div class="callout callout-note">
+      <strong>Dependent jobs wait rather than consume a suspect solve.</strong> A paused calibration does
+      not release its takes, and a rejected calibration is <strong>invisible to every discovery lookup</strong> —
+      already-linked, capture parent folder, take folder, sibling takes, and one level up all skip it. The
+      queue keeps running everything else; the blocked takes requeue on their own the moment a trustworthy
+      calibration appears.
+    </div>
+    <p class="type-desc">
+      Accept Anyway is available from the queue's right-click menu whenever a selected job is paused on
+      quality, and accepts multiple selected jobs at once. It is a deliberate override, recorded durably —
+      the accepted decision survives requeues and reaches subprocess workers.
+    </p>
+  </section>
+
+  <section class="type-section">
+    <h2 class="section-title">Board override and presets</h2>
+    <p class="type-desc">
+      Most quality failures are really detection failures: the board dimensions were wrong, so the frames
+      that survived selection were the ones that happened to fit a wrong model. By default the plugin
+      assumes Epic's shipped board — <strong>11 x 16 squares at 0.75 cm</strong>, measured in squares, not
+      inner corners — and auto-detects the pattern per take.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Override Default Board<br /><span class="opt-default">Default off</span></span>
+        <span class="option-desc">
+          Turn on for a non-Epic board. Your board width, height, and square size are then pinned
+          verbatim — only those dimensions and their swapped orientation are tried, and auto-detection
+          never writes back over them.
+        </span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Square Size (cm)</span>
+        <span class="option-desc">
+          <strong>Inert unless the override is on</strong> — with it off, Epic's 0.75 cm is assumed
+          regardless of what the field shows. Square size cannot be measured from footage, and a wrong
+          value silently scales the stereo baseline and therefore all reconstructed depth, so measure your
+          printed board rather than trusting the spec sheet.
+        </span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Board presets</span>
+        <span class="option-desc">
+          Save a named board (dimensions plus square size) from the <strong>Generate Stereo Calibration</strong>
+          dialog and switch between them per shoot. The preset section appears only while the override is
+          on. No presets ship by default — a new one starts at Epic's board.
+        </span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      Symptoms that point at the board rather than the gates: calibration that scans forever and produces
+      nothing (wrong dimensions, nothing detects), or a clean-looking solve whose depth comes out at
+      visibly the wrong scale (wrong square size).
+    </div>
+  </section>
+
+  <section class="type-section">
+    <h2 class="sub-heading">Related</h2>
+    <ul class="bullet-list">
+      <li><a href="/marketplace/mha-manager/docs/global-settings">Global Settings -&gt; Stereo Calibration</a> — every calibration setting with its default, including the two gate thresholds.</li>
+      <li><a href="/marketplace/mha-manager/docs/stereo-workflow#calibration-identity">Stereo Workflow</a> — the calibration -&gt; identity -&gt; performance chain and the other blocked states.</li>
+      <li><a href="/marketplace/mha-manager/docs/troubleshooting">Troubleshooting</a> — stuck, blocked, and failing jobs.</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .type-stereo { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead strong, .type-desc strong { color: var(--text); font-weight: 500; }
+  .doc-lead code, .type-desc code, .callout code, .blk-row code, .bullet-list code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  .type-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .type-section:last-of-type { border-bottom: none; }
+
+  .type-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 640px;
+    margin-bottom: 16px;
+  }
+
+  .sub-heading {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    margin: 24px 0 10px;
+  }
+  .sub-heading:first-child { margin-top: 0; }
+
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .tier-table {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+
+  .blk-row {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+  .blk-row:last-child { border-bottom: none; }
+
+  .blk-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .blk-row strong { color: var(--text); font-weight: 500; }
+
+  .flavor-note {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 12px;
+  }
+
+  .pipeline-stage {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stage-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+  .stage-note { font-size: 0.7rem; color: var(--accent); }
+  .pipeline-arrow { color: var(--text-muted); font-size: 0.9rem; font-family: var(--font-mono); }
+
+  .pipeline-stage.gate {
+    border-color: color-mix(in srgb, #f0a500 45%, transparent);
+    background: color-mix(in srgb, #f0a500 9%, transparent);
+  }
+  .pipeline-stage.gate .stage-name,
+  .pipeline-stage.gate .stage-note { color: #f0a500; }
+
+  .fork {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 4px 0 12px;
+    flex-wrap: wrap;
+  }
+
+  .fork-branches {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-left: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    padding-left: 16px;
+  }
+
+  .fork-branch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .branch-tag {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 74px;
+  }
+
+  .lane-drop {
+    padding-left: 84px;
+    line-height: 1;
+  }
+
+  .drop-arrow {
+    color: var(--accent);
+    font-size: 1.3rem;
+  }
+
+  .option-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .option-row {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 20px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .option-row:last-child { border-bottom: none; }
+  .option-name { font-weight: 600; color: var(--text); font-size: 0.825rem; line-height: 1.5; }
+  .option-desc { color: var(--text-muted); line-height: 1.55; }
+  .option-desc strong { color: var(--text); font-weight: 500; }
+  .opt-default {
+    font-weight: 400;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .bullet-list {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+  }
+  .bullet-list li { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; padding-left: 4px; }
+  .bullet-list li strong { color: var(--text); font-weight: 500; }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 16px 0 0;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+  .callout-tip  { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+  .callout-note { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout strong { color: var(--text); font-weight: 600; }
+  .callout code { color: var(--accent); }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .blk-row { grid-template-columns: 1fr; gap: 4px; }
+    .option-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
