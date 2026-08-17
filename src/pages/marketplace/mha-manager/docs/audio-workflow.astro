@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '../../../../layouts/DocsLayout.astro';
+import DocFigure from '../../../../components/DocFigure.astro';
 ---
 
 <DocsLayout
@@ -17,6 +18,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       capture footage exists.
     </p>
   </div>
+
+  <DocFigure
+    src="/assets/docs/mha/audio-batch.webp"
+    alt="Four Audio jobs in the queue, typed Face / Auto Detect, running through Tracking to Done with waveform thumbnails"
+    caption="An audio batch — one job per voice track, no footage or identity needed"
+  />
 
   <section class="type-section">
     <h2 class="sub-heading">Pipeline stages</h2>

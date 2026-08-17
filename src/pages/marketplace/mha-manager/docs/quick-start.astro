@@ -77,9 +77,14 @@ import DocFigure from '../../../../components/DocFigure.astro';
           requires.
         </p>
         <DocFigure
-          src="/assets/docs/mha/qs-job-configured.webp"
-          alt="The MHA Manager queue with the Add Jobs and Start Batch controls and Job Settings panel"
-          caption="A configured job — capture data assigned, type classified automatically"
+          src="/assets/docs/mha/qs-add-jobs.webp"
+          alt="Clicking Add Jobs, picking a Capture Data asset in the dialog, and the new job row appearing in the queue with Start Batch enabled"
+          caption="Add Jobs — pick capture data and the job lands in the queue, type already classified"
+        />
+        <DocFigure
+          src="/assets/docs/mha/qs-auto-categorization.webp"
+          alt="Two Mono jobs in the queue: the second job's Type column changing from Unknown to Face as classification completes"
+          caption="Auto-classification — the Type cell fills in on its own once the take is analysed"
         />
       </div>
     </div>
@@ -107,8 +112,8 @@ import DocFigure from '../../../../components/DocFigure.astro';
         </p>
         <DocFigure
           src="/assets/docs/mha/qs-batch-running.webp"
-          alt="A Mono job in the queue with status and progress columns as the batch starts"
-          caption="The batch running — per-job progress bar and live log output visible"
+          alt="Clicking Start Batch — the queued job moves from Pending through the pipeline stages with its progress bar filling"
+          caption="The batch running — status and per-job progress update live in the queue row"
         />
       </div>
     </div>
@@ -139,9 +144,9 @@ import DocFigure from '../../../../components/DocFigure.astro';
           </div>
         </div>
         <DocFigure
-          src="/assets/docs/mha/qs-content-browser-output.webp"
-          alt="Content Browser showing the output folder — Performance asset, AnimSequence, and LevelSequence visible"
-          caption="Generated assets in the Content Browser after a successful batch"
+          src="/assets/docs/mha/qs-find-outputs.webp"
+          alt="A completed job in the queue, the Content Browser output folder with Performance, AnimSequence and LevelSequence assets, and the exported take folder on disk"
+          caption="Generated assets in the Content Browser and on disk after a successful batch"
         />
       </div>
     </div>
