@@ -41,11 +41,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
       and every take Live Link Hub delivers is classified and queued automatically — capture in one
       window, watch jobs appear in the other.
     </p>
-    <DocFigure
-      src="/assets/docs/mha/llh-autoqueue-result.webp"
-      alt="Content Browser with newly ingested Capture Data assets beside the MHA Manager panel showing matching auto-queued job rows"
-      caption="With Auto-Queue on, takes ingested by Live Link Hub arrive as queued jobs on their own"
-    />
     <div class="callout callout-note">
       Live Link Hub is a separate Epic download and depends on the Live Link / Virtual Production
       plugins. See Epic's Live Link Hub and MetaHuman Animator capture documentation for device
@@ -142,6 +137,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       and classifies every take it finds. You check the ones to bring in, and the confirmed set is
       handed to Live Link Hub as ingest device requests.
     </p>
+    <DocFigure
+      src="/assets/docs/mha/ingest-add-jobs-external.webp"
+      alt="Add Jobs dialog on the External Footage source: footage root, fallback actor, schema and destination line, and the scanned take tree with Kind / Take / Actor columns"
+      caption="External Footage: the scanned tree groups takes by folder, with kind and actor per take"
+    />
     <div class="field-list">
       <div class="src-row header">
         <span>Take kind</span>
@@ -228,6 +228,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
       project and queue them the moment they appear in the Content Browser — no dialog needed:
     </p>
+    <DocFigure
+      src="/assets/docs/mha/ingest-autoqueue-settings.webp"
+      alt="Global Settings, Ingest section: Auto-Queue Ingested Takes, Auto-Start Batch on Ingest, and Watch Folder"
+      caption="The Ingest section of Global Settings"
+    />
     <div class="field-list">
       <div class="src-row header">
         <span>Setting</span>
@@ -258,6 +263,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <li>Mono takes get a first-frame framing probe that auto-enables body tracking when the whole body is in shot.</li>
       <li>Dependent assets (calibration, identity) are auto-discovered where the folder layout allows, so a stereo take lands ready or clearly marked for what it still needs.</li>
     </ul>
+    <DocFigure
+      src="/assets/docs/mha/ingest-autoqueue-result.webp"
+      alt="Job Queue after auto-queue: a MetaHumanGrid take typed Calibration and Done, two DNAPose takes typed Identity - one Failed, one blocked on Poor Calibration"
+      caption="Auto-queued stereo takes, typed by name: the grid take ran as Calibration, the DNAPose takes as Identity"
+    />
     <div class="callout callout-tip">
       Keep <code>grid</code>, <code>calib</code>, <code>identity</code>, and <code>dna</code> out of
       folder and take names that are <em>not</em> those take types — those tokens drive
