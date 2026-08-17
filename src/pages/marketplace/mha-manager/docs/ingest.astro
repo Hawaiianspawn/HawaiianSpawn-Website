@@ -178,19 +178,20 @@ import DocFigure from '../../../../components/DocFigure.astro';
   </section>
 
   <section class="doc-section">
-    <h2 class="section-title">Teaching the scan your layout</h2>
+    <h2 class="section-title">Describing your footage layout</h2>
     <p class="section-desc">
-      By default the scan assumes the take's parent folder is the actor and that footage is
-      <code>.mp4</code> or <code>.mov</code>. A stage whose footage is laid out differently can ship
-      the rules with the footage: drop a file named <code>MHAIngestSchema.json</code> at the scan
-      root and the dialog picks it up automatically, reporting which rules it used.
+      Out of the box, the scan assumes each take is a folder, its parent folder names the actor,
+      and footage is <code>.mp4</code> or <code>.mov</code>. If your stage lays footage out
+      differently, ship the rules alongside it: drop a file named
+      <code>MHAIngestSchema.json</code> at the footage root and the dialog picks it up
+      automatically, reporting which rules it used.
     </p>
     <div class="code-block">
       <pre><code>{`{
   "version": 1,
   "path_template": "{actor}/{session}/{take}",
   "video_extensions": ["mp4", "mov"],
-  "stereo_patterns": ["*_L", "*_R"]
+  "stereo_patterns": ["*_top", "*_bot"]
 }`}</code></pre>
     </div>
     <div class="field-list">
@@ -202,27 +203,28 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <div class="schema-row">
         <span><code>version</code></span>
         <span><code>1</code></span>
-        <span>Schema version. Anything other than 1 is refused and the built-in defaults are used, with a warning in the dialog.</span>
+        <span>Schema version. Anything other than <code>1</code> is refused; the built-in defaults are used and the dialog shows a warning.</span>
       </div>
       <div class="schema-row">
         <span><code>path_template</code></span>
         <span><code>{`{actor}/{take}`}</code></span>
-        <span>Matched from the <strong>end</strong>: <code>{`{take}`}</code> is the last segment and only <code>{`{actor}`}</code>'s distance from it counts. So <code>{`{actor}/{take}`}</code> means "the take's parent folder", at any depth, and an Actor/Session/Take stage ships <code>{`{actor}/{session}/{take}`}</code>. A template with no <code>{`{actor}`}</code> token sends every take to the fallback actor.</span>
+        <span>Matched from the <strong>end</strong> of the path: <code>{`{take}`}</code> is always the last folder, and only <code>{`{actor}`}</code>'s distance above it matters. <code>{`{actor}/{take}`}</code> therefore means "the take's parent folder", however deep the root is; an Actor / Session / Take stage ships <code>{`{actor}/{session}/{take}`}</code>. Leave <code>{`{actor}`}</code> out entirely and every take uses the dialog's fallback actor.</span>
       </div>
       <div class="schema-row">
         <span><code>video_extensions</code></span>
         <span><code>["mp4", "mov"]</code></span>
-        <span>Which files count as footage. A leading dot is optional and case does not matter.</span>
+        <span>Which file extensions count as footage. Leading dot optional, case ignored.</span>
       </div>
       <div class="schema-row">
         <span><code>stereo_patterns</code></span>
         <span>(empty)</span>
-        <span>Wildcards the two video base names in a folder must match for it to count as a stereo take. Empty accepts any two-video folder — the same rule the engine's own auto-discovery uses.</span>
+        <span>Wildcards that a folder's two video base names must match, one each, for the folder to count as a stereo take — e.g. <code>*_top</code> and <code>*_bot</code> for a top / bottom head-mounted rig. Case is ignored. Empty accepts any folder holding exactly two videos, the same rule the engine's own auto-discovery uses.</span>
       </div>
     </div>
     <div class="callout callout-tip">
-      Only the keys you include are overridden; everything else keeps its default. An unparseable
-      file falls back to the built-in defaults rather than failing the scan, and says so.
+      Only the keys you include are overridden; everything else keeps its default. A file that
+      cannot be parsed falls back to the built-in defaults instead of failing the scan, and the
+      dialog says so.
     </div>
   </section>
 
