@@ -268,11 +268,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <li>Mono takes get a first-frame framing probe that auto-enables body tracking when the whole body is in shot.</li>
       <li>Dependent assets (calibration, identity) are auto-discovered where the folder layout allows, so a stereo take lands ready or clearly marked for what it still needs.</li>
     </ul>
-    <DocFigure
-      src="/assets/docs/mha/ingest-autoqueue-result.webp"
-      alt="Job Queue after auto-queue: a MetaHumanGrid take typed Calibration and Done, two DNAPose takes typed Identity - one Failed, one blocked on Poor Calibration"
-      caption="Auto-queued stereo takes, typed by name: the grid take ran as Calibration, the DNAPose takes as Identity"
-    />
     <div class="callout callout-tip">
       Keep <code>grid</code>, <code>calib</code>, <code>identity</code>, and <code>dna</code> out of
       folder and take names that are <em>not</em> those take types — those tokens drive
