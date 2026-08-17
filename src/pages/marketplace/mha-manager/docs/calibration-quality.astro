@@ -134,6 +134,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
   <section class="type-section">
     <h2 class="section-title">When a job pauses</h2>
+    <DocFigure
+      src="/assets/docs/mha/ingest-autoqueue-result.webp"
+      alt="Job Queue: a MetaHumanGrid take typed Calibration and Done, two DNAPose takes typed Identity - one Failed, one blocked on Poor Calibration"
+      caption="A take paused on Poor Calibration — the queue keeps running everything else while it waits for a trustworthy solve"
+    />
     <p class="type-desc">
       Both gates produce the same blocked status — <strong>Poor Calibration</strong> — but from different
       places, and they clear differently:
@@ -168,11 +173,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
       queue keeps running everything else; the blocked takes requeue on their own the moment a trustworthy
       calibration appears.
     </div>
-    <DocFigure
-      src="/assets/docs/mha/ingest-autoqueue-result.webp"
-      alt="Job Queue: a MetaHumanGrid take typed Calibration and Done, two DNAPose takes typed Identity - one Failed, one blocked on Poor Calibration"
-      caption="A take paused on Poor Calibration — the queue keeps running everything else while it waits for a trustworthy solve"
-    />
     <p class="type-desc">
       Accept Anyway is available from the queue's right-click menu whenever a selected job is paused on
       quality, and accepts multiple selected jobs at once. It is a deliberate override, recorded durably —

@@ -22,6 +22,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
   <section class="doc-section">
     <h2 class="section-title">Live Link Hub</h2>
+    <DocFigure
+      src="/assets/docs/mha/llh-capture-manager.webp"
+      alt="Live Link Hub — Capture Manager view with takes selected, ingesting into the Unreal project"
+      caption="Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data"
+    />
     <p class="section-desc">
       <strong>Live Link Hub</strong> is Epic's first-party capture application and the recommended
       input for MHA Manager. It bundles Capture Manager: connect your capture source (Live Link Face
@@ -30,11 +35,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <code>UFootageCaptureData</code> asset under <code>/Game/CaptureManager/Imports/&lt;Actor&gt;/</code>
       — exactly what every job runs on, with no manual asset assembly.
     </p>
-    <DocFigure
-      src="/assets/docs/mha/llh-capture-manager.webp"
-      alt="Live Link Hub — Capture Manager view with takes selected, ingesting into the Unreal project"
-      caption="Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data"
-    />
     <p class="section-desc">
       Drive it from Live Link Hub's own window, or from the <strong>External Footage</strong> source
       of the Add Jobs dialog below. Either way, turn on <strong>Auto-Queue Ingested Takes</strong>
@@ -136,17 +136,17 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
   <section class="doc-section">
     <h2 class="section-title">External Footage (Live Link Hub)</h2>
+    <DocFigure
+      src="/assets/docs/mha/ingest-add-jobs-external.webp"
+      alt="Add Jobs dialog on the External Footage source: footage root, fallback actor, schema and destination line, and the scanned take tree with Kind / Take / Actor columns"
+      caption="External Footage: the scanned tree groups takes by folder, with kind and actor per take"
+    />
     <p class="section-desc">
       For footage that is not in the project yet. Point the dialog at a footage root on disk; it
       walks the folder itself — a plain filesystem scan, because Live Link Hub is not running yet —
       and classifies every take it finds. You check the ones to bring in, and the confirmed set is
       handed to Live Link Hub as ingest device requests.
     </p>
-    <DocFigure
-      src="/assets/docs/mha/ingest-add-jobs-external.webp"
-      alt="Add Jobs dialog on the External Footage source: footage root, fallback actor, schema and destination line, and the scanned take tree with Kind / Take / Actor columns"
-      caption="External Footage: the scanned tree groups takes by folder, with kind and actor per take"
-    />
     <div class="field-list">
       <div class="src-row header">
         <span>Take kind</span>
@@ -230,16 +230,16 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
   <section class="doc-section">
     <h2 class="section-title">Auto-queue on ingest</h2>
-    <p class="section-desc">
-      As takes arrive from Live Link Hub / Capture Manager, the <strong>Ingest</strong> section
-      of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
-      project and queue them the moment they appear in the Content Browser — no dialog needed:
-    </p>
     <DocFigure
       src="/assets/docs/mha/ingest-autoqueue-settings.webp"
       alt="Global Settings, Ingest section: Auto-Queue Ingested Takes, Auto-Start Batch on Ingest, and Watch Folder"
       caption="The Ingest section of Global Settings"
     />
+    <p class="section-desc">
+      As takes arrive from Live Link Hub / Capture Manager, the <strong>Ingest</strong> section
+      of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
+      project and queue them the moment they appear in the Content Browser — no dialog needed:
+    </p>
     <div class="field-list">
       <div class="src-row header">
         <span>Setting</span>
