@@ -1,4 +1,7 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+
 interface Props {
   src: string;
   alt: string;
@@ -6,15 +9,40 @@ interface Props {
 }
 
 const { src, alt, caption } = Astro.props;
+
+// Astro does not validate public/ references, so a missing screenshot ships as a broken
+// image. Omit the figure instead - the prose stands on its own until the shot exists.
+// Scripts/Capture-DocShot.ps1 -List in the plugin repo tracks what is still unshot.
+const exists = fs.existsSync(path.join(process.cwd(), 'public', src));
+if (!exists) {
+  console.warn(`[DocFigure] missing image, figure omitted: ${src}`);
+}
 ---
 
-<figure class="doc-figure">
-  <img src={src} alt={alt} loading="lazy" />
-  {caption && <figcaption>{caption}</figcaption>}
-</figure>
+{exists && (
+  <details class="doc-figure" open>
+    <summary>{caption ?? alt}</summary>
+    <figure>
+      <img src={src} alt={alt} />
+    </figure>
+  </details>
+)}
 
 <style>
   .doc-figure { margin: 20px 0 4px; }
+
+  summary {
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
+    border-radius: var(--radius);
+  }
+  summary::before { content: "Screenshot: "; font-weight: 600; }
+  .doc-figure[open] summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+  figure { margin: 0; }
 
   .doc-figure img {
     display: block;
@@ -23,11 +51,4 @@ const { src, alt, caption } = Astro.props;
     border-radius: var(--radius);
   }
 
-  figcaption {
-    font-size: 0.775rem;
-    color: var(--text-muted);
-    text-align: center;
-    margin-top: 8px;
-    font-style: italic;
-  }
 </style>

@@ -12,7 +12,7 @@ const issues = [
   },
   {
     id: 'plugin-missing',
-    symptom: '"MHA Manager" does not appear in Window menu',
+    symptom: '"MHA Manager" does not appear in Tools menu',
     cause: 'The plugin is not enabled or did not load.',
     fix: 'Go to <strong>Edit → Plugins</strong>, search for "MHA Manager", and enable it. If it is missing from the list entirely, verify the plugin folder is in <code>YourProject/Plugins/MHAManager/</code> with a valid <code>.uplugin</code> file.',
     type: 'install',
@@ -145,8 +145,8 @@ const typeLabels: Record<string, { label: string; cls: string }> = {
   <div class="overview-figures">
     <DocFigure
       src="/assets/docs/mha/ts-validation-error.webp"
-      alt="Queue row with red X icon visible — tooltip showing &quot;Missing Identity asset&quot; or similar validation message"
-      caption="A validation error on a job row — hover the red X to see the specific missing asset"
+      alt="Queue row for a take that cannot run yet, its Message column reading Missing Req and naming what the job is waiting on"
+      caption="A job that cannot run yet — the Message column names the missing requirement"
     />
     <DocFigure
       src="/assets/docs/mha/ts-log-panel-error.webp"

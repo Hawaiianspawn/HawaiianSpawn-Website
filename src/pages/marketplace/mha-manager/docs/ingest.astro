@@ -4,18 +4,19 @@ import DocFigure from '../../../../components/DocFigure.astro';
 ---
 
 <DocsLayout
-  title="Ingest Footage — MHA Manager"
-  description="Bring raw capture footage into your project as Capture Data assets and queue it — manually or automatically."
+  title="Ingest & Add Jobs — MHA Manager"
+  description="Bring raw capture footage into your project as Capture Data through Live Link Hub, and fill the queue from the one Add Jobs dialog — project assets, audio, or raw footage — or automatically as takes arrive."
   currentSlug="ingest"
 >
 
   <div class="doc-header">
-    <h1 class="doc-title">Ingest Footage</h1>
+    <h1 class="doc-title">Ingest &amp; Add Jobs</h1>
     <p class="doc-lead">
-      Every footage job runs on a <code>UFootageCaptureData</code> asset. Getting your raw footage
-      into the project as that asset is <em>ingest</em>, and Epic's Live Link Hub — which bundles
-      Capture Manager — is the engine that does it. You can drive it from Live Link Hub's own
-      window, or from the plugin's <strong>Add Jobs...</strong> dialog without leaving the editor.
+      Every footage job runs on a <code>UFootageCaptureData</code> asset. Getting raw footage into
+      the project as that asset is <em>ingest</em>, and Epic's Live Link Hub — which bundles Capture
+      Manager — is the engine that does it. Getting assets into the queue is
+      <strong>Add Jobs...</strong>, the single entry point in the MHA Manager toolbar — or the
+      auto-queue watcher, which needs no dialog at all.
     </p>
   </div>
 
@@ -26,8 +27,8 @@ import DocFigure from '../../../../components/DocFigure.astro';
       input for MHA Manager. It bundles Capture Manager: connect your capture source (Live Link Face
       on iPhone, a stereo head-mounted camera, or an existing take archive), import the takes, and
       ingest them into your Unreal project. Each take lands in the Content Browser as a
-      <code>UFootageCaptureData</code> asset — exactly what every job runs on — with none of the
-      manual asset assembly you would otherwise face.
+      <code>UFootageCaptureData</code> asset under <code>/Game/CaptureManager/Imports/&lt;Actor&gt;/</code>
+      — exactly what every job runs on, with no manual asset assembly.
     </p>
     <DocFigure
       src="/assets/docs/mha/llh-capture-manager.webp"
@@ -35,9 +36,9 @@ import DocFigure from '../../../../components/DocFigure.astro';
       caption="Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data"
     />
     <p class="section-desc">
-      Because Live Link Hub writes finished Capture Data directly into the project, nothing has to be
-      assembled by hand afterwards. Turn on <strong>Auto-Queue Ingested Takes</strong> (see below) and
-      every take Live Link Hub delivers is classified and queued automatically — capture in one
+      Drive it from Live Link Hub's own window, or from the <strong>External Footage</strong> source
+      of the Add Jobs dialog below. Either way, turn on <strong>Auto-Queue Ingested Takes</strong>
+      and every take Live Link Hub delivers is classified and queued automatically — capture in one
       window, watch jobs appear in the other.
     </p>
     <DocFigure
@@ -53,29 +54,170 @@ import DocFigure from '../../../../components/DocFigure.astro';
   </section>
 
   <section class="doc-section">
-    <h2 class="section-title">Ingest from the Add Jobs dialog</h2>
-    <p class="section-desc">
-      <a href="/marketplace/mha-manager/docs/add-jobs"><strong>Add Jobs...</strong></a> in the MHA
-      Manager panel covers all three ways work enters the queue, including raw footage that has not
-      been ingested yet:
-    </p>
+    <h2 class="section-title">The three sources</h2>
     <div class="field-list">
-      <div class="opt-row header">
+      <div class="src-row header">
         <span>Source</span>
         <span>What it queues</span>
       </div>
-      <div class="opt-row">
-        <span><strong>External Footage (Live Link Hub)</strong></span>
-        <span>Pick a raw take folder on disk and launch Live Link Hub to ingest it into the project. Requires the <code>CaptureManagerEditor</code> plugin (UE 5.7+).</span>
-      </div>
-      <div class="opt-row">
+      <div class="src-row">
         <span><strong>Project Assets</strong></span>
-        <span>One job per Footage Capture Data asset already in the project — takes ingested earlier, or by someone else on the team.</span>
+        <span>One job per <code>FootageCaptureData</code> asset already in the project. The default panel.</span>
       </div>
-      <div class="opt-row">
+      <div class="src-row">
         <span><strong>Audio</strong></span>
-        <span>Audio-driven jobs from project SoundWaves, a folder of WAVs on disk, or a Wwise container over WAAPI. No footage and no identity needed. Requires UE 5.8.</span>
+        <span>Audio-driven jobs from project SoundWaves, WAV files on disk, or a Wwise container. Requires UE 5.8.</span>
       </div>
+      <div class="src-row">
+        <span><strong>External Footage (Live Link Hub)</strong></span>
+        <span>Raw take folders on disk, scanned and then ingested by Live Link Hub. Requires the <code>CaptureManagerEditor</code> plugin (UE 5.7+) and an installed Live Link Hub.</span>
+      </div>
+    </div>
+    <div class="callout callout-note">
+      Nothing is queued until you confirm (or double-click a single take). The dialog only collects
+      a selection — the batch tab runs the enqueue afterwards, so cancelling leaves the queue untouched.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Project Assets</h2>
+    <p class="section-desc">
+      Every <code>FootageCaptureData</code> asset in the project, shown as a tree that mirrors its
+      content path — so an <code>Imports/&lt;Actor&gt;/&lt;Take&gt;</code> layout reads as actor
+      folders with takes underneath. Search filters the tree, checkboxes pick takes (a folder
+      checkbox toggles everything under it), each row is labelled Stereo or Mono, and the footer
+      counts what is checked against the total. Double-clicking a take queues just that one.
+    </p>
+    <p class="section-desc">
+      <strong>Show thumbnails</strong> (below the source picker, off by default) adds a first-frame
+      preview to each row. It is off because decoding a frame per take is slow on large projects;
+      thumbnails are only decoded once the box is ticked.
+    </p>
+    <p class="section-desc">
+      Each checked take becomes one job, typed automatically: path-name tokens classify
+      <code>grid</code>/<code>calib</code> as Stereo Calibration and <code>identity</code>/<code>dna</code>
+      as Identity Create, while Mono and Stereo come from the asset itself. See
+      <a href="/marketplace/mha-manager/docs/naming-conventions">Naming Conventions</a> for the
+      patterns and <a href="/marketplace/mha-manager/docs/job-types">Job Types</a> for what each
+      one does.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Audio</h2>
+    <p class="section-desc">
+      Audio jobs need no footage, no calibration, and no identity — a voice track is the whole
+      input. Three sub-sources feed them:
+    </p>
+    <div class="field-list">
+      <div class="src-row header">
+        <span>Sub-source</span>
+        <span>Behavior</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Project</strong></span>
+        <span>Searches a content folder recursively and queues one job per SoundWave asset found. Each job references the asset directly — nothing is copied or re-imported.</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Import</strong></span>
+        <span>Searches a root folder on disk recursively and queues one job per WAV file. The WAVs stay where they are; each job keeps only its path and imports the wave beside the Performance at solve time.</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Wwise</strong></span>
+        <span>Queues one job per Sound under a Wwise container, resolved live over WAAPI. See <a href="/marketplace/mha-manager/docs/wwise-audio">Wwise Audio</a>.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      Whichever sub-source is active, the preview list below it is the same: every discovered item
+      with a checkbox, a check-all toggle, and a checked count. Items already in the queue are
+      skipped, so re-running against the same folder adds nothing.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">External Footage (Live Link Hub)</h2>
+    <p class="section-desc">
+      For footage that is not in the project yet. Point the dialog at a footage root on disk; it
+      walks the folder itself — a plain filesystem scan, because Live Link Hub is not running yet —
+      and classifies every take it finds. You check the ones to bring in, and the confirmed set is
+      handed to Live Link Hub as ingest device requests.
+    </p>
+    <div class="field-list">
+      <div class="src-row header">
+        <span>Take kind</span>
+        <span>What the scan matched</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Stereo</strong></span>
+        <span>A folder holding two videos whose base names match the schema's stereo patterns.</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Mono</strong></span>
+        <span>A single video file.</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Archive</strong></span>
+        <span>A take folder in an existing capture archive layout.</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Audio</strong></span>
+        <span>A loose WAV, when <strong>Include .wav audio as audio takes</strong> is on. Scan-only — audio takes are queued directly in the editor and never go through Live Link Hub. A WAV that belongs to a stereo take is always that take's audio track, never a take of its own.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      Takes the engine would silently drop are still listed, greyed out with the reason — so a
+      mislaid take shows up as a problem instead of just going missing. The <strong>actor</strong>
+      for each take comes from its folder depth (see the schema below); takes that sit too shallow
+      to carry an actor segment fall back to the dialog's fallback actor field.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Teaching the scan your layout</h2>
+    <p class="section-desc">
+      By default the scan assumes the take's parent folder is the actor and that footage is
+      <code>.mp4</code> or <code>.mov</code>. A stage whose footage is laid out differently can ship
+      the rules with the footage: drop a file named <code>MHAIngestSchema.json</code> at the scan
+      root and the dialog picks it up automatically, reporting which rules it used.
+    </p>
+    <div class="code-block">
+      <pre><code>{`{
+  "version": 1,
+  "path_template": "{actor}/{session}/{take}",
+  "video_extensions": ["mp4", "mov"],
+  "stereo_patterns": ["*_L", "*_R"]
+}`}</code></pre>
+    </div>
+    <div class="field-list">
+      <div class="schema-row header">
+        <span>Key</span>
+        <span>Default</span>
+        <span>Meaning</span>
+      </div>
+      <div class="schema-row">
+        <span><code>version</code></span>
+        <span><code>1</code></span>
+        <span>Schema version. Anything other than 1 is refused and the built-in defaults are used, with a warning in the dialog.</span>
+      </div>
+      <div class="schema-row">
+        <span><code>path_template</code></span>
+        <span><code>{`{actor}/{take}`}</code></span>
+        <span>Matched from the <strong>end</strong>: <code>{`{take}`}</code> is the last segment and only <code>{`{actor}`}</code>'s distance from it counts. So <code>{`{actor}/{take}`}</code> means "the take's parent folder", at any depth, and an Actor/Session/Take stage ships <code>{`{actor}/{session}/{take}`}</code>. A template with no <code>{`{actor}`}</code> token sends every take to the fallback actor.</span>
+      </div>
+      <div class="schema-row">
+        <span><code>video_extensions</code></span>
+        <span><code>["mp4", "mov"]</code></span>
+        <span>Which files count as footage. A leading dot is optional and case does not matter.</span>
+      </div>
+      <div class="schema-row">
+        <span><code>stereo_patterns</code></span>
+        <span>(empty)</span>
+        <span>Wildcards the two video base names in a folder must match for it to count as a stereo take. Empty accepts any two-video folder — the same rule the engine's own auto-discovery uses.</span>
+      </div>
+    </div>
+    <div class="callout callout-tip">
+      Only the keys you include are overridden; everything else keeps its default. An unparseable
+      file falls back to the built-in defaults rather than failing the scan, and says so.
     </div>
   </section>
 
@@ -84,30 +226,30 @@ import DocFigure from '../../../../components/DocFigure.astro';
     <p class="section-desc">
       As takes arrive from Live Link Hub / Capture Manager, the <strong>Ingest</strong> section
       of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
-      project and queue them the moment they appear in the Content Browser:
+      project and queue them the moment they appear in the Content Browser — no dialog needed:
     </p>
     <div class="field-list">
-      <div class="opt-row header">
+      <div class="src-row header">
         <span>Setting</span>
         <span>What it does</span>
       </div>
-      <div class="opt-row">
+      <div class="src-row">
         <span><strong>Auto-Queue Ingested Takes</strong></span>
         <span>Watches the project for newly created Footage Capture Data assets and adds each to the queue automatically. Takes already in the queue are not re-added.</span>
       </div>
-      <div class="opt-row">
+      <div class="src-row">
         <span><strong>Auto-Start Batch on Ingest</strong></span>
         <span>Starts the batch when auto-queued takes arrive and no batch is running. Takes arriving mid-batch are queued and started on the next idle trigger.</span>
       </div>
-      <div class="opt-row">
+      <div class="src-row">
         <span><strong>Watch Folder (optional)</strong></span>
-        <span>A content-path prefix to limit the watch, e.g. <code>/Game/CaptureManager/Ingest</code>. Empty watches everywhere under <code>/Game</code>.</span>
+        <span>A content-path prefix to limit the watch, e.g. <code>/Game/CaptureManager/Imports</code>. Empty watches everywhere under <code>/Game</code>.</span>
       </div>
     </div>
   </section>
 
   <section class="doc-section">
-    <h2 class="section-title">What happens to an ingested take</h2>
+    <h2 class="section-title">What happens to a queued take</h2>
     <p class="section-desc">
       However a take enters the queue, it is classified automatically and readied to process:
     </p>
@@ -119,14 +261,17 @@ import DocFigure from '../../../../components/DocFigure.astro';
     <div class="callout callout-tip">
       Keep <code>grid</code>, <code>calib</code>, <code>identity</code>, and <code>dna</code> out of
       folder and take names that are <em>not</em> those take types — those tokens drive
-      classification, and a misnamed performance take will be queued as the wrong job.
+      classification, and a misnamed performance take will be queued as the wrong job. See
+      <a href="/marketplace/mha-manager/docs/naming-conventions">Naming Conventions</a>. Once jobs
+      are in the queue, <a href="/marketplace/mha-manager/docs/job-options">Per-Job Options</a>
+      covers what you can change per take before starting the batch.
     </div>
   </section>
 
 </DocsLayout>
 
 <style>
-  .doc-header { margin-bottom: 32px; }
+  .doc-header { margin-bottom: 40px; }
 
   .doc-title {
     font-size: clamp(1.8rem, 4vw, 2.4rem);
@@ -142,21 +287,9 @@ import DocFigure from '../../../../components/DocFigure.astro';
     line-height: 1.7;
   }
 
-  .doc-lead code,
-  .section-desc code,
-  .opt-row code,
-  .bullet-list code,
-  .callout code {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--accent);
-    background: var(--bg-surface);
-    padding: 1px 5px;
-    border-radius: 3px;
-    border: 1px solid var(--border);
-  }
+  .doc-lead strong { color: var(--text); font-weight: 600; }
 
-  .doc-section { margin-bottom: 44px; }
+  .doc-section { margin-bottom: 48px; }
 
   .section-title {
     font-size: 1.1rem;
@@ -167,13 +300,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
     border-bottom: 1px solid var(--border);
   }
 
-  .subsection-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin: 32px 0 12px;
-  }
-
   .section-desc {
     font-size: 0.9rem;
     color: var(--text-muted);
@@ -182,6 +308,85 @@ import DocFigure from '../../../../components/DocFigure.astro';
   }
 
   .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .src-row, .schema-row {
+    display: grid;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .src-row { grid-template-columns: 1fr 2.4fr; }
+  .schema-row { grid-template-columns: 0.9fr 0.9fr 2.6fr; }
+
+  .src-row:last-child, .schema-row:last-child { border-bottom: none; }
+
+  .src-row.header, .schema-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .src-row strong, .schema-row strong { color: var(--text); font-weight: 500; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .code-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+
+  .code-block pre { margin: 0; }
+
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #c9d1d9;
+    line-height: 1.75;
+    white-space: pre;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+
+  .callout-tip { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+  .callout-note { background: var(--bg-surface); border-color: var(--border); }
+  .callout strong { color: var(--text); font-weight: 600; }
+  .callout em { color: var(--text); font-style: italic; }
 
   .bullet-list {
     padding-left: 20px;
@@ -198,67 +403,10 @@ import DocFigure from '../../../../components/DocFigure.astro';
     padding-left: 4px;
   }
 
-  .bullet-list li strong { color: var(--text); font-weight: 500; }
-
-  .field-list {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin-bottom: 12px;
-  }
-
-  .opt-row {
-    display: grid;
-    grid-template-columns: 1fr 2.4fr;
-    gap: 16px;
-    padding: 11px 16px;
-    font-size: 0.825rem;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-muted);
-    align-items: start;
-    line-height: 1.55;
-  }
-
-  .opt-row:last-child { border-bottom: none; }
-
-  .opt-row.header {
-    background: var(--bg-surface);
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-  }
-
-  .opt-row strong { color: var(--text); font-weight: 500; }
-
-  .callout {
-    padding: 12px 16px;
-    border-radius: var(--radius);
-    font-size: 0.825rem;
-    line-height: 1.6;
-    color: var(--text-muted);
-    margin: 0 0 24px;
-  }
-
-  .callout code { background: color-mix(in srgb, var(--bg-surface) 60%, transparent); }
-  .callout strong { color: var(--text); font-weight: 600; }
-  .callout em { color: var(--text); font-style: italic; }
-
-  .callout-note {
-    border-left: 3px solid var(--accent);
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
-  }
-
-  .callout-tip {
-    border-left: 3px solid #f0a500;
-    background: color-mix(in srgb, #f0a500 8%, transparent);
-  }
-
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
-  @media (max-width: 640px) {
-    .opt-row { grid-template-columns: 1fr; gap: 4px; }
+  @media (max-width: 720px) {
+    .src-row, .schema-row { grid-template-columns: 1fr; gap: 4px; }
   }
 </style>

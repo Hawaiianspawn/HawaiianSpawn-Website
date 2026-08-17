@@ -113,17 +113,23 @@ const groups = [
   <div class="doc-header">
     <h1 class="doc-title">Per-Job Options</h1>
     <p class="doc-lead">
-      Every job in the queue has its own independent set of solve options. Add columns to the
-      queue view via the column picker, then edit each cell inline. Settings here override nothing
-      at the global level — they are purely per-take controls passed directly to the MetaHuman
-      Animator solver.
+      Every job in the queue has its own independent set of solve options. Select a job and edit
+      them in the job settings panel beside the queue — only the sections that apply to that job's
+      type are shown. Settings here override nothing at the global level — they are purely
+      per-take controls passed directly to the MetaHuman Animator solver.
     </p>
   </div>
 
   <div class="callout callout-tip">
-    <strong>Column picker tip:</strong> Click the <strong>Columns...</strong> button in the toolbar
-    to open the grouped column picker. Options are organized by job type so you only see what's
-    relevant to the takes in your batch, and the layout is saved in the manifest.
+    <strong>Multi-select edits:</strong> select several jobs and the panel edits all of them at
+    once, so a change like Head Stabilization applies across a whole shoot in one action.
+  </div>
+
+  <div class="callout callout-tip">
+    <strong>Column picker:</strong> the <strong>Columns...</strong> button in the toolbar toggles
+    which queue columns are visible — Thumbnail, Type, Solve, Status, Progress, Process Time and
+    the rest. It controls the queue table, not the options themselves; column layout is saved in
+    the manifest.
   </div>
 
   <div class="callout callout-tip">
@@ -134,15 +140,15 @@ const groups = [
   </div>
 
   <DocFigure
-    src="/assets/docs/mha/job-options-column-picker.webp"
-    alt="Column picker dropdown open — grouped sections (Universal, Mono, Stereo, Audio) with checkboxes for each option"
-    caption="The column picker — right-click any column header to open it and toggle which options are visible in the queue"
+    src="/assets/docs/mha/job-options-settings-panel.webp"
+    alt="A job selected in the queue with the job settings panel beside it, showing the solve option sections for that job type"
+    caption="Per-job options live in the job settings panel — select a job, edit its sections"
   />
 
   <DocFigure
-    src="/assets/docs/mha/job-options-queue-columns.webp"
-    alt="Queue with several per-job columns visible — e.g. Head Stabilization, Frame Exclusion, Tongue Solve — cells being edited inline"
-    caption="Multiple per-job options added as columns — edit each cell inline per take"
+    src="/assets/docs/mha/job-options-column-picker.webp"
+    alt="Column picker open from the Columns... toolbar button, showing grouped checkboxes for the queue columns"
+    caption="The Columns... button toggles which queue columns are visible"
   />
 
   <nav class="option-nav">
