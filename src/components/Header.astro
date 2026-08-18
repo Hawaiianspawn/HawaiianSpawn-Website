@@ -3,7 +3,7 @@ const navLinks = [
   { href: '/', label: 'Work' },
   { href: '/resume', label: 'Resume' },
   { href: '/contact', label: 'Contact' },
-  { href: '/marketplace/mha-manager', label: 'Marketplace' },
+  { href: '/marketplace/mha-manager/docs', label: 'MHA Manager', match: '/marketplace' },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -20,7 +20,7 @@ const currentPath = Astro.url.pathname;
       {navLinks.map(link => (
         <a
           href={link.href}
-          class:list={['nav-link', { active: currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) }]}
+          class:list={['nav-link', { active: currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.match ?? link.href)) }]}
         >
           {link.label}
         </a>
