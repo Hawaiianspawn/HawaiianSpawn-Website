@@ -159,7 +159,7 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
 
 <DocsLayout
   title="MCP Toolset — MHA Manager"
-  description="Drive the MHA Manager batch queue from an MCP client via the UE 5.8 native MCP stack."
+  description="Drive the MHA Manager batch queue from an MCP client via the UE 5.8 native MCP stack, plus the agent skills that ship with the plugin."
   currentSlug="mcp-toolset"
 >
 
@@ -235,6 +235,61 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
       Follow Epic's Model Context Protocol documentation for your engine build for the exact endpoint
       and client configuration; this page documents only the tools the plugin contributes.
     </p>
+  </section>
+
+  <section class="doc-section" id="skills">
+    <h2 class="section-title">Agent skills</h2>
+    <p class="section-desc">
+      The plugin ships three agent skills alongside its source. They turn the toolset from a list of
+      function calls into guided workflows — connect the editor, ask why a job is blocked, or
+      reorganize a shoot's worth of takes before ingest. Each is a folder holding a
+      <code>SKILL.md</code> instruction file (plus a helper script where needed), so any LLM agent
+      that reads skill folders can use them.
+    </p>
+    <div class="field-list">
+      <div class="skill-row header">
+        <span>Skill</span>
+        <span>Use it when</span>
+      </div>
+      <div class="skill-row">
+        <span><code>mha-setup</code></span>
+        <span>Connecting an agent to the editor for the first time, or the <code>unreal</code> MCP server is not responding. Walks the two Epic MCP plugins, autostart, the ImgMedia cache size, the Capture Manager / Live Link Hub connection, pointing the client at the server, and verification.</span>
+      </div>
+      <div class="skill-row">
+        <span><code>mha-guide</code></span>
+        <span>Asking why a job is blocked, what a status means, how the stereo chain fits together, or what a setting does. Reads the live queue to diagnose rather than guessing from documentation.</span>
+      </div>
+      <div class="skill-row">
+        <span><code>mha-organize-takes</code></span>
+        <span>Raw takes need sorting before ingest, take names misclassify, or Capture Data landed in the wrong actor folder. Three modes: organize on disk, verify and fix the <code>/Game</code> layout after ingest, or both as one flow. Its disk-organizing mode needs nothing but a folder; the other two need the toolset connected.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      Copy the folders you want from the plugin's <code>Skills/</code> directory into your agent's
+      skills location — per project, or per user:
+    </p>
+    <div class="code-block">
+      <pre><code>{`# per project - commits with the project, whole team gets them
+<YourProject>/.claude/skills/mha-setup/
+<YourProject>/.claude/skills/mha-guide/
+<YourProject>/.claude/skills/mha-organize-takes/
+
+# or per user - available in every project you open
+~/.claude/skills/mha-guide/`}</code></pre>
+    </div>
+    <p class="section-desc">
+      Copy the whole folder, not just the <code>SKILL.md</code> inside it. Skills are picked up on
+      the next session; the plugin does not have to be running for a skill to be listed, only for it
+      to do anything useful.
+    </p>
+    <div class="callout callout-note">
+      <strong>Reads are free; writes ask first.</strong> The skills query the queue, classify takes,
+      and lint a layout without touching anything, then present a plan and stop. Nothing is moved,
+      renamed, queued, or started until you approve it — so "show me what's wrong with this shoot"
+      is a safe thing to ask. The classification rules <code>mha-organize-takes</code> enforces are
+      the same ones documented under
+      <a href="/marketplace/mha-manager/docs/naming-conventions">Naming Conventions</a>.
+    </div>
   </section>
 
   <section class="doc-section">
@@ -353,6 +408,51 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
     overflow: hidden;
   }
 
+  .skill-row {
+    display: grid;
+    grid-template-columns: 0.8fr 3fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+  .skill-row:last-child { border-bottom: none; }
+  .skill-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .skill-row code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+  .code-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+  }
+  .code-block pre { margin: 0; }
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre;
+  }
+  @media (max-width: 640px) { .skill-row { grid-template-columns: 1fr; gap: 4px; } }
   .req-row {
     display: grid;
     grid-template-columns: 0.9fr 3fr;
