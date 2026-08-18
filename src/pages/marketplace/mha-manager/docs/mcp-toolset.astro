@@ -256,7 +256,7 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
         <span>Connecting an agent to the editor for the first time, or the <code>unreal</code> MCP server is not responding. Walks the two Epic MCP plugins, autostart, the ImgMedia cache size, the Capture Manager / Live Link Hub connection, pointing the client at the server, and verification.</span>
       </div>
       <div class="skill-row">
-        <span><code>mha-guide</code></span>
+        <span><code>mha-help</code></span>
         <span>Asking why a job is blocked, what a status means, how the stereo chain fits together, or what a setting does. Reads the live queue to diagnose rather than guessing from documentation.</span>
       </div>
       <div class="skill-row">
@@ -271,11 +271,11 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
     <div class="code-block">
       <pre><code>{`# per project - commits with the project, whole team gets them
 <YourProject>/.claude/skills/mha-setup/
-<YourProject>/.claude/skills/mha-guide/
+<YourProject>/.claude/skills/mha-help/
 <YourProject>/.claude/skills/mha-organize-takes/
 
 # or per user - available in every project you open
-~/.claude/skills/mha-guide/`}</code></pre>
+~/.claude/skills/mha-help/`}</code></pre>
     </div>
     <p class="section-desc">
       Copy the whole folder, not just the <code>SKILL.md</code> inside it. Skills are picked up on
