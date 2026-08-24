@@ -39,6 +39,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <div class="code-block">
       <pre><code>{`{
   "schema_version": 1,
+  "plugin_version": "2.7.0",
   "settings": { ... },
   "jobs": [ ... ]
 }`}</code></pre>
@@ -49,6 +50,11 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <span class="field-name"><code>schema_version</code></span>
         <span class="field-type">Int</span>
         <span class="field-desc">Used by the loader to detect incompatible manifests from future versions.</span>
+      </div>
+      <div class="field-row">
+        <span class="field-name"><code>plugin_version</code></span>
+        <span class="field-type">String</span>
+        <span class="field-desc">VersionName of the MHA Manager plugin that wrote the file, for diagnosing manifests produced by a different build.</span>
       </div>
       <div class="field-row">
         <span class="field-name"><code>settings</code></span>
@@ -67,13 +73,13 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <h2 class="section-title">Settings block</h2>
     <div class="code-block">
       <pre><code>{`"settings": {
-  "plugin_version": "2.7.0",
   "use_custom_output_path": false,
   "output_path": "/Game/CaptureManager/Export",
   "ue_export_flat": true,
   "skip_if_already_solved": true,
   "max_concurrent_jobs": 1,
   "export_anim_sequence": true,
+  "reduce_control_rig_keys": true,
   "export_level_sequence": true,
   "bind_face_to_audio_level_sequence": true,
   "level_sequence_lighting_environment": "Portrait",
@@ -88,18 +94,27 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "target_skeleton_or_skeletal_mesh": "",
   "force_d3d12": false,
   "add_skeleton_compatibility": true,
+  "body_target_skeletal_mesh_global": "/MetaHumanBodyTracker/SKM_Body.SKM_Body",
   "retargeter_output_path": "/Game/CaptureManager/BodyTrackerTargets",
-  "default_control_rig_class": "",
   "board_pattern_width": 11,
   "board_pattern_height": 16,
   "board_square_size": 0.75,
   "override_default_board": false,
+  "calibration_sharpness_threshold": 5.0,
+  "calibration_board_presets": [],
   "max_calibration_rms_error": 1.0,
   "min_calibration_diagnostics_score": 0.5,
+  "rejected_calibration_paths": [],
   "export_calibration_json": false,
   "clean_depth": false,
   "auto_queue_ingested_takes": true,
   "auto_run_ingested_takes": false,
+  "auto_categorize_stereo_takes_by_name": true,
+  "stereo_calibration_name_patterns": ["*grid*", "*calibration*", "*calib*"],
+  "stereo_identity_name_patterns": ["*identity*", "*dna*"],
+  "enable_mcp_toolset": true,
+  "linked_batch_asset": "/Game/Batches/ShootDay1.ShootDay1",
+  "timing_calibration": [ ... ],
   "default_job_options_by_category": {
     "mono":   { ... },
     "stereo": { ... },
@@ -112,6 +127,15 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   ]
 }`}</code></pre>
     </div>
+    <p class="section-desc">
+      <code>rejected_calibration_paths</code> keeps calibrations judged too poor to trust out of every
+      lookup; <code>calibration_sharpness_threshold</code> and the board pattern fields are learned state
+      (the auto-tuned winner from the last solve) unless <code>override_default_board</code> is on, in which
+      case the board fields are your pinned dimensions. <code>timing_calibration</code> holds the four
+      per-job-type ETA samples. <code>linked_batch_asset</code> is written only while a
+      <a href="#batch-assets">batch asset</a> is linked. <code>default_control_rig_class</code> is read from
+      older manifests but no longer written.
+    </p>
     <p class="section-desc">
       <code>default_job_options_by_category</code> holds the per-category solve default templates —
       one sub-object per category (Mono / Stereo / Audio) using the same keys as a job's
@@ -158,8 +182,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="field-row">
         <span class="field-name"><code>input_type</code></span>
-        <span class="field-type"><code>"Mono"</code> | <code>"Stereo"</code> | <code>"Audio"</code> | <code>"CalibrateStereo"</code> | <code>"IdentityCreate"</code></span>
-        <span class="field-desc">Determines the pipeline and which solve options are used. A legacy <code>"Depth"</code> value is remapped to <code>"Mono"</code> on load.</span>
+        <span class="field-type"><code>"Mono"</code> | <code>"Stereo"</code> | <code>"Audio"</code> | <code>"Calibrate"</code> | <code>"Identity"</code></span>
+        <span class="field-desc">Determines the pipeline and which solve options are used. <code>"CalibrateStereo"</code> and <code>"IdentityCreate"</code> are accepted on load as pre-rename aliases but are never written, and a legacy <code>"Depth"</code> value loads as <code>"Stereo"</code> — the same solve, which skips depth generation when depth already exists.</span>
       </div>
       <div class="field-row">
         <span class="field-name"><code>footage_capture_data</code></span>
@@ -188,7 +212,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="field-row">
         <span class="field-name"><code>body_coverage_pct</code></span>
-        <span class="field-type">Number (0–1)</span>
+        <span class="field-type">Number (0-1)</span>
         <span class="field-desc">Post-solve body detection coverage for body-tracked jobs. Omitted until measured. Calibration jobs record <code>calibration_rms_error</code> and <code>calibration_selected_frames</code> instead.</span>
       </div>
       <div class="field-row">
@@ -236,7 +260,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <div class="field-row">
         <span class="field-name"><code>type</code></span>
         <span class="field-type">String</span>
-        <span class="field-desc"><code>"Performance"</code>, <code>"AnimSequence"</code>, <code>"LevelSequence"</code>, <code>"Identity"</code>, <code>"CaptureData"</code>, <code>"CameraCalibration"</code>, <code>"ControlRigFBX"</code>, <code>"DCCFBX"</code>, or <code>"Log"</code>.</span>
+        <span class="field-desc"><code>"Performance"</code>, <code>"AnimSequence"</code>, <code>"LevelSequence"</code>, <code>"Identity"</code>, <code>"CaptureData"</code>, <code>"CameraCalibration"</code>, <code>"ControlRigFBX"</code>, <code>"DCCFBX"</code>, <code>"AudioWav"</code>, <code>"Log"</code>, or <code>"Other"</code>.</span>
       </div>
       <div class="field-row">
         <span class="field-name"><code>asset_path</code></span>
@@ -245,7 +269,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="field-row">
         <span class="field-name"><code>state</code></span>
-        <span class="field-type"><code>"Complete"</code> | <code>"Partial"</code> | <code>"Failed"</code></span>
+        <span class="field-type"><code>"Complete"</code> | <code>"Partial"</code> | <code>"Failed"</code> | <code>"Unknown"</code></span>
         <span class="field-desc">Outcome of this specific artifact. A job can be Complete overall while an optional export is Partial.</span>
       </div>
       <div class="field-row">

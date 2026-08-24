@@ -50,9 +50,9 @@ const toolGroups = [
         desc: 'Remove jobs from the queue by GUID. Unknown ids are ignored. Returns the number actually removed.',
       },
       {
-        sig: 'clear_queue() -> bool',
+        sig: 'clear_queue() -> int',
         params: '(none)',
-        desc: 'Remove every job from the queue.',
+        desc: 'Remove every job from the queue. Returns the number of jobs removed.',
       },
       {
         sig: 'update_job(job_id, fields_json) -> str',

@@ -155,10 +155,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <span class="option-name">Baseline / Scale Tolerance</span>
         <span class="option-desc">Acceptable deviation between the calibrated stereo geometry and the live footage. Increase if the rig was adjusted between calibration and capture.</span>
       </div>
-      <div class="option-row">
-        <span class="option-name">Enable Depth Cleaning + Depth Clamp Min/Max</span>
-        <span class="option-desc">Runs the hole-filling pass (below) before the solve; the clamp clips out-of-range depth before cleaning to eliminate background noise.</span>
-      </div>
     </div>
     <div class="callout callout-tip">
       See <a href="/marketplace/mha-manager/docs/job-options#stereo">Per-Job Options</a> for the full
@@ -178,7 +174,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <div class="option-list">
       <div class="option-row">
         <span class="option-name">Non-destructive</span>
-        <span class="option-desc">Writes a new <code>_Cleaned</code> copy of the depth sequence on disk and as a new asset — the original capture data is never modified.</span>
+        <span class="option-desc">Writes a new copy of the depth sequence - package suffix <code>_Clean</code>, sibling <code>_clean</code> directory on disk - so the original capture data is never modified.</span>
       </div>
       <div class="option-row">
         <span class="option-name">Asynchronous</span>

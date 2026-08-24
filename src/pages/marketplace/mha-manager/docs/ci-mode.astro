@@ -86,7 +86,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="field-row">
         <span><code class="code-warn">1</code></span>
-        <span>One or more jobs failed or produced partial artifacts. The manifest records which jobs failed — re-run the same manifest with <strong>Reprocess Solved Takes</strong> off (the default) to retry only the failures.</span>
+        <span>At least one job finished Failed, or was still blocked at the end of the run (<code>MissingCalibration</code>, <code>MissingIdentity</code> or <code>PoorCalibrationQuality</code>). The manifest records which. Partial artifacts on an otherwise Done job do not affect the exit code.</span>
       </div>
       <div class="field-row">
         <span><code class="code-error">2</code></span>
@@ -130,17 +130,16 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">Retry failed jobs</h2>
     <p class="section-desc">
-      When a batch finishes with exit code <code>1</code>, the manifest on disk contains the
-      artifact state for every job. To retry only the failures:
+      A batch only runs jobs that are pending. Failed jobs reload from the manifest still marked
+      Failed, so re-running the same manifest does nothing until you requeue them - only Done jobs
+      whose options changed (Stale) requeue themselves.
     </p>
     <ol class="numbered-list">
-      <li>Re-run the commandlet against the same manifest, or load the queue in the editor from its <a href="/marketplace/mha-manager/docs/manifests#batch-assets">batch asset</a>.</li>
-      <li>Leave <strong>Reprocess Solved Takes</strong> off (the default) in Global Settings.</li>
-      <li>Click <strong>Start Batch</strong> if you are in the editor.</li>
+      <li>Load the manifest, or the queue's <a href="/marketplace/mha-manager/docs/manifests#batch-assets">batch asset</a>.</li>
+      <li>Requeue the failures: <code>retry_jobs(job_ids)</code> over the <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP toolset</a>, or right-click the rows in the queue and pick <strong>Retry</strong>.</li>
+      <li>Leave <strong>Reprocess Solved Takes</strong> off (the default) so the Done jobs around them stay skipped.</li>
+      <li>Start the batch, in the editor or by re-running the commandlet against the saved manifest.</li>
     </ol>
-    <p class="section-desc" style="margin-top:12px;">
-      Jobs with <code>"State": "Complete"</code> artifacts are skipped. Only failed or partial jobs run.
-    </p>
   </section>
 
 </DocsLayout>

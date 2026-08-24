@@ -42,7 +42,7 @@ const issues = [
     id: 'depth-quality',
     symptom: 'Stereo solve quality is poor — face looks incorrect or distorted',
     cause: 'Depth map contains holes, noise, or out-of-range values that degrade the solve.',
-    fix: 'Enable <strong>Depth Cleaning</strong> in the job\'s stereo options. Set <strong>Depth Clamp Min</strong> and <strong>Max</strong> to clip background noise. If the face is partially out of frame on many frames, lower <strong>Face Coverage Threshold</strong> or <strong>Face Width Threshold</strong> — or mark those frames in <strong>Frame Exclusion Ranges</strong>.',
+    fix: 'Turn on <strong>Clean Depth</strong> under Global Settings &rarr; Depth Footage. It is a single queue-wide toggle - the depth range, noise cutoff, hole filling and foreground isolation are all derived from the footage, so there is nothing to tune. If the face is partially out of frame on many frames, lower <strong>Face Coverage Threshold</strong> or <strong>Face Width Threshold</strong>, or mark those frames in <strong>Excluded Frames</strong>.',
     type: 'stereo',
   },
   {

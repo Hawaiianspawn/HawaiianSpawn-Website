@@ -68,10 +68,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
     </div>
     <p class="section-desc" style="margin-top:14px;">
-      The patterns are editable under <strong>Ingest</strong> in
-      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a>, and the whole
-      behavior can be turned off — with auto-categorization disabled, every stereo take queues as a
-      performance job and you set the two preflight types by hand.
+      There is no settings-panel row for any of this - the patterns are a manifest-only escape
+      hatch. Edit <code>stereo_calibration_name_patterns</code> and
+      <code>stereo_identity_name_patterns</code> in the batch manifest
+      (<a href="/marketplace/mha-manager/docs/manifests"><code>.mhajson</code></a>), or set
+      <code>"auto_categorize_stereo_takes_by_name": false</code> to turn the behavior off entirely -
+      every stereo take then queues as a performance job and you set the two preflight types by hand.
     </p>
     <div class="callout callout-tip">
       Tokens are required only for <strong>stereo</strong> takes. Mono and audio takes need none —

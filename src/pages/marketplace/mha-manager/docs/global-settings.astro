@@ -144,7 +144,7 @@ const settings = [
     note: null,
   },
   {
-    name: 'Body Target Mesh',
+    name: 'Body Target Mesh (ExistingSkeleton default)',
     section: 'Camera Calibration and Depth (whole queue)',
     default: 'SKM_Body',
     desc: 'Global default <code>USkeletalMesh</code> for body-tracked jobs whose Body Export Skeleton is Existing Skeleton. A per-job Body Target Mesh takes priority.',
@@ -221,7 +221,7 @@ const settings = [
     <h2 class="extra-title">Solve Defaults — per-category templates</h2>
     <DocFigure
       src="/assets/docs/mha/gs-solve-defaults.webp"
-      alt="Solve Defaults section — Mono / Stereo / Audio picker at top, embedded job-settings panel below editing the Mono template with Body Tracking toggle visible"
+      alt="Solve Defaults section - Mono / Depth Footage / Audio picker at top, embedded job-settings panel below editing the Mono template with Body Tracking toggle visible"
       caption="The Solve Defaults section — pick a category, edit its template with the same panel a real job uses"
     />
     <p class="extra-desc">
@@ -302,7 +302,7 @@ const settings = [
         <div class="setting-body">
           <p class="setting-desc">The primary quality gate. Calibration is ranked by <strong>out-of-sample validation RMS</strong> — error measured on frames it did not train on — because a solve's own training error overfits and hides a bad result. Above this value the job pauses as PoorCalibrationQuality.</p>
           <div class="callout callout-note">
-            <strong>Why 1.0.</strong> On a reference rig, downstream solve quality was flat across validation RMS 0.6–1.1 px and clearly degraded by 2.4 px (depth coverage −5%, jitter +58%), with the quality knee between the two. A tighter gate like 0.5 rejects even a rig's best achievable solve; 1.0 accepts the healthy range and rejects the degraded tail with margin. Treat 0.8–1.2 as a sensible window, not a universal constant.
+            <strong>Why 1.0.</strong> On a reference rig, downstream solve quality was flat across validation RMS 0.6-1.1 px and clearly degraded by 2.4 px (depth coverage -5%, jitter +58%), with the quality knee between the two. A tighter gate like 0.5 rejects even a rig's best achievable solve; 1.0 accepts the healthy range and rejects the degraded tail with margin. Treat 0.8-1.2 as a sensible window, not a universal constant.
           </div>
         </div>
       </div>
@@ -312,7 +312,7 @@ const settings = [
           <span class="setting-default">Default: <code>0.5</code></span>
         </div>
         <div class="setting-body">
-          <p class="setting-desc">A second, coarser gate on Epic's 0–1 diagnostics score, evaluated against the consuming take's own footage. It catches <strong>structurally broken</strong> calibrations (a wrong-route solve scores around 0.2) but cannot rank frame-set quality — a slightly worse calibration can score marginally higher. Leave it as a structural safety net; do not tighten it expecting finer quality discrimination. Below this value the job pauses.</p>
+          <p class="setting-desc">A second, coarser gate on Epic's 0-1 diagnostics score, evaluated against the consuming take's own footage. It catches <strong>structurally broken</strong> calibrations (a wrong-route solve scores around 0.2) but cannot rank frame-set quality — a slightly worse calibration can score marginally higher. Leave it as a structural safety net; do not tighten it expecting finer quality discrimination. Below this value the job pauses.</p>
         </div>
       </div>
       <div class="setting-row">

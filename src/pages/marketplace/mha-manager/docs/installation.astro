@@ -12,14 +12,14 @@ import DocFigure from '../../../../components/DocFigure.astro';
   <div class="doc-header">
     <h1 class="doc-title">Installation</h1>
     <p class="doc-lead">
-      Two ways to get the plugin into your project. Precompiled binaries are the fastest path —
-      no Visual Studio required. Build from source if you need to modify the plugin or target
-      a specific engine build.
+      Three ways to get the plugin into your project. The Epic Games Launcher and the manual
+      zip drop both use precompiled binaries and need no compiler. Build from source only to
+      modify the plugin or target a specific engine build.
     </p>
   </div>
 
   <!-- System requirements -->
-  <div class="plugin-table" style="margin-bottom: 16px;">
+  <div class="plugin-table" style="margin-bottom: 32px;">
     <div class="plugin-row header">
       <span>Requirement</span>
       <span>Needs</span>
@@ -38,12 +38,12 @@ import DocFigure from '../../../../components/DocFigure.astro';
     <div class="plugin-row">
       <span><strong>RAM</strong></span>
       <span>16 GB minimum</span>
-      <span>Sequential is stable on 16 GB; 32 GB+ suits 2 concurrent workers, 64 GB+ for 3–4</span>
+      <span>Enough for sequential batches; raise it before raising Max Concurrent Jobs</span>
     </div>
     <div class="plugin-row">
       <span><strong>GPU</strong></span>
       <span>Discrete GPU required</span>
-      <span>The MetaHuman solver needs real hardware — headless <code>-nullrhi</code> is unsupported; RTX-class recommended</span>
+      <span>The MetaHuman solver needs real hardware, so headless <code>-nullrhi</code> is unsupported</span>
     </div>
     <div class="plugin-row">
       <span><strong>Disk</strong></span>
@@ -56,17 +56,16 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <span>The cloud AutoRig login runs in an interactive editor session (see Job Types)</span>
     </div>
   </div>
-  <div class="callout callout-tip" style="margin-bottom: 32px;">
-    Concurrency is controlled by <strong>Max Concurrent Jobs</strong> in Global Settings — leave it
-    at 1 (sequential) unless you have the RAM and a workstation-class GPU. Optional Epic plugins are
-    needed only for specific job types; the dependency tables below cover them.
-  </div>
 
   <!-- Track selector -->
   <div class="track-selector" role="tablist">
-    <button class="track-btn active" data-track="binaries" role="tab" aria-selected="true">
+    <button class="track-btn active" data-track="launcher" role="tab" aria-selected="true">
       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Precompiled Binaries
+      Epic Games Launcher
+    </button>
+    <button class="track-btn" data-track="manual" role="tab" aria-selected="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Manual
     </button>
     <button class="track-btn" data-track="source" role="tab" aria-selected="false">
       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -74,168 +73,242 @@ import DocFigure from '../../../../components/DocFigure.astro';
     </button>
   </div>
 
-  <!-- Precompiled track -->
-  <div class="track-panel" data-panel="binaries">
+  <!-- Epic Games Launcher track -->
+  <div class="track-panel" data-panel="launcher">
 
     <div class="callout callout-tip">
       <strong>Recommended for most users.</strong> No compiler or Visual Studio needed.
     </div>
 
-    <!-- Method selector -->
-    <div class="method-selector" role="tablist">
-      <button class="method-btn active" data-method="launcher" role="tab" aria-selected="true">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        Epic Games Launcher
-      </button>
-      <button class="method-btn" data-method="manual" role="tab" aria-selected="false">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Manual / GitHub
-      </button>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 class="step-title">Open the Epic Games Launcher</h3>
+          <p class="step-desc">
+            Launch the Epic Games Launcher and sign in. Navigate to
+            <strong>Unreal Engine → Library</strong> using the left sidebar.
+          </p>
+          <DocFigure
+            src="/assets/docs/mha/launcher-library-tab.webp"
+            alt="Epic Games Launcher with &quot;Unreal Engine → Library&quot; selected in the left sidebar"
+            caption="The Library tab in the Epic Games Launcher"
+          />
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 class="step-title">Find the plugin in your Vault</h3>
+          <p class="step-desc">
+            Scroll down past your engine installations to the <strong>Fab Library</strong> section.
+            Find <strong>MHA Manager</strong> — use the search bar if you have many items.
+            If it isn't in your library yet, purchase or claim it on
+            <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a> first.
+          </p>
+          <DocFigure
+            src="/assets/docs/mha/launcher-vault-plugin.webp"
+            alt="Fab Library section showing the MHA Manager plugin card with &quot;Install to Engine&quot; and &quot;Add to Project&quot; buttons visible"
+            caption="The MHA Manager card in the Fab Library — two install options are shown"
+          />
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 class="step-title">Choose how to install it</h3>
+          <p class="step-desc">
+            You have two options on the plugin card:
+          </p>
+          <div class="install-option-grid">
+            <div class="install-option">
+              <span class="install-option-label">Install to Engine</span>
+              <p class="install-option-desc">
+                Installs the plugin engine-wide for a specific UE version. Available in every
+                project using that engine — but must be enabled per project via
+                <strong>Edit → Plugins</strong>.
+              </p>
+              <div class="install-option-path">
+                <code>Engine/Plugins/Marketplace/MHAManager/</code>
+              </div>
+            </div>
+            <div class="install-option">
+              <span class="install-option-label">Add to Project</span>
+              <p class="install-option-desc">
+                Copies the plugin directly into a single project's <code>Plugins/</code> folder.
+                Only available in that project, but auto-enabled on install. Best if you only
+                need it for one project.
+              </p>
+              <div class="install-option-path">
+                <code>YourProject/Plugins/MHAManager/</code>
+              </div>
+            </div>
+          </div>
+          <DocFigure
+            src="/assets/docs/mha/launcher-install-dialog.webp"
+            alt="&quot;Install to Engine&quot; engine version picker dialog — showing UE 5.8 selected"
+            caption="Selecting the engine version when using &quot;Install to Engine&quot;"
+          />
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3 class="step-title">Let the editor enable the dependency plugins</h3>
+        <p class="step-desc">
+          The engine plugins MHA Manager requires are declared as dependencies — when you enable
+          MHA Manager, the editor offers to enable them for you. Accept the prompt and restart
+          when asked. These are the auto-enabled dependencies:
+        </p>
+        <div class="plugin-table">
+          <div class="plugin-row header">
+            <span>Plugin name</span>
+            <span>Where it comes from</span>
+            <span>Required for</span>
+          </div>
+          <div class="plugin-row">
+            <span><code>MetaHuman</code></span>
+            <span>Engine</span>
+            <span>All job types — the MetaHuman Animator pipeline</span>
+          </div>
+          <div class="plugin-row">
+            <span><code>CaptureData</code></span>
+            <span>Engine</span>
+            <span>All job types — footage import assets</span>
+          </div>
+          <div class="plugin-row">
+            <span><code>ImgMedia</code></span>
+            <span>Engine</span>
+            <span>Image and depth sequence loading</span>
+          </div>
+        </div>
+        <p class="step-desc" style="margin-top: 16px;">
+          Two more Epic plugins come from
+          <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a> for free —
+          install them to the engine via the Epic Games Launcher, or into your project's
+          <code>Plugins/</code> folder. Mono (face) and Audio jobs need neither.
+        </p>
+        <div class="plugin-table">
+          <div class="plugin-row header">
+            <span>Plugin name</span>
+            <span>Fab listing</span>
+            <span>Required for</span>
+          </div>
+          <div class="plugin-row">
+            <span><code>MetaHumanDepthProcessing</code></span>
+            <span><a href="https://www.fab.com/listings/8efe3d9d-ae3b-4d75-955c-d404ff8108f9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Depth Processing</a></span>
+            <span><strong>Required</strong> by Stereo and Identity Create jobs — depth generation is their first stage</span>
+          </div>
+          <div class="plugin-row">
+            <span><code>MetaHumanBodyTracker</code></span>
+            <span><a href="https://www.fab.com/listings/4095b8e0-3eff-44f1-acb4-cb40b99228b9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Markerless Motion Capture</a></span>
+            <span>Optional — body tracking and the framing probe (UE 5.8)</span>
+          </div>
+        </div>
+        <div class="callout callout-note" style="margin-top: 14px;">
+          <strong>Depth Processing is the one plugin the editor will not enable for you.</strong>
+          MHA Manager declares it, but the engine copy has no default-enable flag, so a brand-new
+          project needs it ticked once in <strong>Edit &rarr; Plugins</strong>. Without it, every
+          Stereo and Identity Create job fails at its first stage with "Unable to generate depth
+          images. Please make sure Depth Processing plugin is enabled."
+        </div>
+        <div class="callout callout-tip" style="margin-top: 14px;">
+          <strong>Capture Manager:</strong> auto-queue of takes ingested through Live Link Hub /
+          Capture Manager uses the engine's <code>CaptureManager</code> plugin (UE 5.7+, included
+          with the engine). It produces the Footage Capture Data assets the watcher picks up.
+        </div>
+      </div>
     </div>
 
-    <!-- Epic Launcher method -->
-    <div class="method-panel" data-method-panel="launcher">
-      <div class="steps">
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3 class="step-title">Verify the plugin is active</h3>
+        <p class="step-desc">
+          Search for <strong>MHA Manager</strong> in the Plugins browser — it should show
+          as enabled. Then open <strong>Tools → MHA Manager</strong> from the menu bar.
+          The queue panel should appear. You're ready.
+        </p>
+        <DocFigure
+          src="/assets/docs/mha/install-plugins-browser.webp"
+          alt="Edit → Plugins → search &quot;MHA Manager&quot; — show it enabled"
+          caption="The plugin showing as enabled in the Plugins browser"
+        />
+        <DocFigure
+          src="/assets/docs/mha/install-window-menu.webp"
+          alt="Tools menu open — highlight &quot;MHA Manager&quot; entry"
+          caption="Opening MHA Manager from the Tools menu"
+        />
+      </div>
+    </div>
 
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h3 class="step-title">Open the Epic Games Launcher</h3>
-            <p class="step-desc">
-              Launch the Epic Games Launcher and sign in. Navigate to
-              <strong>Unreal Engine → Library</strong> using the left sidebar.
-            </p>
-            <DocFigure
-              src="/assets/docs/mha/launcher-library-tab.webp"
-              alt="Epic Games Launcher with &quot;Unreal Engine → Library&quot; selected in the left sidebar"
-              caption="The Library tab in the Epic Games Launcher"
-            />
-          </div>
-        </div>
+    </div>
+  </div><!-- end track-panel launcher -->
 
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h3 class="step-title">Find the plugin in your Vault</h3>
-            <p class="step-desc">
-              Scroll down past your engine installations to the <strong>Fab Library</strong> section.
-              Find <strong>MHA Manager</strong> — use the search bar if you have many items.
-              If it isn't in your library yet, purchase or claim it on
-              <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a> first.
-            </p>
-            <DocFigure
-              src="/assets/docs/mha/launcher-vault-plugin.webp"
-              alt="Fab Library section showing the MHA Manager plugin card with &quot;Install to Engine&quot; and &quot;Add to Project&quot; buttons visible"
-              caption="The MHA Manager card in the Fab Library — two install options are shown"
-            />
-          </div>
-        </div>
+  <!-- Manual track -->
+  <div class="track-panel hidden" data-panel="manual">
 
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <h3 class="step-title">Choose how to install it</h3>
-            <p class="step-desc">
-              You have two options on the plugin card:
-            </p>
-            <div class="install-option-grid">
-              <div class="install-option">
-                <span class="install-option-label">Install to Engine</span>
-                <p class="install-option-desc">
-                  Installs the plugin engine-wide for a specific UE version. Available in every
-                  project using that engine — but must be enabled per project via
-                  <strong>Edit → Plugins</strong>.
-                </p>
-                <div class="install-option-path">
-                  <code>Engine/Plugins/Marketplace/MHAManager/</code>
-                </div>
-              </div>
-              <div class="install-option">
-                <span class="install-option-label">Add to Project</span>
-                <p class="install-option-desc">
-                  Copies the plugin directly into a single project's <code>Plugins/</code> folder.
-                  Only available in that project, but auto-enabled on install. Best if you only
-                  need it for one project.
-                </p>
-                <div class="install-option-path">
-                  <code>YourProject/Plugins/MHAManager/</code>
-                </div>
-              </div>
-            </div>
-            <DocFigure
-              src="/assets/docs/mha/launcher-install-dialog.webp"
-              alt="&quot;Install to Engine&quot; engine version picker dialog — showing UE 5.8 selected"
-              caption="Selecting the engine version when using &quot;Install to Engine&quot;"
-            />
-          </div>
-        </div>
+    <div class="callout callout-tip">
+      <strong>The same precompiled binaries, dropped in by hand.</strong> No compiler or Visual Studio needed.
+    </div>
 
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <h3 class="step-title">Let the editor enable the dependency plugins</h3>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 class="step-title">Download the plugin archive</h3>
           <p class="step-desc">
-            The engine plugins MHA Manager requires are declared as dependencies — when you enable
-            MHA Manager, the editor offers to enable them for you. Accept the prompt and restart
-            when asked. These are the auto-enabled dependencies:
+            Grab the latest release from the
+            <a href="https://github.com/Hawaiianspawn/mha-manager/releases" target="_blank" rel="noopener noreferrer">GitHub Releases page</a>.
+            Download <code>MHAManager-v2.7.0.zip</code> (or the latest version available).
           </p>
-          <div class="plugin-table">
-            <div class="plugin-row header">
-              <span>Plugin name</span>
-              <span>Where it comes from</span>
-              <span>Required for</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHuman</code></span>
-              <span>Engine</span>
-              <span>All job types — the MetaHuman Animator pipeline</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>CaptureData</code></span>
-              <span>Engine</span>
-              <span>All job types — footage import assets</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>ImgMedia</code></span>
-              <span>Engine</span>
-              <span>Image and depth sequence loading</span>
-            </div>
-          </div>
-          <p class="step-desc" style="margin-top: 16px;">
-            Two more Epic plugins come from
-            <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a> for free —
-            install them to the engine via the Epic Games Launcher, or into your project's
-            <code>Plugins/</code> folder. Mono (face) and Audio jobs need neither.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 class="step-title">Copy to your project's Plugins folder</h3>
+          <p class="step-desc">
+            Extract the archive. Inside you'll find a single folder named <code>MHAManager</code>.
+            Copy it into your project's <code>Plugins/</code> directory, creating it if it doesn't exist:
           </p>
-          <div class="plugin-table">
-            <div class="plugin-row header">
-              <span>Plugin name</span>
-              <span>Fab listing</span>
-              <span>Required for</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanDepthProcessing</code></span>
-              <span><a href="https://www.fab.com/listings/8efe3d9d-ae3b-4d75-955c-d404ff8108f9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Depth Processing</a></span>
-              <span><strong>Required</strong> by Stereo and Identity Create jobs — depth generation is their first stage</span>
-            </div>
-            <div class="plugin-row">
-              <span><code>MetaHumanBodyTracker</code></span>
-              <span><a href="https://www.fab.com/listings/4095b8e0-3eff-44f1-acb4-cb40b99228b9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Markerless Motion Capture</a></span>
-              <span>Optional — body tracking and the framing probe (UE 5.8)</span>
-            </div>
+          <div class="code-block">
+            <pre><code>YourProject/
+└── Plugins/
+  └── MHAManager/       ← paste here
+      ├── MHAManager.uplugin
+      └── Binaries/</code></pre>
           </div>
-          <div class="callout callout-note" style="margin-top: 14px;">
-            <strong>Depth Processing is the one plugin the editor will not enable for you.</strong>
-            MHA Manager declares it, but the engine copy has no default-enable flag, so a brand-new
-            project needs it ticked once in <strong>Edit &rarr; Plugins</strong>. Without it, every
-            Stereo and Identity Create job fails at its first stage with "Unable to generate depth
-            images. Please make sure Depth Processing plugin is enabled."
-          </div>
-          <div class="callout callout-tip" style="margin-top: 14px;">
-            <strong>Capture Manager:</strong> auto-queue of takes ingested through Live Link Hub /
-            Capture Manager uses the engine's <code>CaptureManager</code> plugin (UE 5.7+, included
-            with the engine). It produces the Footage Capture Data assets the watcher picks up.
-          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 class="step-title">Open your project</h3>
+          <p class="step-desc">
+            Double-click your <code>.uproject</code> to open Unreal Editor. If prompted that modules need
+            to be rebuilt, click <strong>No</strong> — the precompiled binaries should load without
+            recompiling. If this prompt repeats every launch, use the
+            <a href="#" data-switch-track="source">From Source</a> path instead.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3 class="step-title">Enable required engine plugins</h3>
+          <p class="step-desc">
+            Go to <strong>Edit → Plugins</strong> and verify all dependencies are enabled. The
+            dependency table in the <strong>Epic Games Launcher</strong> tab applies here too.
+          </p>
         </div>
       </div>
 
@@ -244,99 +317,14 @@ import DocFigure from '../../../../components/DocFigure.astro';
         <div class="step-body">
           <h3 class="step-title">Verify the plugin is active</h3>
           <p class="step-desc">
-            Search for <strong>MHA Manager</strong> in the Plugins browser — it should show
-            as enabled. Then open <strong>Tools → MHA Manager</strong> from the menu bar.
-            The queue panel should appear. You're ready.
+            Search for <strong>MHA Manager</strong> in the Plugins browser — it should show as
+            enabled. Then open <strong>Tools → MHA Manager</strong>. The queue panel should appear.
           </p>
-          <DocFigure
-            src="/assets/docs/mha/install-plugins-browser.webp"
-            alt="Edit → Plugins → search &quot;MHA Manager&quot; — show it enabled"
-            caption="The plugin showing as enabled in the Plugins browser"
-          />
-          <DocFigure
-            src="/assets/docs/mha/install-window-menu.webp"
-            alt="Tools menu open — highlight &quot;MHA Manager&quot; entry"
-            caption="Opening MHA Manager from the Tools menu"
-          />
         </div>
       </div>
 
-      </div><!-- end launcher steps -->
-    </div><!-- end method-panel launcher -->
-
-    <!-- Manual / GitHub method -->
-    <div class="method-panel hidden" data-method-panel="manual">
-      <div class="steps">
-
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h3 class="step-title">Download the plugin archive</h3>
-            <p class="step-desc">
-              Grab the latest release from the
-              <a href="https://github.com/Hawaiianspawn/mha-manager/releases" target="_blank" rel="noopener noreferrer">GitHub Releases page</a>.
-              Download <code>MHAManager-v2.7.0.zip</code> (or the latest version available).
-            </p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h3 class="step-title">Copy to your project's Plugins folder</h3>
-            <p class="step-desc">
-              Extract the archive. Inside you'll find a single folder named <code>MHAManager</code>.
-              Copy it into your project's <code>Plugins/</code> directory, creating it if it doesn't exist:
-            </p>
-            <div class="code-block">
-              <pre><code>YourProject/
-└── Plugins/
-    └── MHAManager/       ← paste here
-        ├── MHAManager.uplugin
-        └── Binaries/</code></pre>
-            </div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <h3 class="step-title">Open your project</h3>
-            <p class="step-desc">
-              Double-click your <code>.uproject</code> to open Unreal Editor. If prompted that modules need
-              to be rebuilt, click <strong>No</strong> — the precompiled binaries should load without
-              recompiling. If this prompt repeats every launch, use the
-              <a href="#" data-switch-track="source">From Source</a> path instead.
-            </p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <h3 class="step-title">Enable required engine plugins</h3>
-            <p class="step-desc">
-              Go to <strong>Edit → Plugins</strong> and verify all dependencies are enabled. See the
-              table in the Epic Launcher tab above — the same plugins apply here.
-            </p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-num">5</div>
-          <div class="step-body">
-            <h3 class="step-title">Verify the plugin is active</h3>
-            <p class="step-desc">
-              Search for <strong>MHA Manager</strong> in the Plugins browser — it should show as
-              enabled. Then open <strong>Tools → MHA Manager</strong>. The queue panel should appear.
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </div><!-- end method-panel manual -->
-
-  </div><!-- end track-panel binaries -->
+    </div>
+  </div><!-- end track-panel manual -->
 
   <!-- From Source track -->
   <div class="track-panel hidden" data-panel="source">
@@ -443,7 +431,7 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
             caption="Set configuration to Development Editor and platform to Win64 before building"
           />
           <p class="step-desc" style="margin-top: 10px;">
-            A full build typically takes 5–15 minutes depending on hardware. Subsequent incremental
+            A full build typically takes 5-15 minutes depending on hardware. Subsequent incremental
             builds are much faster.
           </p>
         </div>
@@ -522,44 +510,6 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
     background: var(--bg-card);
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
-
-  /* Method sub-selector */
-  .method-selector {
-    display: flex;
-    gap: 0;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 3px;
-    margin-bottom: 28px;
-    width: fit-content;
-  }
-
-  .method-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 6px 16px;
-    border-radius: 4px;
-    font-size: 0.825rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.15s, background 0.15s;
-  }
-
-  .method-btn:hover { color: var(--text); }
-
-  .method-btn.active {
-    color: var(--text);
-    background: var(--bg-surface);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-  }
-
-  .method-panel { }
-  .method-panel.hidden { display: none; }
 
   /* Install option grid */
   .install-option-grid {
@@ -781,7 +731,7 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
 </style>
 
 <script>
-  // Track switcher (Precompiled / From Source)
+  // Track switcher (Launcher / Manual / From Source)
   const trackBtns = document.querySelectorAll<HTMLButtonElement>('.track-btn');
   const trackPanels = document.querySelectorAll<HTMLElement>('.track-panel');
 
@@ -794,23 +744,6 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
       });
       trackPanels.forEach(panel => {
         panel.classList.toggle('hidden', panel.dataset.panel !== target);
-      });
-    });
-  });
-
-  // Method switcher (Epic Launcher / Manual) — scoped inside binaries panel
-  const methodBtns = document.querySelectorAll<HTMLButtonElement>('.method-btn');
-  const methodPanels = document.querySelectorAll<HTMLElement>('.method-panel');
-
-  methodBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.method;
-      methodBtns.forEach(b => {
-        b.classList.toggle('active', b === btn);
-        b.setAttribute('aria-selected', String(b === btn));
-      });
-      methodPanels.forEach(panel => {
-        panel.classList.toggle('hidden', panel.dataset.methodPanel !== target);
       });
     });
   });

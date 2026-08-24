@@ -9,9 +9,10 @@ const groups = [
     badge: 'All job types',
     badgeClass: 'badge-all',
     options: [
-      { name: 'Frame Exclusion Ranges', type: 'Array of ranges', desc: 'One or more frame ranges to skip during the solve, e.g. <code>0-5, 120-125</code>. Use to cut out blinks, obstructions, equipment glare, or any frames where the face is occluded or corrupted.' },
-      { name: 'Show Frames', type: 'Bool', desc: 'Renders preview frames to the viewport during the solve. Useful for debugging to visually confirm the solver is tracking correctly. Slows down processing — disable for production batches.' },
-      { name: 'Capture Frame Rate', type: 'Float (optional)', desc: 'Override the frame rate auto-detected from the capture data asset. Leave blank in most cases. Set explicitly if your image sequence lacks embedded timing metadata or if auto-detection gives incorrect results.' },
+      { name: 'Capture Frame Rate', type: 'Double', desc: 'Frame rate applied to this job\'s FootageCaptureData asset and every image sequence linked to it. It always shows the take\'s current rate and cannot be left blank - editing it writes onto the capture data asset, not just this job. Inert on audio-only jobs, which have no footage.' },
+      { name: 'Timecode', type: 'String', desc: 'Start timecode written onto the job\'s linked image and depth sequences, as <code>HH:MM:SS:FF</code> or <code>HH:MM:SS;FF</code>. Like Frame Rate it edits the CaptureData asset, and is inert on audio-only jobs.' },
+      { name: 'Show Frames Live', type: 'Bool', desc: 'Updates the viewport with each frame as it is processed. Useful to confirm the solver is tracking correctly; it costs a little speed, so leave it off for production batches.' },
+      { name: 'Excluded Frames', type: 'Array of ranges', desc: 'One or more frame ranges the solve skips, e.g. <code>0-5, 120-125</code>. Use it to cut blinks, obstructions, equipment glare, or any frames where the face is occluded or corrupted.' },
     ],
   },
   {
@@ -23,6 +24,7 @@ const groups = [
       { name: 'Head Stabilization', type: 'Bool', desc: 'Corrects for drift introduced by head movement across the recording. Enabled by default. Disable only if stabilization is degrading a locked-off, tripod-style take.' },
       { name: 'Tongue Solve', type: 'Bool', desc: 'Enables the tongue tracking solver (applies to Mono and Stereo jobs). Requires UE 5.7 or later. Capture quality must be sufficient for tongue visibility — close-framing and good lighting are prerequisites.' },
       { name: 'Neutral Pose Calibration', type: 'Bool + Frame + Alpha', desc: 'Uses a neutral expression frame to calibrate the facial geometry baseline before solving, with a blend weight (alpha). Available on Mono and Stereo jobs.' },
+      { name: 'Models', type: '5 assets (advanced)', desc: 'Advanced sub-group overriding the models the mono pipeline runs: <strong>Smoothing Params</strong> (realtime smoothing applied to the solved curves), <strong>NNE Backend</strong> (inference runtime, e.g. <code>NNERuntimeORTCpu</code>), and the <strong>Face Detector</strong>, <strong>Head Pose Tracker</strong> and <strong>Face Solver</strong> NNE models. Blank or empty on any of them means the engine default - leave them alone unless you are testing a custom model.' },
     ],
   },
   {
@@ -33,10 +35,11 @@ const groups = [
     options: [
       { name: 'Body Tracking', type: 'Bool', desc: 'Enables the SMPLX-based body solver alongside the face solve. Requires the <strong>MetaHumanBodyTracker</strong> plugin. Disabled by default — face-only tracking is unaffected when this is off.' },
       { name: 'Face Tracking', type: 'Bool', desc: 'Enabled by default. Disable to skip the face solve entirely for body-only runs — useful when you only need body motion and want to save solve time.' },
-      { name: 'Body Height', type: 'Bool + Float (cm)', desc: 'Auto-infers the subject\'s height from footage by default. Disable Auto Body Height to enter a fixed value instead. Epic recommends 145–190cm for best tracking quality.' },
-      { name: 'Body Detection Confidence', type: 'Float (0–1)', desc: 'Threshold for initially acquiring a body lock on the subject. Default 0.7. Lower this if the tracker struggles to acquire lock in cluttered or dim footage.' },
-      { name: 'Body Tracking Confidence', type: 'Float (0–1)', desc: 'Threshold for maintaining an existing body lock once acquired. Default 0.5. Lower this if the tracker frequently drops lock during fast motion.' },
+      { name: 'Body Height', type: 'Bool + Float (cm)', desc: 'Auto-infers the subject\'s height from footage by default. Disable Auto Body Height to enter a fixed value instead. Epic recommends 145-190cm for best tracking quality.' },
+      { name: 'Body Detection Confidence', type: 'Float (0-1)', desc: 'Threshold for initially acquiring a body lock on the subject. Default 0.7. Lower this if the tracker struggles to acquire lock in cluttered or dim footage.' },
+      { name: 'Body Tracking Confidence', type: 'Float (0-1)', desc: 'Threshold for maintaining an existing body lock once acquired. Default 0.5. Lower this if the tracker frequently drops lock during fast motion.' },
       { name: 'Enable Foot Locking', type: 'Bool', desc: 'Stabilizes foot contact points to reduce foot sliding during the solve. Enabled by default.' },
+      { name: 'Skip Preview Pass', type: 'Bool', desc: 'Skips the quick preview pass that runs before the full body solve. Off by default, and only has an effect while Body Tracking is on.' },
       { name: 'Head Allowed Rotation (Left/Right, Up/Down)', type: 'Float (degrees)', desc: 'Yaw and pitch limits beyond which a frame is treated as unsolved for head rotation. Defaults: 45deg left/right, 30deg up/down.' },
       { name: 'Head Rotation Handler', type: 'Enum', desc: 'What to do with frames outside the allowed head rotation range: <strong>None</strong> (leave unsolved) or <strong>Neutral Pose</strong> (substitute a neutral head pose).' },
     ],
@@ -48,7 +51,7 @@ const groups = [
     badgeClass: 'badge-body',
     options: [
       { name: 'Export Face / Export Body', type: 'Bool', desc: 'Toggle which solved data streams get baked into the exported AnimSequence. Both enabled by default.' },
-      { name: 'Body Export Skeleton', type: 'Enum', desc: '<strong>Performer Skeleton</strong> builds a mesh matching the solve\'s own body-shape betas. <strong>Existing Skeleton</strong> retargets the solved body onto a mesh you choose, via an IK Retargeter.' },
+      { name: 'Body Export Skeleton', type: 'Enum', desc: '<strong>Performer Skeleton</strong> builds a mesh matching the solve\'s own body-shape betas. <strong>Existing Skeleton</strong> retargets the solved body onto a mesh you choose, via an IK Retargeter. <strong>Both</strong> - the default - runs one pass of each.' },
       { name: 'Body Target Mesh', type: 'Object (USkeletalMesh)', desc: 'Shown only when Body Export Skeleton is Existing Skeleton. Per-job override of the global default target mesh; empty falls back to the global default, then the plugin\'s SKM_Body.' },
       { name: 'Body Retargeter', type: 'Object (UIKRetargeter)', desc: 'Shown only when Body Export Skeleton is Existing Skeleton. IK Retargeter used to retarget the solved body onto the Target Mesh. Use the panel\'s <strong>+ Create Retargeter...</strong> button to auto-generate one pre-wired to the SMPL body-tracker source rig — you only need to configure the target chain mapping in the editor that opens.' },
       { name: 'Unsolved Frames', type: 'Enum', desc: 'Fallback for frames the body tracker couldn\'t solve: hold the <strong>Last Valid Frame</strong>, or fall back to a <strong>Neutral Pose</strong>.' },
@@ -76,13 +79,23 @@ const groups = [
       { name: 'Default Tracker / Default Solver', type: 'Asset', desc: 'Override the face contour tracker or face animation solver asset used instead of the pipeline default. Leave empty to use the engine default (shown pre-filled in the settings panel).' },
       { name: 'Head Movement Reference Frame', type: 'Int', desc: 'The frame number used as the identity reference for head movement correction. Frame 0 is the default. Set to a frame where the subject is in a neutral, stable pose facing forward.' },
       { name: 'Neutral Pose Calibration', type: 'Bool', desc: 'Uses a dedicated neutral expression frame (separate from the performance footage) to calibrate the facial geometry baseline before solving. Improves accuracy when a calibration take is available.' },
-      { name: 'Face Coverage Threshold', type: 'Float (0–1)', desc: 'Minimum proportion of the face that must be visible in the depth map for a frame to be included in the solve. Frames below this threshold are automatically excluded. Raise if you see partial-face frames corrupting the solve.' },
+      { name: 'Face Coverage Threshold', type: 'Float (percent, 0-100)', desc: 'Minimum percentage of the depth map the detected face must cover for a frame to count as valid. Default 80. Frames below it are excluded from the solve; lowering it lets partial-face frames back in.' },
       { name: 'Face Width Threshold', type: 'Float (pixels)', desc: 'Minimum face width in depth pixels required for a frame to be included. Acts alongside Face Coverage Threshold to filter out frames where the face is too far from camera or too small for reliable depth data.' },
       { name: 'Baseline Tolerance', type: 'Float', desc: 'Acceptable deviation between the stereo baseline distance recorded in the camera calibration and what is measured in the live footage. Increase if calibration was done at a slightly different rig configuration than the capture.' },
       { name: 'Scale Tolerance', type: 'Float', desc: 'Acceptable scale mismatch between calibrated and measured stereo geometry. Increase if the rig was adjusted between calibration and capture.' },
-      { name: 'Enable Depth Cleaning', type: 'Bool', desc: 'Runs a non-destructive hole-filling pass on the depth sequence before the performance solve, writing a new <code>_Cleaned</code> copy rather than modifying the original. Distinguishes background from the subject and only patches interior gaps within the face/body silhouette — borders and out-of-range background are left untouched. Runs asynchronously on the thread pool and is cancellable mid-pass.' },
-      { name: 'Depth Clamp Min', type: 'Float', desc: 'Clips depth values below this threshold to zero before cleaning. Eliminates background or near-field noise that would otherwise be treated as valid face depth.' },
-      { name: 'Depth Clamp Max', type: 'Float', desc: 'Clips depth values above this threshold to zero before cleaning. Eliminates far-field objects and reflections that appear in the depth map beyond the face region.' },
+      { name: 'Easy To Edit Control Curves', type: 'Bool', desc: 'Produces control curves shaped for hand editing after the solve. UE 5.8+, off by default.' },
+    ],
+  },
+  {
+    id: 'identity',
+    label: 'Identity',
+    badge: 'IdentityCreate jobs only',
+    badgeClass: 'badge-stereo',
+    options: [
+      { name: 'Neutral Frame Index', type: 'Int', desc: 'Frame used as the Neutral pose. It must have valid RGB and depth and a front-facing view of the performer. Default 0.' },
+      { name: 'Fit Teeth', type: 'Bool', desc: 'Tracks a Teeth pose before auto-rig so the service fits teeth. Off by default - teeth solves are rarely good.' },
+      { name: 'Teeth Frame Index', type: 'Int', desc: 'Shown only when Fit Teeth is on. Frame used as the Teeth pose; it must show the performer\'s teeth clearly, with valid RGB and depth.' },
+      { name: 'Prepare for Performance', type: 'Bool', desc: 'Trains the predictive solvers after auto-rig completes, so the Identity is ready for fast performance solving. On by default - stereo takes cannot solve against an unprepared Identity.' },
     ],
   },
   {
@@ -92,13 +105,13 @@ const groups = [
     badgeClass: 'badge-audio',
     options: [
       { name: 'Solver Mode', type: 'Enum', desc: '<strong>Realtime</strong> — faster solve, lower quality. Suitable for previews and iteration. <strong>Offline</strong> — slower, higher quality. Use for final output deliverables.' },
-      { name: 'Mood Preset', type: 'Enum', desc: 'Sets the emotional baseline used to color the generated animation. Available presets: Neutral, Happy, Sad, Angry, Surprised, Disgusted, Fearful. The solver blends the detected phonemes against this mood baseline.' },
+      { name: 'Mood Preset', type: 'Enum', desc: 'Emotional baseline the solve colors the animation with: <strong>Auto Detect</strong> - the default, inferred from the audio - plus Neutral, Happy, Sad, Disgust, Anger, Surprise, Fear, Confident, Excited, Bored, Playful and Confused. It applies to the offline solve; the realtime solve has its own <strong>Realtime Mood</strong> pair, which defaults to Neutral.' },
       { name: 'Blink Generation', type: 'Bool', desc: 'Auto-generates natural blink keyframes when the audio solve does not produce blink data. Enabled by default. Disable if you are driving blinks from a separate system or if the performance data already includes them.' },
       { name: 'Downmix Channels', type: 'Bool', desc: 'Downmixes multi-channel audio to mono before analysis. Enabled by default. Disable to solve from a single specific channel via Audio Channel.' },
       { name: 'Audio Channel', type: 'Int (0-indexed)', desc: 'Which channel from a multi-track audio asset to use when Downmix Channels is off. Defaults to 0 (left/mono). For stereo files where dialogue is on the right channel, set to 1.' },
-      { name: 'Output Controls', type: 'Enum', desc: 'Which control rig channels the audio solve drives: <strong>Full Face</strong>, <strong>Lips Only</strong>, or <strong>Eyelids Only</strong>.' },
-      { name: 'Mood Intensity', type: 'Float', desc: 'Blend weight for the Mood Preset — lower values keep the animation closer to neutral while retaining a hint of the chosen mood.' },
-      { name: 'Lookahead Window', type: 'Int (milliseconds)', desc: 'How far ahead the solver reads the audio signal to generate anticipatory animation cues — for example, jaw pre-opening before a vowel. Default 80 ms. Increase for more anticipatory motion; decrease for tighter sync.' },
+      { name: 'Output Controls', type: 'Enum', desc: 'Which curves the solve outputs: <strong>Full Face</strong> (all facial curves) or <strong>Mouth Only</strong> (lip sync curves only).' },
+      { name: 'Mood Intensity', type: 'Float (0-1)', desc: 'Blend weight for the Mood Preset - lower values keep the animation closer to neutral while retaining a hint of the chosen mood. Default 1.0.' },
+      { name: 'Lookahead Window', type: 'Int (milliseconds)', desc: 'Realtime solve only - hidden unless Realtime Audio is on. How far ahead the solver reads incoming audio, trading latency for accuracy. Default 80 ms.' },
     ],
   },
 ];
@@ -126,7 +139,7 @@ const groups = [
   </div>
 
   <div class="callout callout-tip">
-    <strong>Column picker:</strong> the <strong>Columns...</strong> button in the toolbar toggles
+    <strong>Column picker:</strong> the <strong>Columns</strong> button in the toolbar toggles
     which queue columns are visible — Thumbnail, Type, Solve, Status, Progress, Process Time and
     the rest. It controls the queue table, not the options themselves; column layout is saved in
     the manifest.
@@ -147,8 +160,8 @@ const groups = [
 
   <DocFigure
     src="/assets/docs/mha/job-options-column-picker.webp"
-    alt="Column picker open from the Columns... toolbar button, showing grouped checkboxes for the queue columns"
-    caption="The Columns... button toggles which queue columns are visible"
+    alt="Column picker open from the Columns toolbar button, showing grouped checkboxes for the queue columns"
+    caption="The Columns button toggles which queue columns are visible"
   />
 
   <nav class="option-nav">
