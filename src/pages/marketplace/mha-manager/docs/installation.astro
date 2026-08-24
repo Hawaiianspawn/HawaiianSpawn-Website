@@ -32,7 +32,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
     </div>
     <div class="plugin-row">
       <span><strong>Unreal Engine</strong></span>
-      <span>5.5 – 5.8</span>
+      <span>5.7 - 5.8</span>
       <span>Match the binary build to your engine version, or build from source</span>
     </div>
     <div class="plugin-row">
@@ -187,7 +187,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
             </div>
             <div class="plugin-row">
               <span><code>MetaHuman</code></span>
-              <span>Engine (UE 5.6+); on UE 5.5, free from Fab — <a href="https://www.fab.com/listings/055a6486-ad17-4590-aa1e-261d47f7f041" target="_blank" rel="noopener noreferrer">MetaHuman Plugin</a></span>
+              <span>Engine</span>
               <span>All job types — the MetaHuman Animator pipeline</span>
             </div>
             <div class="plugin-row">
@@ -202,11 +202,10 @@ import DocFigure from '../../../../components/DocFigure.astro';
             </div>
           </div>
           <p class="step-desc" style="margin-top: 16px;">
-            Two Epic plugins are <strong>optional</strong> — the related UI hides or labels itself
-            when they are absent, and Mono/Audio jobs need neither. Both are free from
-            <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a>;
-            install them to the engine via the Epic Games Launcher or into your project's
-            <code>Plugins/</code> folder.
+            Two more Epic plugins come from
+            <a href="https://www.fab.com" target="_blank" rel="noopener noreferrer">Fab</a> for free —
+            install them to the engine via the Epic Games Launcher, or into your project's
+            <code>Plugins/</code> folder. Mono (face) and Audio jobs need neither.
           </p>
           <div class="plugin-table">
             <div class="plugin-row header">
@@ -217,13 +216,20 @@ import DocFigure from '../../../../components/DocFigure.astro';
             <div class="plugin-row">
               <span><code>MetaHumanDepthProcessing</code></span>
               <span><a href="https://www.fab.com/listings/8efe3d9d-ae3b-4d75-955c-d404ff8108f9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Depth Processing</a></span>
-              <span>Stereo/depth jobs — depth generation and the depth solve path</span>
+              <span><strong>Required</strong> by Stereo and Identity Create jobs — depth generation is their first stage</span>
             </div>
             <div class="plugin-row">
               <span><code>MetaHumanBodyTracker</code></span>
               <span><a href="https://www.fab.com/listings/4095b8e0-3eff-44f1-acb4-cb40b99228b9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Markerless Motion Capture</a></span>
-              <span>Body tracking and the framing probe (UE 5.8)</span>
+              <span>Optional — body tracking and the framing probe (UE 5.8)</span>
             </div>
+          </div>
+          <div class="callout callout-note" style="margin-top: 14px;">
+            <strong>Depth Processing is the one plugin the editor will not enable for you.</strong>
+            MHA Manager declares it, but the engine copy has no default-enable flag, so a brand-new
+            project needs it ticked once in <strong>Edit &rarr; Plugins</strong>. Without it, every
+            Stereo and Identity Create job fails at its first stage with "Unable to generate depth
+            images. Please make sure Depth Processing plugin is enabled."
           </div>
           <div class="callout callout-tip" style="margin-top: 14px;">
             <strong>Capture Manager:</strong> auto-queue of takes ingested through Live Link Hub /
@@ -269,7 +275,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
             <p class="step-desc">
               Grab the latest release from the
               <a href="https://github.com/Hawaiianspawn/mha-manager/releases" target="_blank" rel="noopener noreferrer">GitHub Releases page</a>.
-              Download <code>MHAManager-v2.6.1.zip</code> (or the latest version available).
+              Download <code>MHAManager-v2.7.0.zip</code> (or the latest version available).
             </p>
           </div>
         </div>
@@ -385,14 +391,14 @@ import DocFigure from '../../../../components/DocFigure.astro';
             The build needs the MetaHuman and CaptureData headers present. Make sure the
             <code>MetaHuman</code>, <code>CaptureData</code>, and <code>ImgMedia</code> plugins are
             enabled in your <code>.uproject</code> (they are declared as dependencies, so the editor
-            offers to enable them when you enable MHA Manager). On UE 5.5, install the free
-            <a href="https://www.fab.com/listings/055a6486-ad17-4590-aa1e-261d47f7f041" target="_blank" rel="noopener noreferrer">MetaHuman Plugin</a> from Fab first — it ships with the engine on 5.6+.
+            offers to enable them when you enable MHA Manager). All three ship with the engine.
           </p>
           <div class="callout callout-tip" style="margin-top: 14px;">
-            <strong>Optional plugins:</strong> Stereo/depth jobs need Epic's free
-            <strong><a href="https://www.fab.com/listings/8efe3d9d-ae3b-4d75-955c-d404ff8108f9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Depth Processing</a></strong> plugin, and body tracking (UE 5.8)
-            needs <strong><a href="https://www.fab.com/listings/4095b8e0-3eff-44f1-acb4-cb40b99228b9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Markerless Motion Capture</a></strong> — both free on Fab. Mono
-            and Audio jobs need neither, and the related UI hides itself when they are absent.
+            <strong>From Fab:</strong> Stereo and Identity Create jobs require Epic's free
+            <strong><a href="https://www.fab.com/listings/8efe3d9d-ae3b-4d75-955c-d404ff8108f9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Depth Processing</a></strong> plugin, which you must tick in
+            <strong>Edit &rarr; Plugins</strong> yourself; body tracking (UE 5.8) needs
+            <strong><a href="https://www.fab.com/listings/4095b8e0-3eff-44f1-acb4-cb40b99228b9" target="_blank" rel="noopener noreferrer">MetaHuman Animator Markerless Motion Capture</a></strong>. Mono (face)
+            and Audio jobs need neither.
           </div>
         </div>
       </div>

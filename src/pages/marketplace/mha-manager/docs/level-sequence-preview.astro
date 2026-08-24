@@ -20,9 +20,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">What gets exported</h2>
     <p class="section-desc">
-      Enable <strong>Export Level Sequence</strong> in
-      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> and every job adds
-      a Level Sequence to its outputs, beside the Performance and AnimSequence. Three things make it
+      <strong>Export LevelSequence</strong> is on by default in
+      <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a>, so every job adds
+      a Level Sequence to its outputs beside the Performance and AnimSequence. Three things make it
       reviewable on its own:
     </p>
     <div class="field-list">
@@ -46,11 +46,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </section>
 
   <section class="doc-section">
-    <h2 class="section-title">Face binding for audio jobs</h2>
+    <h2 class="section-title">Face binding</h2>
     <p class="section-desc">
-      The engine binds a face to an exported Level Sequence only for stereo takes, so an audio
-      cinematic would otherwise play dialogue over an empty frame. The plugin binds one itself, in
-      order of preference:
+      The engine binds a face to an exported Level Sequence only for stereo takes — where it uses
+      the take's own rigged identity. An audio sequence would otherwise play dialogue over an empty
+      frame, and a mono one its plate with nothing animated in front of it, so for those two the
+      plugin binds a face itself, in order of preference:
     </p>
     <ol class="numbered-list">
       <li>
@@ -68,6 +69,12 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       shipped face archetypes carry identical bones under different Skeleton assets, so a mismatched
       pair looks correct and evaluates to nothing — a silent, still face is worse than a clear skip.
     </div>
+    <p class="section-desc">
+      A mono sequence that gets a face drops the footage plate: the engine adds it as a standalone
+      plane in front of the take's own camera, and the bound face is reframed at the origin, so the
+      plate would only sit in shot as a stray billboard. Only a face-bound sequence gets the
+      lighting rig — there is nothing for it to light otherwise.
+    </p>
   </section>
 
   <section class="doc-section">

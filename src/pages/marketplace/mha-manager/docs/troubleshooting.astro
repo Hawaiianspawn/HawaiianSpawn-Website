@@ -56,7 +56,7 @@ const issues = [
     id: 'slow-solve',
     symptom: 'Solve is much slower than expected',
     cause: 'GPU not being used, or D3D12 not active on a system that benefits from it.',
-    fix: 'Enable <strong>Force D3D12</strong> in Global Settings and re-run. Also verify your GPU drivers are up to date and that the editor is running on the discrete GPU rather than an integrated graphics adapter (check Windows Graphics Settings → Hardware-accelerated GPU scheduling).',
+    fix: 'Enable <strong>Force DX12 for Worker Processes</strong> under Global Settings &rarr; Advanced and re-run. Also verify your GPU drivers are up to date and that the editor is running on the discrete GPU rather than an integrated graphics adapter (check Windows Graphics Settings → Hardware-accelerated GPU scheduling).',
     type: 'performance',
   },
   {

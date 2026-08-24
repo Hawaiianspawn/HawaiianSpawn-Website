@@ -8,8 +8,8 @@ const toolGroups = [
     desc: 'Read-only tools that report queue and job state as JSON.',
     tools: [
       {
-        sig: 'get_queue_state() -> str',
-        params: '(none)',
+        sig: 'get_queue_state(status_filter="") -> str',
+        params: '<code>status_filter</code> (required by the schema — pass <code>""</code> for the whole queue)',
         desc: 'The whole queue as JSON. Each job carries its persisted fields plus live runtime fields the saved manifest omits: <code>live_status</code> (the real status — Running, MissingCalibration, PoorCalibrationQuality — not the collapsed "pending"), <code>stage</code>, <code>progress</code>, <code>status_message</code>, and <code>estimated_seconds</code>. Log lines are omitted for size — use <code>get_job</code> for a log tail.',
       },
       {
@@ -57,7 +57,7 @@ const toolGroups = [
       {
         sig: 'update_job(job_id, fields_json) -> str',
         params: '<code>job_id</code>, <code>fields_json</code>',
-        desc: 'Apply a partial job update — only the JSON keys present are changed. Supported keys include <code>input_type</code>, <code>identity</code>, <code>camera_calibration</code>, <code>start_frame</code>/<code>end_frame</code>, <code>body_tracking</code>, <code>export_output_path</code>, <code>custom_data</code>, and a partial <code>options</code> object. Returns <code>""</code> on success or an <code>error: ...</code> message (an unknown key lists the supported set).',
+        desc: 'Apply a partial job update — only the JSON keys present are changed. Supported keys include <code>input_type</code>, <code>identity</code>, <code>camera_calibration</code>, <code>start_frame</code>/<code>end_frame</code>, <code>body_tracking</code>, <code>export_output_path</code>, <code>custom_data</code>, and a partial <code>options</code> object. <code>export_output_path</code> must be a real path under <code>/Game</code> (<code>""</code> clears the override). Returns <code>""</code> on success or an <code>error: ...</code> message (an unknown key lists the supported set).',
       },
       {
         sig: 'update_settings(settings_json) -> str',
@@ -87,9 +87,9 @@ const toolGroups = [
         desc: 'Request cooperative cancellation of the running batch (cancels adapters, kills workers). Returns <code>false</code> if nothing was running or the editor is in an unattended session.',
       },
       {
-        sig: 'retry_jobs(job_ids) -> bool',
+        sig: 'retry_jobs(job_ids) -> int',
         params: '<code>job_ids</code> (list)',
-        desc: 'Requeue completed/failed/skipped jobs for another run, clearing persisted timing.',
+        desc: 'Requeue completed/failed/skipped jobs for another run, clearing persisted timing. Returns how many were actually requeued; unknown ids are ignored.',
       },
       {
         sig: 'retry_job_as_mono(job_id) -> bool',
@@ -148,7 +148,7 @@ const toolGroups = [
       {
         sig: 'save_manifest(file_path) -> bool',
         params: '<code>file_path</code>',
-        desc: 'Write the queue manifest JSON to disk. Pass <code>""</code> to write the default autosave manifest.',
+        desc: 'Write the queue manifest JSON to disk. The path must be inside the project\'s <code>Saved</code> folder; anything outside it returns <code>false</code> and writes nothing. Pass <code>""</code> to write the default autosave manifest.',
       },
     ],
   },
@@ -182,7 +182,7 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
       </div>
       <div class="req-row">
         <span><strong>UE 5.8+</strong></span>
-        <span>The toolset uses the engine's native <code>ModelContextProtocol</code> + <code>ToolsetRegistry</code> stack. On UE 5.5 / 5.7 this stack does not exist, so the toolset is unavailable — the rest of the plugin works normally.</span>
+        <span>The toolset uses the engine's native <code>ModelContextProtocol</code> + <code>ToolsetRegistry</code> stack. On UE 5.7 this stack does not exist, so the toolset is unavailable — the rest of the plugin works normally.</span>
       </div>
       <div class="req-row">
         <span><strong>Engine MCP plugins</strong></span>

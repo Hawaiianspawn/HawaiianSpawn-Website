@@ -27,8 +27,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <pre><code>YourProject/Saved/MHAManager/batch.mhajson</code></pre>
     </div>
     <p class="section-desc" style="margin-top:12px;">
-      This file is overwritten each run. Save a named copy via <strong>File... → Save Manifest As</strong>
-      in the batch panel toolbar if you need to preserve a specific queue.
+      This file is overwritten each run. To preserve a specific queue, save it as a
+      <a href="#batch-assets">batch asset</a> from the toolbar, or write a named copy with the
+      <code>save_manifest</code> <a href="/marketplace/mha-manager/docs/mcp-toolset">MCP tool</a>
+      (anywhere inside the project's <code>Saved</code> folder).
     </p>
   </section>
 
@@ -65,18 +67,20 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <h2 class="section-title">Settings block</h2>
     <div class="code-block">
       <pre><code>{`"settings": {
-  "plugin_version": "2.6.1",
+  "plugin_version": "2.7.0",
   "use_custom_output_path": false,
-  "export_output_path": "/Game/MHA_Batch",
+  "output_path": "/Game/CaptureManager/Export",
   "ue_export_flat": true,
   "skip_if_already_solved": true,
   "max_concurrent_jobs": 1,
   "export_anim_sequence": true,
-  "export_level_sequence": false,
+  "export_level_sequence": true,
+  "bind_face_to_audio_level_sequence": true,
+  "level_sequence_lighting_environment": "Portrait",
   "export_for_dcc": false,
-  "export_control_rig_fbx": false,
+  "export_dcc_audio": true,
   "dcc_export_directory": "",
-  "dcc_export_flat": true,
+  "dcc_export_layout": "PerTake",
   "overwrite_existing": true,
   "force_export_animation": false,
   "auto_open_after_export": false,
@@ -89,9 +93,13 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "board_pattern_width": 11,
   "board_pattern_height": 16,
   "board_square_size": 0.75,
-  "auto_detect_board_pattern": true,
+  "override_default_board": false,
+  "max_calibration_rms_error": 1.0,
+  "min_calibration_diagnostics_score": 0.5,
   "export_calibration_json": false,
-  "auto_queue_ingested_takes": false,
+  "clean_depth": false,
+  "auto_queue_ingested_takes": true,
+  "auto_run_ingested_takes": false,
   "default_job_options_by_category": {
     "mono":   { ... },
     "stereo": { ... },
@@ -206,7 +214,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     <div class="code-block">
       <pre><code>{`"artifacts": [
   {
-    "asset_path": "/Game/MHA_Batch/Scene01_Take03_Performance.Scene01_Take03_Performance",
+    "asset_path": "/Game/CaptureManager/Export/Scene01_Take03_Performance.Scene01_Take03_Performance",
     "type": "Performance",
     "state": "Complete",
     "stage_created_by": "ProcessPerformance",
@@ -214,7 +222,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     "disk_path": ""
   },
   {
-    "asset_path": "/Game/MHA_Batch/Scene01_Take03_Anim.Scene01_Take03_Anim",
+    "asset_path": "/Game/CaptureManager/Export/Scene01_Take03_Anim.Scene01_Take03_Anim",
     "type": "AnimSequence",
     "state": "Complete",
     "stage_created_by": "ExportOutputs",

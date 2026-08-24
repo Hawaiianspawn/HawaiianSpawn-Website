@@ -86,7 +86,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="field-row">
         <span><code class="code-warn">1</code></span>
-        <span>One or more jobs failed or produced partial artifacts. The manifest records which jobs failed — re-run with <strong>Do Not Re-Process Solved Takes</strong> enabled to retry only the failed jobs.</span>
+        <span>One or more jobs failed or produced partial artifacts. The manifest records which jobs failed — re-run the same manifest with <strong>Reprocess Solved Takes</strong> off (the default) to retry only the failures.</span>
       </div>
       <div class="field-row">
         <span><code class="code-error">2</code></span>
@@ -102,7 +102,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       while the batch runs:
     </p>
     <div class="code-block">
-      <pre><code>Progress - Pending: 3  Running: 1  Done: 2  Failed: 0</code></pre>
+      <pre><code>Progress - Pending: 3  Running: 1  Done: 2  Failed: 0  Blocked: 0</code></pre>
     </div>
     <p class="section-desc">
       Failed jobs log the stage at which they failed and the error message from the solver.
@@ -134,9 +134,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       artifact state for every job. To retry only the failures:
     </p>
     <ol class="numbered-list">
-      <li>Open the manifest in the editor (<strong>File → Load Manifest</strong> in the batch panel).</li>
-      <li>Enable <strong>Do Not Re-Process Solved Takes</strong> in Global Settings.</li>
-      <li>Click <strong>Start Batch</strong> (or re-run the commandlet with the same manifest).</li>
+      <li>Re-run the commandlet against the same manifest, or load the queue in the editor from its <a href="/marketplace/mha-manager/docs/manifests#batch-assets">batch asset</a>.</li>
+      <li>Leave <strong>Reprocess Solved Takes</strong> off (the default) in Global Settings.</li>
+      <li>Click <strong>Start Batch</strong> if you are in the editor.</li>
     </ol>
     <p class="section-desc" style="margin-top:12px;">
       Jobs with <code>"State": "Complete"</code> artifacts are skipped. Only failed or partial jobs run.

@@ -4,116 +4,177 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
 const settings = [
   {
-    name: 'UE Export Directory',
-    default: 'Off (/Game/MHA_Batch when enabled)',
-    desc: 'When disabled, generated Performance and animation assets are saved next to the source Capture Data asset. Enable it to collect everything in one Content Browser folder instead — use a project-relative path starting with <code>/Game/</code>.',
+    name: 'Auto-Queue Ingested Takes',
+    section: 'Ingest',
+    default: 'On',
+    desc: 'Watches the project for new Footage Capture Data assets — takes pushed from Live Link Hub / Capture Manager — and queues them automatically. Takes already in the queue are never re-added. When Live Link Hub exits, a sweep also picks up takes that were already in the project or arrived while the watcher was off.',
     note: null,
   },
   {
-    name: 'Flat Export (UE)',
-    default: 'Enabled',
-    desc: 'Places all generated assets directly in the UE Export Directory. Disable to create a per-take subfolder named after the source Capture Data\'s folder.',
+    name: 'Auto-Start Batch on Ingest',
+    section: 'Ingest',
+    default: 'Off',
+    desc: 'Starts the batch when auto-queued takes arrive and nothing is running. Takes arriving mid-batch are queued and started on the next idle trigger.',
     note: null,
   },
   {
-    name: 'Do Not Re-Process Solved Takes',
-    default: 'Enabled',
-    desc: 'When enabled, any job whose <code>UMetaHumanPerformance</code> asset already exists at the output path is skipped automatically. Useful when re-running a batch after a partial failure — completed jobs are not duplicated.',
+    name: 'Watch Folder (optional)',
+    section: 'Ingest',
+    default: 'Empty (all of /Game)',
+    desc: 'Content path prefix to restrict the watcher to, for example <code>/Game/CaptureManager/Ingest</code>.',
     note: null,
   },
   {
-    name: 'Max Concurrent Jobs',
-    default: '1',
-    desc: 'How many takes are solved simultaneously (1–8). Sequential mode (1) is the safest and lowest-memory option. Values above 1 launch separate worker processes that each solve a take side by side — real parallelism, since Epic\'s MetaHuman pipeline only allows one solve per editor instance.',
-    note: '2 is a good fit for 32 GB+ RAM and a mid-range GPU (~40–60% faster wall-clock on large queues). 3–4 needs workstation-class hardware (64 GB+, RTX 3090/4090). Stereo depth generation still runs serially before jobs enter the parallel pool.',
+    name: 'WAAPI Endpoint / Default Container / Platform / Language',
+    section: 'Wwise',
+    default: '<code>http://127.0.0.1:8090/waapi</code>, empty, Windows, English(US)',
+    desc: 'Where the Wwise Authoring API lives, which container to enumerate when a Wwise enqueue names none, and which converted media the solve reads. See <a href="/marketplace/mha-manager/docs/wwise-audio">Wwise Audio</a>.',
+    note: null,
+  },
+  {
+    name: 'Reprocess Solved Takes',
+    section: 'Execution',
+    default: 'Off',
+    desc: 'Off, a job whose Performance asset already exists and contains solved animation skips straight to export instead of solving again — the right behaviour when re-running a batch after a partial failure. Turn it on to force the solve to run regardless. Identity Create and Stereo Calibration jobs are unaffected: they go straight to Done when their identity or calibration already exists.',
+    note: 'A solved job whose options changed since it ran is marked <strong>Stale</strong> and re-solved by the next Start Batch, whatever this setting says.',
+  },
+  {
+    name: 'Always Export Animation',
+    section: 'Execution',
+    default: 'Off',
+    desc: 'Re-exports a job\'s AnimSequence on every run, even when <strong>Overwrite Existing Assets</strong> is off and one already exists. Only the AnimSequence — LevelSequence and Control Rig FBX still respect the overwrite setting.',
+    note: 'Use this when you have changed export settings (curve interpolation, head movement) and want updated animation without re-running the full solve.',
   },
   {
     name: 'Export AnimSequence',
-    default: 'Enabled',
-    desc: 'Bakes the solved performance into a <code>UAnimSequence</code> asset on the MetaHuman skeleton. Disable if you only need the raw Performance asset.',
+    section: 'Export',
+    default: 'On',
+    desc: 'Bakes the solved performance into a <code>UAnimSequence</code> asset. Turn it off for solve-only runs.',
     note: null,
   },
   {
-    name: 'Export LevelSequence',
-    default: 'Disabled',
-    desc: 'Additionally bakes the animation into a <code>ULevelSequence</code> asset — framed, self-lit, and playable on its own. The lighting rig, face binding, and preview backdrop have their own settings; see <a href="/marketplace/mha-manager/docs/level-sequence-preview">Level Sequence Preview</a>.',
+    name: 'Overwrite Existing Assets',
+    section: 'Export',
+    default: 'On',
+    desc: 'Overwrites assets at the output path if they already exist. Off, export is skipped for any asset that is already there, unless Always Export Animation overrides it.',
     note: null,
   },
   {
-    name: 'Export FBX For DCC',
-    default: 'Disabled',
+    name: 'Open in Editor After Export',
+    section: 'Export',
+    default: 'Off',
+    desc: 'Opens the exported AnimSequence in its asset editor when a job completes. Best for single-job runs; no effect headless.',
+    note: null,
+  },
+  {
+    name: 'Custom UE Export Directory',
+    section: 'Export',
+    default: 'Off (<code>/Game/CaptureManager/Export</code> when enabled)',
+    desc: 'Off, generated Performance and animation assets are saved next to the source Capture Data asset. On, everything is collected in the Content Browser folder below instead.',
+    note: null,
+  },
+  {
+    name: 'No Per-Take Subfolders',
+    section: 'Export',
+    default: 'On',
+    desc: 'Places all generated assets directly in the UE export directory. Turn it off to give each take a subfolder named after its source Capture Data\'s folder. Affects newly created jobs only.',
+    note: null,
+  },
+  {
+    name: 'Use MetaHuman ID Mesh',
+    section: 'Export',
+    default: 'On',
+    desc: 'Targets the exported AnimSequence at the skeletal mesh of the job\'s MetaHuman Identity. Off, the Fallback Target Skeleton below is used instead. Queue-wide — there is no per-job override.',
+    note: null,
+  },
+  {
+    name: 'Fallback Target Skeleton',
+    section: 'Export',
+    default: 'Face_Archetype_Skeleton',
+    desc: 'Skeleton or skeletal mesh used as the export target when Use MetaHuman ID Mesh is off.',
+    note: null,
+  },
+  {
+    name: 'Export FBX for DCC',
+    section: 'Export',
+    default: 'Off',
     desc: 'Writes the job-appropriate FBX for Maya, Blender, and other DCC tools. One toggle, not two — the form is derived from the solve: body-tracking jobs get the baked-joint <code>&lt;name&gt;_DCC.fbx</code>, face jobs get the animator-editable Control Rig <code>&lt;name&gt;_CR.fbx</code>. See <a href="/marketplace/mha-manager/docs/exports">Exports</a>.',
     note: null,
   },
   {
-    name: 'Export Take Audio (WAV)',
-    default: 'Enabled',
-    desc: 'Writes the take\'s audio beside the exported FBX as <code>&lt;AnimName&gt;.wav</code>, trimmed and timecode-aligned to the same range the FBX animation covers, so audio and animation line up at frame 0 in the DCC. Skipped when the take has no audio track.',
+    name: 'Reduce Control Rig Keys',
+    section: 'Export',
+    default: 'Off',
+    desc: 'Thins the Control Rig bake before FBX export. The bake writes one key per frame on every channel and Epic\'s own Control Rig FBX exporter has no key-reduction option, so dense bakes stay dense. This drops keys that do not meaningfully change the curve, refitting tangents to compensate.',
     note: null,
   },
   {
     name: 'DCC Export Directory',
-    default: 'Saved/MHAManager/Exports',
+    section: 'Export',
+    default: '<code>&lt;ProjectSaved&gt;/MHAManager/Exports</code>',
     desc: 'Disk folder where the FBX files are written. <strong>Open Export Folder</strong> in the toolbar opens whatever it is currently set to.',
     note: null,
   },
   {
-    name: 'DCC Export Layout',
+    name: 'DCC Folder Layout',
+    section: 'Export',
     default: 'Per Take',
     desc: 'Folder structure under the export directory: <strong>Per Take</strong> (a subfolder per source take), <strong>Actor / Part</strong> (<code>&lt;Actor&gt;/Face</code> or <code>/Body</code>), or <strong>Flat</strong> (everything in one folder).',
     note: null,
   },
   {
-    name: 'Overwrite Existing',
-    default: 'Enabled',
-    desc: 'Overwrites assets at the output path if they already exist. Disable to protect previously exported assets from being replaced on re-runs.',
+    name: 'Export Take Audio (WAV)',
+    section: 'Export',
+    default: 'On',
+    desc: 'Writes the take\'s audio beside the exported FBX as <code>&lt;AnimName&gt;.wav</code>, trimmed and timecode-aligned to the same range the FBX animation covers, so audio and animation line up at frame 0 in the DCC. Skipped when the take has no audio track.',
     note: null,
   },
   {
-    name: 'Force Export Animation',
-    default: 'Disabled',
-    desc: 'Re-exports a job\'s AnimSequence even when <strong>Overwrite Existing Assets</strong> is off and an AnimSequence already exists at the output path. Only affects AnimSequence export — other asset types (Performance, LevelSequence) still respect the overwrite setting.',
-    note: 'Use this when you\'ve changed export settings (curve interpolation, head movement, etc.) and want updated animation without re-running the full solve or touching other output assets.',
-  },
-  {
-    name: 'Auto-Open After Export',
-    default: 'Disabled',
-    desc: 'Opens the exported AnimSequence in its asset editor automatically when a job completes. Has no effect in headless/CI runs.',
+    name: 'Export LevelSequence',
+    section: 'Export',
+    default: 'On',
+    desc: 'Also bakes the animation into a <code>ULevelSequence</code> — framed, self-lit, and playable on its own. The face binding, lighting rig, and preview backdrop sit under it as their own rows; see <a href="/marketplace/mha-manager/docs/level-sequence-preview">Level Sequence Preview</a>.',
     note: null,
   },
   {
-    name: 'Use MetaHuman ID for Output Mesh',
-    default: 'Enabled',
-    desc: 'When enabled, the exported AnimSequence targets the skeleton of the specific <code>UMetaHumanIdentity</code> assigned to the job. When disabled, a generic archetype skeleton is used instead — useful if the Identity is a placeholder.',
+    name: 'Clean Depth',
+    section: 'Camera Calibration and Depth (whole queue)',
+    default: 'Off',
+    desc: 'Runs the automatic depth-cleaning pass before every depth-footage solve: per-sequence depth range, per-frame noise cutoff, hole filling, temporal smoothing, and foreground isolation, all data-driven. Depth footage only — Mono and Audio jobs ignore it. Queue-wide, with no per-job override.',
     note: null,
   },
   {
-    name: 'Reduce Control Rig Keys',
-    default: 'Disabled',
-    desc: 'Thins the Control Rig bake before FBX export. The bake writes one key per frame on every channel and Epic\'s own Control Rig FBX exporter has no key-reduction option, so dense bakes stay dense. This drops keys that do not meaningfully change the curve, refitting tangents to compensate, shrinking the file with minimal visual difference.',
+    name: 'Body Target Mesh',
+    section: 'Camera Calibration and Depth (whole queue)',
+    default: 'SKM_Body',
+    desc: 'Global default <code>USkeletalMesh</code> for body-tracked jobs whose Body Export Skeleton is Existing Skeleton. A per-job Body Target Mesh takes priority.',
     note: null,
   },
   {
-    name: 'Force D3D12',
-    default: 'Disabled',
-    desc: 'Forces the Direct3D 12 graphics backend for the performance solve. Some systems see better GPU utilization with D3D12. Leave disabled unless you have a specific reason to override the project\'s default RHI.',
+    name: 'Max Concurrent Jobs',
+    section: 'Advanced',
+    default: '1',
+    desc: 'How many takes are solved simultaneously (1-8). Sequential mode (1) is the safest and lowest-memory option. Values above 1 launch separate worker processes that each solve a take side by side — real parallelism, since Epic\'s MetaHuman pipeline only allows one solve per editor instance.',
+    note: 'Each extra slot costs one subprocess and 2-5 GB of RAM. Stereo depth generation still runs serially before jobs enter the parallel pool.',
+  },
+  {
+    name: 'Force DX12 for Worker Processes',
+    section: 'Advanced',
+    default: 'Off',
+    desc: 'Launches subprocess workers with <code>-d3d12</code> so headless jobs use DirectX 12 even if the editor session was started differently.',
     note: null,
   },
   {
-    name: 'Add Skeleton Compatibility',
-    default: 'Enabled',
-    desc: 'Auto-registers a body export\'s target skeleton as compatible with the MetaHuman base skeleton, so Face and Body animation can be retargeted and played back together without a manual compatibility setup step.',
-    note: null,
-  },
-  {
-    name: 'Body Target Skeletal Mesh',
-    default: 'Plugin default (SKM_Body)',
-    desc: 'Global default <code>USkeletalMesh</code> used for body-tracked jobs whose Body Export Skeleton is set to Existing Skeleton. Any per-job Body Target Mesh override takes priority over this.',
+    name: 'Add MetaHuman Skeleton Compatibility',
+    section: 'Advanced',
+    default: 'On',
+    desc: 'Auto-registers a body export\'s target skeleton as compatible with the MetaHuman base skeleton, so face and body animation play back together without a manual compatibility step.',
     note: null,
   },
   {
     name: 'Retargeter Output Path',
-    default: '/Game/CaptureManager/BodyTrackerTargets',
+    section: 'Advanced',
+    default: '<code>/Game/CaptureManager/BodyTrackerTargets</code>',
     desc: 'Content Browser folder where <strong>+ Create Retargeter...</strong> saves new IK Retargeter assets, named <code>RTG_SMPL_&lt;MeshName&gt;</code> automatically.',
     note: null,
   },
@@ -131,7 +192,8 @@ const settings = [
     <p class="doc-lead">
       Global settings apply to every job in the queue. They are configured once in the settings
       panel at the top of the MHA Manager tab. Settings persist between sessions and
-      are saved in the batch manifest.
+      are saved in the batch manifest. Most rows carry a revert arrow that puts them back to the
+      default shown here.
     </p>
   </div>
 
@@ -140,7 +202,8 @@ const settings = [
       <div class="setting-row">
         <div class="setting-meta">
           <span class="setting-name">{s.name}</span>
-          <span class="setting-default">Default: <code>{s.default}</code></span>
+          <span class="setting-section">{s.section}</span>
+          <span class="setting-default">Default: <Fragment set:html={s.default} /></span>
         </div>
         <div class="setting-body">
           <p class="setting-desc" set:html={s.desc} />
@@ -163,10 +226,11 @@ const settings = [
     />
     <p class="extra-desc">
       New jobs inherit their starting solve options from one of three templates, chosen by the
-      job's solve category: <strong>Mono</strong>, <strong>Stereo</strong>, or <strong>Audio</strong>.
-      Set your preferred options once per category instead of per job. The Solve Defaults section
-      in the settings panel shows a 3-way picker above an embedded job-settings panel — it is the
-      same widget used for a queued job, editing the chosen template instead of a specific job.
+      job's solve category: <strong>Mono</strong>, <strong>Depth Footage</strong> (stereo), or
+      <strong>Audio</strong>. Set your preferred options once per category instead of per job. The
+      Solve Defaults section in the settings panel shows a 3-way picker above an embedded
+      job-settings panel — it is the same widget used for a queued job, editing the chosen template
+      instead of a specific job.
     </p>
     <p class="extra-desc">
       A new job is seeded from the template matching its category at creation time. If a queued
@@ -196,7 +260,7 @@ const settings = [
     <div class="settings-list">
       <div class="setting-row">
         <div class="setting-meta">
-          <span class="setting-name">Board Pattern W / H</span>
+          <span class="setting-name">Board Width (squares) / Height</span>
           <span class="setting-default">Default: <code>11 x 16</code></span>
         </div>
         <div class="setting-body">
@@ -205,7 +269,7 @@ const settings = [
       </div>
       <div class="setting-row">
         <div class="setting-meta">
-          <span class="setting-name">Square Size</span>
+          <span class="setting-name">Square Size (cm)</span>
           <span class="setting-default">Default: <code>0.75 cm</code></span>
         </div>
         <div class="setting-body">
@@ -214,7 +278,7 @@ const settings = [
       </div>
       <div class="setting-row">
         <div class="setting-meta">
-          <span class="setting-name">Override Default Board</span>
+          <span class="setting-name">Override default board</span>
           <span class="setting-default">Default: <code>Off</code></span>
         </div>
         <div class="setting-body">
@@ -223,25 +287,16 @@ const settings = [
       </div>
       <div class="setting-row">
         <div class="setting-meta">
-          <span class="setting-name">Auto-Detect Board Pattern</span>
-          <span class="setting-default">Default: <code>Enabled</code></span>
+          <span class="setting-name">Sharpness auto-tune</span>
+          <span class="setting-default">Not a setting</span>
         </div>
         <div class="setting-body">
-          <p class="setting-desc">Probes a handful of frames across the take with candidate board sizes (your setting, its transpose, an inner-corner misentry, Epic's board) before committing to the full-take scan. If nothing detects, the job fails in seconds with a clear error — wrong board dimensions are the most common cause of "calibration runs forever and produces nothing".</p>
+          <p class="setting-desc">Blurry frames are rejected during frame selection by a threshold the plugin tunes itself (5.0 px to start) and stores for the next locked-frame retry. Likewise, with the board override off the board pattern is probed across a handful of frames — your last winner, its transpose, an inner-corner misentry, Epic's board — before the full-take scan, and the winning dimensions are written back. Neither is an editable row; both appear in the manifest as learned state.</p>
         </div>
       </div>
       <div class="setting-row">
         <div class="setting-meta">
-          <span class="setting-name">Sharpness Threshold</span>
-          <span class="setting-default">Default: <code>5.0 px</code> (auto-tunes)</span>
-        </div>
-        <div class="setting-body">
-          <p class="setting-desc">Rejects blurry frames during calibration frame selection, and auto-tunes — the last winning value is stored and reused on locked-frame retries. If fewer than 10 frames pass, one retry runs with the filter disabled; final quality is then judged by Max RMS Error.</p>
-        </div>
-      </div>
-      <div class="setting-row">
-        <div class="setting-meta">
-          <span class="setting-name">Max RMS Error</span>
+          <span class="setting-name">Max RMS Error (px)</span>
           <span class="setting-default">Default: <code>1.0 px</code></span>
         </div>
         <div class="setting-body">
@@ -253,7 +308,7 @@ const settings = [
       </div>
       <div class="setting-row">
         <div class="setting-meta">
-          <span class="setting-name">Min Calibration Diagnostics Score</span>
+          <span class="setting-name">Min Score</span>
           <span class="setting-default">Default: <code>0.5</code></span>
         </div>
         <div class="setting-body">
@@ -356,9 +411,27 @@ const settings = [
     line-height: 1.4;
   }
 
+  .setting-section {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
   .setting-default {
     font-size: 0.775rem;
     color: var(--text-muted);
+  }
+
+  :global(.setting-default code) {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
   }
 
   .setting-default code {
