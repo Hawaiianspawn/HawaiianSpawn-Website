@@ -141,6 +141,23 @@ const toolGroups = [
     ],
   },
   {
+    id: 'face-edit',
+    label: 'Face edit',
+    desc: 'Turn a plain-language direction into marker keyframes on a Mono job\'s <a href="/marketplace/mha-manager/docs/face-edit">Face Performance Edit</a> session. Both need a face-edit backend installed and a session open or openable; rendering stays with the user.',
+    tools: [
+      {
+        sig: 'get_face_edit_session(job_id="") -> str',
+        params: '<code>job_id</code> (empty uses the session open in the panel)',
+        desc: 'The session as JSON: <code>take_name</code>, <code>frame_count</code>, <code>fps</code>, <code>params</code> (the neutral parameter names the installed backend supports), the current <code>markers</code>, the <code>prompt</code> typed in the panel, and a <code>contact_sheet</code> of stills to look at when the direction depends on what the performer is doing.',
+      },
+      {
+        sig: 'set_face_edit_markers(job_id, markers_json) -> str',
+        params: '<code>job_id</code>, <code>markers_json</code>',
+        desc: 'Replace the marker list, validated against the parameter names the backend supports, the take frame count, and each parameter range — one bad marker rejects the whole list and the error names it. The panel refreshes on success. Nothing is rendered; the user reviews and presses Render.',
+      },
+    ],
+  },
+  {
     id: 'persistence',
     label: 'Persistence',
     desc: 'Write queue state to disk.',
@@ -240,9 +257,9 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
   <section class="doc-section" id="skills">
     <h2 class="section-title">Agent skills</h2>
     <p class="section-desc">
-      The plugin ships three agent skills alongside its source. They turn the toolset from a list of
-      function calls into guided workflows — connect the editor, ask why a job is blocked, or
-      reorganize a shoot's worth of takes before ingest. Each is a folder holding a
+      The plugin ships four agent skills alongside its source. They turn the toolset from a list of
+      function calls into guided workflows — connect the editor, ask why a job is blocked,
+      reorganize a shoot's worth of takes before ingest, or direct a face edit in words. Each is a folder holding a
       <code>SKILL.md</code> instruction file (plus a helper script where needed), so any LLM agent
       that reads skill folders can use them.
     </p>
@@ -260,6 +277,10 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
         <span>Asking why a job is blocked, what a status means, how the stereo chain fits together, or what a setting does. Reads the live queue to diagnose rather than guessing from documentation.</span>
       </div>
       <div class="skill-row">
+        <span><code>mha-direct</code></span>
+        <span>Directing a Mono take's facial performance in words - "subtle smile from 2s to 4s". Reads the open <a href="/marketplace/mha-manager/docs/face-edit">Face Performance Edit</a> session, writes markers back for you to review, and never renders.</span>
+      </div>
+      <div class="skill-row">
         <span><code>mha-organize-takes</code></span>
         <span>Raw takes need sorting before ingest, take names misclassify, or Capture Data landed in the wrong actor folder. Three modes: organize on disk, verify and fix the <code>/Game</code> layout after ingest, or both as one flow. Its disk-organizing mode needs nothing but a folder; the other two need the toolset connected.</span>
       </div>
@@ -273,6 +294,7 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
 <YourProject>/.claude/skills/mha-setup/
 <YourProject>/.claude/skills/mha-help/
 <YourProject>/.claude/skills/mha-organize-takes/
+<YourProject>/.claude/skills/mha-direct/
 
 # or per user - available in every project you open
 ~/.claude/skills/mha-help/`}</code></pre>

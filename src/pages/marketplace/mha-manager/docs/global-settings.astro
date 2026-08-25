@@ -151,6 +151,13 @@ const settings = [
     note: null,
   },
   {
+    name: 'Face Edit Backend Root',
+    section: 'External Tools',
+    default: 'Empty (face editing off)',
+    desc: 'Folder holding the <code>backend.json</code> written by <code>Scripts/Install-FaceEditBackend.ps1</code>. The plugin ships no model or weights - this points it at one you installed. Empty, or no readable manifest, greys out <a href="/marketplace/mha-manager/docs/face-edit">Edit Face Performance</a> with the reason in its tooltip.',
+    note: null,
+  },
+  {
     name: 'Max Concurrent Jobs',
     section: 'Advanced',
     default: '1',

@@ -1,0 +1,313 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+
+const params = [
+  { group: 'Pose',  name: 'head_pitch, head_yaw, head_roll', range: 'deg, -25 to 25', desc: 'Head nod / turn / tilt offsets. Past about 8 deg the framing itself changes.' },
+  { group: 'Pose',  name: 'move_x, move_y',                  range: '-1 to 1',        desc: 'Shift the face inside the crop.' },
+  { group: 'Pose',  name: 'zoom',                            range: '-1 to 1',        desc: 'Face scale; negative shrinks.' },
+  { group: 'Eyes',  name: 'eye_open',                        range: '0 to 1',         desc: 'Open the eyes further than captured. 0 leaves them alone.' },
+  { group: 'Eyes',  name: 'wink',                            range: '0 to 1',         desc: 'Close one eye.' },
+  { group: 'Eyes',  name: 'gaze_x, gaze_y',                  range: 'deg, -30 to 30 / -63 to 63', desc: 'Eyeball direction. Negative x is the performer left, negative y is down.' },
+  { group: 'Brows', name: 'brow_raise',                      range: '-1 to 1',        desc: 'Brows up, or furrowed.' },
+  { group: 'Mouth', name: 'lip_open',                        range: '0 to 1',         desc: 'Open the mouth further than captured.' },
+  { group: 'Mouth', name: 'smile',                           range: '-1 to 1',        desc: 'Smile, or frown.' },
+  { group: 'Mouth', name: 'pout, purse',                     range: '-1 to 1',        desc: 'Lip shapes.' },
+  { group: 'Mouth', name: 'grin',                            range: '0 to 1',         desc: 'Wide grin.' },
+  { group: 'Mouth', name: 'jaw_open',                        range: '-1 to 1',        desc: 'Jaw open, or clenched.' },
+];
+---
+
+<DocsLayout
+  title="Face Performance Edit - MHA Manager"
+  description="Adjust a Mono take's facial performance with a marker timeline before it solves, using a locally installed face-edit backend."
+  currentSlug="face-edit"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Face Performance Edit</h1>
+    <p class="doc-lead">
+      A dead-eyed line or a missed smile normally means a reshoot. Right-click a
+      <strong>Mono</strong> job, choose <strong>Edit Face Performance...</strong>, and drop markers on
+      the take's timeline instead: the panel edits the take's RGB frames through a locally installed
+      face-edit backend, then resets the job so the next batch re-solves the adjusted footage. The
+      original frames are always kept.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">Before you start</h2>
+    <p class="section-desc">
+      The plugin ships no model and no weights. Install a backend once, outside the plugin, and point
+      the plugin at it. Until you do, the menu entry is greyed out and its tooltip says why.
+    </p>
+    <div class="code-block">
+      <pre><code>{'powershell -ExecutionPolicy Bypass -File Scripts\\Install-FaceEditBackend.ps1 -Root D:\\FaceEdit'}</code></pre>
+    </div>
+    <p class="section-desc">
+      The script clones the backend, builds its own Python 3.10 virtual environment, downloads its
+      weights (about 1.5 GB), runs a self test, and writes a <code>backend.json</code> manifest. Paste
+      the root it prints into <strong>Global Settings -&gt; External Tools -&gt; Face Edit Backend
+      Root</strong>. Re-running the script is safe - every step is skipped when its result already
+      exists. You need <code>git</code> and either Python 3.10 or <code>uv</code> on PATH, and an
+      NVIDIA GPU with headroom beside the editor.
+    </p>
+    <div class="callout callout-warn">
+      <strong>Check the backend's licence before commercial work.</strong> LivePortrait is the first
+      supported backend: its own code is MIT, but the face-detection models it pulls in are licensed
+      for non-commercial use only. The installer prints the notice; the plugin ships neither.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">The panel</h2>
+    <p class="section-desc">
+      Opening a session starts the backend - once per editor session, so the weights load once - and
+      copies the take's frames aside. The header reports the take, frame count, fps, backend name, and
+      state: Loading model, Loading footage, Ready, Rendering, or Error.
+    </p>
+    <div class="field-list">
+      <div class="fe-row header">
+        <span>Area</span>
+        <span>What it does</span>
+      </div>
+      <div class="fe-row">
+        <span><strong>Before / After</strong></span>
+        <span>The scrubbed frame as captured, and the same frame previewed with the markers that reach it. The After pane stays blank on frames no marker touches - those frames are never rendered.</span>
+      </div>
+      <div class="fe-row">
+        <span><strong>Marker list</strong></span>
+        <span>Add at Frame, Remove, Duplicate. Markers are keyframed adjustments, not a re-performance.</span>
+      </div>
+      <div class="fe-row">
+        <span><strong>Marker properties</strong></span>
+        <span>Timing and parameter values for the selected marker. Rows the installed backend does not support are hidden.</span>
+      </div>
+      <div class="fe-row">
+        <span><strong>Direct</strong></span>
+        <span>A plain-language note plus <strong>Send to Claude</strong>. See <a href="#directing">Directing in words</a>.</span>
+      </div>
+      <div class="fe-row">
+        <span><strong>Render / Cancel / Revert Footage</strong></span>
+        <span>Render every touched frame over the take's footage, stop a render in progress, or restore the original frames.</span>
+      </div>
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      Markers and the note are stored per take, so reopening the panel picks up where you left off.
+      The menu entry is greyed out while a batch is running, and on Stereo and Audio rows: editing one
+      view of a stereo pair destroys the stereo consistency the depth solve depends on.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Markers</h2>
+    <p class="section-desc">
+      A marker has a frame, a ramp in, a hold, and a ramp out, all counted in frames. It is at full
+      strength from <code>frame</code> to <code>frame + hold</code>, eases in over the frames before
+      and out over the frames after, and is zero everywhere else. Overlapping markers sum, so a long
+      mood marker plus short beats layer cleanly. Every value defaults to 0, meaning no change.
+    </p>
+    <div class="field-list">
+      <div class="param-row header">
+        <span>Group</span>
+        <span>Parameter</span>
+        <span>Range</span>
+        <span>Meaning</span>
+      </div>
+      {params.map(p => (
+        <div class="param-row">
+          <span>{p.group}</span>
+          <span><code>{p.name}</code></span>
+          <span>{p.range}</span>
+          <span>{p.desc}</span>
+        </div>
+      ))}
+    </div>
+    <p class="section-desc" style="margin-top:14px;">
+      Values are model-neutral: degrees for pose and gaze, signed unit scalars for expressions. The
+      backend maps them to its own ranges and declares which of them it supports. Subtle is 0.2-0.4,
+      clear 0.5-0.7, big 0.8-1.0 - prefer smaller values over longer spans, because large pose and
+      zoom values produce artifacts that the solver then faithfully tracks.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Render, and getting the take back</h2>
+    <p class="section-desc">
+      Opening a session copies the take's frame folder to <code>&lt;folder&gt;_orig</code>, once. That
+      pristine copy is the only thing the backend ever reads, so edits never chain: the marker list
+      alone decides what the take looks like. Render then makes the live folder equal to "pristine plus
+      the current markers" - touched frames are written over, frames an earlier render touched but the
+      current markers do not are restored from the copy, and everything else is left byte-identical.
+    </p>
+    <p class="section-desc">
+      The job is reset to <strong>Pending</strong> so the next <strong>Start Batch</strong> re-solves
+      it, and the backup is recorded as an artifact on the job. File names and the folder do not
+      change, so the take's Capture Data and its image sequence need no fixing up.
+      <strong>Revert Footage to Original</strong> on the queue row restores the copy and resets the job
+      again; it appears only on takes that have been edited.
+    </p>
+    <div class="callout callout-note">
+      <strong>Ingested footage lives in a cache.</strong> Takes brought in through Live Link Hub /
+      Capture Manager reference frames under the project's <code>Saved</code> cache, so the frames, the
+      <code>_orig</code> copy, and the take itself are only as durable as that cache. Keep the raw
+      footage you shot; a take is not an archive.
+    </div>
+  </section>
+
+  <section class="doc-section" id="directing">
+    <h2 class="section-title">Directing in words</h2>
+    <p class="section-desc">
+      Type the change you want - "subtle smile from 2s to 4s, glance left at 4.5s" - and press
+      <strong>Send to Claude</strong>. That stores the note on the session; running
+      <code>/mha-direct</code> in a Claude Code session next to the editor reads it, translates it into
+      markers, and writes them back through
+      <a href="/marketplace/mha-manager/docs/mcp-toolset">the MCP toolset</a>
+      (<code>get_face_edit_session</code> and <code>set_face_edit_markers</code>). The panel refreshes
+      on its own.
+    </p>
+    <p class="section-desc">
+      Nothing renders on its own: markers arrive for you to scrub, preview, adjust, and render
+      yourself. There is no render tool.
+    </p>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead strong { color: var(--text); font-weight: 500; }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .fe-row {
+    display: grid;
+    grid-template-columns: 1fr 2.8fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .param-row {
+    display: grid;
+    grid-template-columns: 0.6fr 1.6fr 1.2fr 2.4fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .fe-row:last-child,
+  .param-row:last-child { border-bottom: none; }
+
+  .fe-row.header,
+  .param-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .fe-row strong,
+  .param-row strong { color: var(--text); font-weight: 500; }
+
+  .code-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin-bottom: 12px;
+  }
+
+  .code-block pre { margin: 0; }
+
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #c9d1d9;
+    line-height: 1.75;
+    white-space: pre;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+
+  .callout-warn { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout-note { background: var(--bg-surface); border-color: var(--border); }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .fe-row { grid-template-columns: 1fr; gap: 4px; }
+    .param-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
