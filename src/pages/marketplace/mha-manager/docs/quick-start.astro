@@ -30,15 +30,15 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <div class="step-num">1</div>
       <div class="step-body">
         <h3 class="step-title">Open the MHA Manager panel</h3>
-        <p class="step-desc">
-          From the menu bar, go to <strong>Tools → MHA Manager</strong>.
-          The panel docks into the editor with the queue and the <strong>Global Settings</strong> section both on screen. You can float or re-dock it anywhere.
-        </p>
         <DocFigure
           src="/assets/docs/mha/qs-panel-empty.webp"
           alt="The MHA Manager tab open and docked in the Unreal editor"
           caption="The MHA Manager panel on first open — empty queue with Global Settings at the top"
         />
+        <p class="step-desc">
+          From the menu bar, go to <strong>Tools → MHA Manager</strong>.
+          The panel docks into the editor with the queue and the <strong>Global Settings</strong> section both on screen. You can float or re-dock it anywhere.
+        </p>
       </div>
     </div>
 
@@ -46,17 +46,17 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <div class="step-num">2</div>
       <div class="step-body">
         <h3 class="step-title">Choose where outputs land</h3>
+        <DocFigure
+          src="/assets/docs/mha/qs-global-settings.webp"
+          alt="Scrolling through the Global Settings panel — export options, Solve Defaults tabs and Visualization"
+          caption="The Global Settings panel — export path, solve defaults and visualization live here"
+        />
         <p class="step-desc">
           By default, generated assets are saved next to the source Capture Data asset. To collect
           everything in one place instead, enable <strong>Custom UE Export Directory</strong> in the
           settings panel and point it at a Content Browser folder —
           <code>/Game/CaptureManager/Export</code> is the default when enabled.
         </p>
-        <DocFigure
-          src="/assets/docs/mha/qs-global-settings.webp"
-          alt="The Global Settings panel showing the Ingest options and Watch Folder field"
-          caption="The Global Settings panel — output and ingest options live here"
-        />
       </div>
     </div>
 
@@ -64,6 +64,16 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <div class="step-num">3</div>
       <div class="step-body">
         <h3 class="step-title">Add a job</h3>
+        <DocFigure
+          src="/assets/docs/mha/qs-add-jobs.webp"
+          alt="Clicking Add Jobs, picking a Capture Data asset in the dialog, and the new job row appearing in the queue with Start Batch enabled"
+          caption="Add Jobs — pick capture data and the job lands in the queue, type already classified"
+        />
+        <DocFigure
+          src="/assets/docs/mha/qs-auto-categorization.webp"
+          alt="Two Mono jobs in the queue: the second job's Type column changing from Unknown to Face as classification completes"
+          caption="Auto-classification — the Type cell fills in on its own once the take is analysed"
+        />
         <p class="step-desc">
           Click <strong>Add Jobs</strong> and pick your Capture Data. A new row appears in the
           queue with its job type already set — the plugin classifies the take and applies the
@@ -76,16 +86,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
           <a href="/marketplace/mha-manager/docs/job-types">Job Types</a> for what each type
           requires.
         </p>
-        <DocFigure
-          src="/assets/docs/mha/qs-add-jobs.webp"
-          alt="Clicking Add Jobs, picking a Capture Data asset in the dialog, and the new job row appearing in the queue with Start Batch enabled"
-          caption="Add Jobs — pick capture data and the job lands in the queue, type already classified"
-        />
-        <DocFigure
-          src="/assets/docs/mha/qs-auto-categorization.webp"
-          alt="Two Mono jobs in the queue: the second job's Type column changing from Unknown to Face as classification completes"
-          caption="Auto-classification — the Type cell fills in on its own once the take is analysed"
-        />
       </div>
     </div>
 
@@ -93,6 +93,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <div class="step-num">4</div>
       <div class="step-body">
         <h3 class="step-title">Start the batch</h3>
+        <DocFigure
+          src="/assets/docs/mha/qs-batch-running.webp"
+          alt="Clicking Start Batch — the queued job moves from Pending through the pipeline stages with its progress bar filling"
+          caption="The batch running — status and per-job progress update live in the queue row"
+        />
         <p class="step-desc">
           Click <strong>Start Batch</strong>. The plugin will validate the job, then run it
           through the full pipeline:
@@ -110,11 +115,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
           Progress is shown per-job in the queue row. The log panel below the queue streams
           live output from the solver.
         </p>
-        <DocFigure
-          src="/assets/docs/mha/qs-batch-running.webp"
-          alt="Clicking Start Batch — the queued job moves from Pending through the pipeline stages with its progress bar filling"
-          caption="The batch running — status and per-job progress update live in the queue row"
-        />
       </div>
     </div>
 
@@ -122,6 +122,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       <div class="step-num">5</div>
       <div class="step-body">
         <h3 class="step-title">Find your outputs</h3>
+        <DocFigure
+          src="/assets/docs/mha/qs-find-outputs.webp"
+          alt="A completed job in the queue, the Content Browser output folder with Performance, AnimSequence and LevelSequence assets, and the exported take folder on disk"
+          caption="Generated assets in the Content Browser and on disk after a successful batch"
+        />
         <p class="step-desc">
           When the job completes, your generated assets appear in the output path you set in step 2:
         </p>
@@ -143,11 +148,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
             <span>Sequencer-ready animation track (if enabled in Global Settings)</span>
           </div>
         </div>
-        <DocFigure
-          src="/assets/docs/mha/qs-find-outputs.webp"
-          alt="A completed job in the queue, the Content Browser output folder with Performance, AnimSequence and LevelSequence assets, and the exported take folder on disk"
-          caption="Generated assets in the Content Browser and on disk after a successful batch"
-        />
       </div>
     </div>
 
@@ -258,6 +258,8 @@ import DocFigure from '../../../../components/DocFigure.astro';
     line-height: 1.7;
     margin: 0;
   }
+
+  .step-body :global(.doc-figure) + .step-desc { margin-top: 16px; }
 
   .step-desc strong { color: var(--text); font-weight: 500; }
 
