@@ -49,6 +49,38 @@ import DocFigure from '../../../../components/DocFigure.astro';
   </section>
 
   <section class="doc-section">
+    <h2 class="section-title">Auto-queue on ingest</h2>
+    <DocFigure
+      src="/assets/docs/mha/ingest-autoqueue-settings.webp"
+      alt="Global Settings, Ingest section: Auto-Queue Ingested Takes, Auto-Start Batch on Ingest, and Watch Folder"
+      caption="The Ingest section of Global Settings"
+    />
+    <p class="section-desc">
+      As takes arrive from Live Link Hub / Capture Manager, the <strong>Ingest</strong> section
+      of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
+      project and queue them the moment they appear in the Content Browser — no dialog needed:
+    </p>
+    <div class="field-list">
+      <div class="src-row header">
+        <span>Setting</span>
+        <span>What it does</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Auto-Queue Ingested Takes</strong></span>
+        <span>Watches the project for newly created Footage Capture Data assets and adds each to the queue automatically. Takes already in the queue are not re-added.</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Auto-Start Batch on Ingest</strong></span>
+        <span>Starts the batch when auto-queued takes arrive and no batch is running. Takes arriving mid-batch are queued and started on the next idle trigger.</span>
+      </div>
+      <div class="src-row">
+        <span><strong>Watch Folder (optional)</strong></span>
+        <span>A content-path prefix to limit the watch, e.g. <code>/Game/CaptureManager/Imports</code>. Empty watches everywhere under <code>/Game</code>.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
     <h2 class="section-title">The three sources</h2>
     <DocFigure
       src="/assets/docs/mha/ingest-three-sources.webp"
@@ -225,38 +257,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
       Only the keys you include are overridden; everything else keeps its default. A file that
       cannot be parsed falls back to the built-in defaults instead of failing the scan, and the
       dialog says so.
-    </div>
-  </section>
-
-  <section class="doc-section">
-    <h2 class="section-title">Auto-queue on ingest</h2>
-    <DocFigure
-      src="/assets/docs/mha/ingest-autoqueue-settings.webp"
-      alt="Global Settings, Ingest section: Auto-Queue Ingested Takes, Auto-Start Batch on Ingest, and Watch Folder"
-      caption="The Ingest section of Global Settings"
-    />
-    <p class="section-desc">
-      As takes arrive from Live Link Hub / Capture Manager, the <strong>Ingest</strong> section
-      of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
-      project and queue them the moment they appear in the Content Browser — no dialog needed:
-    </p>
-    <div class="field-list">
-      <div class="src-row header">
-        <span>Setting</span>
-        <span>What it does</span>
-      </div>
-      <div class="src-row">
-        <span><strong>Auto-Queue Ingested Takes</strong></span>
-        <span>Watches the project for newly created Footage Capture Data assets and adds each to the queue automatically. Takes already in the queue are not re-added.</span>
-      </div>
-      <div class="src-row">
-        <span><strong>Auto-Start Batch on Ingest</strong></span>
-        <span>Starts the batch when auto-queued takes arrive and no batch is running. Takes arriving mid-batch are queued and started on the next idle trigger.</span>
-      </div>
-      <div class="src-row">
-        <span><strong>Watch Folder (optional)</strong></span>
-        <span>A content-path prefix to limit the watch, e.g. <code>/Game/CaptureManager/Imports</code>. Empty watches everywhere under <code>/Game</code>.</span>
-      </div>
     </div>
   </section>
 
