@@ -1,0 +1,250 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+  title="Expression Limits - MHA Manager"
+  description="Per-character ceilings on MetaHuman Animator expression curves, dialled live in the Performance editor and applied to every export."
+  currentSlug="expression-limits"
+>
+
+  <div class="doc-header">
+    <h1 class="doc-title">Expression Limits</h1>
+    <p class="doc-lead">
+      Some performers push a control further than the character should ever go. Expression Limits
+      caps that per character instead of per take: a profile asset holds a floor, a knee and a
+      ceiling for each expression, you dial it against a solved take and watch the face follow, and
+      every export of every job that names the profile comes out limited. The solved Performance on
+      disk is never touched.
+    </p>
+  </div>
+
+  <section class="doc-section">
+    <h2 class="section-title">Open the panel</h2>
+    <p class="section-desc">
+      Open a solved Performance asset and click <strong>Expression Limits</strong> in its toolbar.
+      With no profile set, <strong>New from Take</strong> creates one next to the Performance, named
+      <code>CLP_&lt;Performance&gt;</code>, with one unlimited row per expression the take carries.
+      The profile is an ordinary asset: keep it per character and point every job for that character
+      at it.
+    </p>
+    <div class="field-list">
+      <div class="el-row header">
+        <span>Control</span>
+        <span>What it does</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Profile</strong></span>
+        <span>Which profile is live on this Performance. The choice is per editor session, not saved into the asset.</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Enabled</strong></span>
+        <span>Untick to see the raw solve for comparison. Batch exports ignore this switch.</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Curves</strong></span>
+        <span>Advanced. Swaps the default one-row-per-board-control view for one row per raw expression curve.</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Lighting</strong></span>
+        <span>Lights the Performance viewport with one of Epic's MetaHuman rigs or a level from your own lighting folder. Remembered for every Performance you open; nothing is written into the asset.</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Schematic</strong></span>
+        <span>The real face control board. Knobs sit at the current frame's solved value, red bars mark where each limit cuts the travel. Click a control to add it as a row, drag to move its ceiling, wheel to zoom, right or middle drag to pan.</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Rows</strong></span>
+        <span>One slider per limited control, with Min / Mid / Max spin boxes, the take's own peak, and a tick at the current frame. Filter by name, or use <strong>Add curve</strong>.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">What a limit does</h2>
+    <p class="section-desc">
+      Three handles per row. <strong>Mid</strong> is the knee and the one input that passes through
+      untouched. Above it the response is scaled so full input lands exactly on <strong>Max</strong>;
+      below it the same scaling runs the other way and zero input lands on <strong>Min</strong>. The
+      output never leaves Min..Max, and the curve keeps its shape at both ends rather than flattening
+      into a plateau. Defaults of 0 / 0.5 / 1 are a no-op.
+    </p>
+    <p class="section-desc">
+      Rows are ordered <code>0 &lt;= Min &lt; Mid &lt; Max &lt;= 1</code>. Dragging one handle past
+      another pushes it rather than swapping the two, so a row can never be inverted.
+    </p>
+    <div class="callout callout-note">
+      <strong>Control rows and curve rows are different units.</strong> A board control row spans the
+      control's own range, so a two-sided axis such as blink / widen rests at 0.5: its floor limits
+      one expression, its ceiling the other, and the knee couples both halves. A curve row limits one
+      raw curve over 0..1. Both lists stay live whichever view is showing; control rows apply first.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Live in the Performance editor</h2>
+    <p class="section-desc">
+      Moving a handle rebakes the take's face animation in place: Sequencer keys, the Control Rig tab
+      and the viewport all follow. Long takes rebake on a short delay after you let go rather than on
+      every pixel of a drag.
+    </p>
+    <p class="section-desc">
+      The asset on disk stays raw. Limits live in memory only: they are pulled out before the package
+      saves and put back afterwards, and a re-solve re-applies them. Epic's own <strong>Export
+      Animation</strong> from inside the editor exports the limited curves and stamps the result so it
+      is never limited a second time on playback.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">In a batch</h2>
+    <p class="section-desc">
+      Set <strong>Curve Limit Profile</strong> in a job's Export options, on a Solve Defaults
+      template, or per take. Every export that job writes - AnimSequence, Level Sequence Control Rig
+      bake, and FBX - comes out limited; leaving it empty means no limits. The frames are limited for
+      the length of the export and restored afterwards, so <strong>Re-Export</strong> with an edited
+      profile regenerates every output without re-solving.
+    </p>
+    <p class="section-desc">
+      Each job logs what its limits actually did: per curve, the take's own peak, what that peak
+      became, and the share of frames that changed. The same report rides in the saved manifest. A
+      limit that reports no affected frames is a limit that was never reached.
+    </p>
+    <div class="callout callout-note">
+      A Performance open in the editor with a profile live steps aside for the length of a batch
+      export, so a queued job always exports from the raw solve and never limits twice.
+    </div>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Limits on a character, outside a take</h2>
+    <p class="section-desc">
+      Right-click the profile asset in the Content Browser:
+    </p>
+    <div class="field-list">
+      <div class="el-row header">
+        <span>Action</span>
+        <span>What it does</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Preview Curve Limits</strong></span>
+        <span>Plays the profile's range-of-motion animation on its preview face mesh with the limits inserted, so you can judge them without a take.</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Apply to Character...</strong></span>
+        <span>Points a face mesh at a limited copy of its post-process AnimBlueprint, so everything that character plays back in the editor is limited.</span>
+      </div>
+      <div class="el-row">
+        <span><strong>Remove from Characters</strong></span>
+        <span>Restores every mesh the profile was applied to, exactly as it was.</span>
+      </div>
+    </div>
+    <div class="callout callout-warn">
+      <strong>Apply to Character blocks cooking.</strong> The limited AnimBlueprint is editor-only
+      workflow content, so an applied mesh will not cook until Remove from Characters is run. The
+      confirmation dialog says so before it changes anything.
+    </div>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .doc-header { margin-bottom: 40px; }
+
+  .doc-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .doc-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .doc-lead strong { color: var(--text); font-weight: 500; }
+
+  .doc-section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .section-desc strong { color: var(--text); font-weight: 500; }
+
+  .field-list {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .el-row {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 16px;
+    padding: 11px 16px;
+    font-size: 0.825rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    align-items: start;
+    line-height: 1.55;
+  }
+
+  .el-row:last-child { border-bottom: none; }
+
+  .el-row.header {
+    background: var(--bg-surface);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .el-row strong { color: var(--text); font-weight: 500; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 16px;
+    border-left: 3px solid;
+    color: var(--text-muted);
+  }
+
+  .callout-warn { background: color-mix(in srgb, #f0a500 8%, transparent); border-color: #f0a500; }
+  .callout-note { background: var(--bg-surface); border-color: var(--border); }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .el-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

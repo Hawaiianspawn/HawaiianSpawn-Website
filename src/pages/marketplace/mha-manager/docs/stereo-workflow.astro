@@ -178,12 +178,45 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="option-row">
         <span class="option-name">Asynchronous</span>
-        <span class="option-desc">EXR I/O and pixel work run on the thread pool, not the game thread — the editor stays responsive and the pass is cancellable mid-run.</span>
+        <span class="option-desc">EXR I/O and pixel work run on the thread pool, not the game thread — the editor stays responsive. Cancel is checked once per frame, so stopping a batch takes effect within a frame instead of at the end of a ten-thousand-frame sequence; the job shows <strong>Cancelling</strong> until it settles.</span>
       </div>
       <div class="option-row">
         <span class="option-name">Idempotent</span>
         <span class="option-desc">Re-running a job that already has a cleaned sequence re-cleans from the newest source rather than stacking passes.</span>
       </div>
+    </div>
+  </section>
+
+  <section class="type-section" id="depth-other">
+    <h2 class="section-title">Depth and Other takes</h2>
+    <p class="type-desc">
+      A single camera that recorded its own depth solves down the same branch as Stereo, minus the
+      depth generation stage: the take's depth is consumed as-is. The two types differ only in where
+      the calibration comes from.
+    </p>
+    <div class="option-list">
+      <div class="option-row">
+        <span class="option-name">Depth</span>
+        <span class="option-desc">The take ingested with a calibration already on its Capture Data - a mobile device running Live Link Face ships one with every take. Nothing to calibrate.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Other</span>
+        <span class="option-desc">The same footage with no calibration on the take - a generic depth camera. The calibration is discovered under the actor folder or linked by hand; no Calibration job can produce one, because a single camera cannot solve a pair.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Both still need an Identity</span>
+        <span class="option-desc">A prepared <code>MHID_&lt;Actor&gt;</code>, exactly as Stereo does. An identity take from a depth camera queues as an Identity Create job on the same name tokens (<code>identity</code>/<code>dna</code>); <code>grid</code> names are ignored for these takes.</span>
+      </div>
+      <div class="option-row">
+        <span class="option-name">Clean Depth applies</span>
+        <span class="option-desc">The clean-up pass above runs on the take's own depth when the setting is on, same as for a generated sequence.</span>
+      </div>
+    </div>
+    <div class="callout callout-note">
+      <strong>Depth solve for depth takes</strong> (Global Settings, on by default) is what routes a
+      newly ingested single-camera take with depth here instead of to Mono. Turn it off and those
+      takes queue as Mono, which ignores the depth and needs no Identity. Picking a type by hand pins
+      it: auto-classification and Retry both leave that job's type alone from then on.
     </div>
   </section>
 

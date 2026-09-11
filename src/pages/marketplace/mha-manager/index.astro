@@ -4,7 +4,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="MHA Manager — Aaron Low"
-  description="An Unreal Engine 5.7-5.8 editor plugin that automates batch processing of MetaHuman Animator footage — Mono, Stereo, and Audio solves plus stereo calibration and identity creation in one queue."
+  description="An Unreal Engine 5.7-5.8 editor plugin that automates batch processing of MetaHuman Animator footage — Mono, Stereo, Depth, and Audio solves plus stereo calibration and identity creation in one queue."
 >
   <div class="page-content">
     <div class="container">
@@ -74,9 +74,9 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             <div class="feature-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
-            <h3 class="feature-title">Five Job Types</h3>
+            <h3 class="feature-title">Seven Job Types</h3>
             <p class="feature-desc">
-              <strong>Mono</strong> (single color camera, with UE 5.8 body tracking), <strong>Stereo</strong> (HMC rigs with automatic depth generation and cleaning), <strong>Audio</strong>-driven facial animation, plus <strong>Stereo Calibration</strong> and <strong>Identity Create</strong> jobs — all in the same queue.
+              <strong>Mono</strong> (single color camera, with UE 5.8 body tracking), <strong>Stereo</strong> (HMC rigs with automatic depth generation and cleaning), <strong>Depth</strong> and <strong>Other</strong> for takes that bring their own depth (Live Link Face on a mobile device, or any depth camera), <strong>Audio</strong>-driven facial animation, plus <strong>Stereo Calibration</strong> and <strong>Identity Create</strong> jobs — all in the same queue.
             </p>
           </div>
 
@@ -97,6 +97,16 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             <h3 class="feature-title">Face Performance Edit</h3>
             <p class="feature-desc">
               Fix a mono take instead of reshooting it: adjust gaze, brows, mouth, or head pose on a marker timeline, render over the take's frames, and re-solve. Original frames kept, revert in one click. Needs a face-edit backend you install locally.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            </div>
+            <h3 class="feature-title">Expression Limits</h3>
+            <p class="feature-desc">
+              Keep an overexpressive performer on model: a per-character profile of floors, knees and ceilings, dialled against a solved take with Sequencer and the face board updating live, then applied to every export of every job for that character. The solve on disk stays raw.
             </p>
           </div>
 

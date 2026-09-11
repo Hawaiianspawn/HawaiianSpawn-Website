@@ -17,6 +17,20 @@ const types = [
     produces: 'Performance + face AnimSequence (depth-constrained)',
   },
   {
+    badge: 'Depth', badgeClass: 'type-depth',
+    href: '/marketplace/mha-manager/docs/stereo-workflow#depth-other',
+    use: 'A single camera that recorded its own depth and shipped a calibration with the take - a mobile device running Live Link Face. Depth-constrained, with nothing to calibrate.',
+    requires: 'Capture Data (color + depth + linked calibration) + Identity',
+    produces: 'Performance + face AnimSequence (depth-constrained)',
+  },
+  {
+    badge: 'Other', badgeClass: 'type-other',
+    href: '/marketplace/mha-manager/docs/stereo-workflow#depth-other',
+    use: 'The same as Depth, but the take carries no calibration - a generic depth camera. The calibration is found under the actor folder or linked by hand.',
+    requires: 'Capture Data (color + depth) + Identity + a Camera Calibration',
+    produces: 'Performance + face AnimSequence (depth-constrained)',
+  },
+  {
     badge: 'Audio', badgeClass: 'type-audio',
     href: '/marketplace/mha-manager/docs/audio-workflow',
     use: 'A voice track with no footage. Generates lip-sync and expression from dialogue alone.',
@@ -71,6 +85,13 @@ const types = [
         <span class="cell-prod">{t.produces}</span>
       </a>
     ))}
+  </div>
+
+  <div class="callout callout-note">
+    <strong>Stereo</strong>, <strong>Depth</strong> and <strong>Other</strong> are the depth family:
+    one solve branch and one options template between them. They differ only in where the depth and
+    the calibration come from. A Calibration job can only ever serve a Stereo take, because one
+    camera cannot solve a pair.
   </div>
 
   <div class="callout callout-note">
@@ -163,6 +184,8 @@ const types = [
 
   .type-mono   { background: color-mix(in srgb, #4a9eff 12%, transparent); color: #4a9eff; border: 1px solid color-mix(in srgb, #4a9eff 30%, transparent); }
   .type-stereo { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+  .type-depth  { background: color-mix(in srgb, #38bdf8 12%, transparent); color: #38bdf8; border: 1px solid color-mix(in srgb, #38bdf8 30%, transparent); }
+  .type-other  { background: color-mix(in srgb, #94a3b8 12%, transparent); color: #94a3b8; border: 1px solid color-mix(in srgb, #94a3b8 30%, transparent); }
   .type-audio  { background: color-mix(in srgb, #c084fc 12%, transparent); color: #c084fc; border: 1px solid color-mix(in srgb, #c084fc 30%, transparent); }
   .type-calib  { background: color-mix(in srgb, #f0a500 12%, transparent); color: #f0a500; border: 1px solid color-mix(in srgb, #f0a500 30%, transparent); }
   .type-identity { background: color-mix(in srgb, #4ade80 12%, transparent); color: #4ade80; border: 1px solid color-mix(in srgb, #4ade80 30%, transparent); }

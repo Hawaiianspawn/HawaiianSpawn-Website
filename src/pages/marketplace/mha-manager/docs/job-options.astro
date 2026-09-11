@@ -13,6 +13,7 @@ const groups = [
       { name: 'Timecode', type: 'String', desc: 'Start timecode written onto the job\'s linked image and depth sequences, as <code>HH:MM:SS:FF</code> or <code>HH:MM:SS;FF</code>. Like Frame Rate it edits the CaptureData asset, and is inert on audio-only jobs.' },
       { name: 'Show Frames Live', type: 'Bool', desc: 'Updates the viewport with each frame as it is processed. Useful to confirm the solver is tracking correctly; it costs a little speed, so leave it off for production batches.' },
       { name: 'Excluded Frames', type: 'Array of ranges', desc: 'One or more frame ranges the solve skips, e.g. <code>0-5, 120-125</code>. Use it to cut blinks, obstructions, equipment glare, or any frames where the face is occluded or corrupted.' },
+      { name: 'Curve Limit Profile', type: 'Object (Curve Limit Profile)', desc: 'Per-character <a href="/marketplace/mha-manager/docs/expression-limits">expression limits</a> applied to every export this job writes - AnimSequence, Level Sequence Control Rig bake, and FBX. Empty means no limits. The solve itself is unaffected, so Re-Export with an edited profile regenerates every output without re-solving.' },
     ],
   },
   {
@@ -33,8 +34,7 @@ const groups = [
     badge: 'Mono jobs only · UE 5.8+',
     badgeClass: 'badge-body',
     options: [
-      { name: 'Body Tracking', type: 'Bool', desc: 'Enables the SMPLX-based body solver alongside the face solve. Requires the <strong>MetaHumanBodyTracker</strong> plugin. Disabled by default — face-only tracking is unaffected when this is off.' },
-      { name: 'Face Tracking', type: 'Bool', desc: 'Enabled by default. Disable to skip the face solve entirely for body-only runs — useful when you only need body motion and want to save solve time.' },
+      { name: 'Type', type: 'Face / Body / Both', desc: 'The combo in the job settings header, next to Solve. It is what turns body tracking on for a Mono job: <strong>Face</strong> is the face solve alone, <strong>Body</strong> the SMPLX body solver alone, <strong>Both</strong> runs the two together. Body needs the <strong>MetaHumanBodyTracker</strong> plugin and hips plus ankles in frame; the framing probe picks Both on its own for a full-body take. The Solve Defaults templates still expose the two toggles separately.' },
       { name: 'Body Height', type: 'Bool + Float (cm)', desc: 'Auto-infers the subject\'s height from footage by default. Disable Auto Body Height to enter a fixed value instead. Epic recommends 145-190cm for best tracking quality.' },
       { name: 'Body Detection Confidence', type: 'Float (0-1)', desc: 'Threshold for initially acquiring a body lock on the subject. Default 0.7. Lower this if the tracker struggles to acquire lock in cluttered or dim footage.' },
       { name: 'Body Tracking Confidence', type: 'Float (0-1)', desc: 'Threshold for maintaining an existing body lock once acquired. Default 0.5. Lower this if the tracker frequently drops lock during fast motion.' },
@@ -71,7 +71,7 @@ const groups = [
   {
     id: 'stereo',
     label: 'Stereo',
-    badge: 'Stereo jobs only',
+    badge: 'Stereo, Depth and Other jobs',
     badgeClass: 'badge-stereo',
     options: [
       { name: 'Solve Type', type: 'Enum', desc: 'Selects the internal stereo solver algorithm variant. In most productions the default is correct. Change only when directed by Epic support or when experimenting with non-standard rig configurations.' },

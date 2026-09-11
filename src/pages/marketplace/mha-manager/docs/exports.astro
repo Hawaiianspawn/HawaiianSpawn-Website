@@ -118,6 +118,17 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   </section>
 
   <section class="doc-section">
+    <h2 class="section-title">Expression limits on the way out</h2>
+    <p class="section-desc">
+      A job that names a <strong>Curve Limit Profile</strong> exports through it: the AnimSequence,
+      the Level Sequence Control Rig bake and the FBX all carry the limited curves, and the job logs
+      what each limit actually did. The solved Performance stays raw, so <strong>Re-Export</strong>
+      after editing the profile regenerates every output without re-solving. See
+      <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a>.
+    </p>
+  </section>
+
+  <section class="doc-section">
     <h2 class="section-title">FBX folder layout</h2>
     <p class="section-desc">
       FBX files go to a folder on disk, not into the project. The default is

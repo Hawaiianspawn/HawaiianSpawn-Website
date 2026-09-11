@@ -86,6 +86,14 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       rather than hardcoded, so environments a future engine adds show up on their own.
     </p>
     <p class="section-desc">
+      Your own lighting levels join the list too: every map under the <strong>Custom Lighting
+      Environment Folder</strong> (<code>/Game/LightingEnvironments</code> by default) is offered
+      alongside Epic's. A custom level follows Epic's convention - the subject stands at the origin
+      facing +Y with the head at (0, -1, 147) - and only its lights, static meshes and post process
+      volumes are copied. The same list lights the Performance editor viewport, chosen from the
+      <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a> panel.
+    </p>
+    <p class="section-desc">
       The rigs' shared companion level (the backdrop and its post-process grade) is deliberately left
       out of the sequence: the preview action opens the sequence against that level anyway, and a
       second copy inside the sequence would double it up. A project without the MetaHuman Character

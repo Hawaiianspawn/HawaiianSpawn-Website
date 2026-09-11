@@ -30,7 +30,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
     <p class="section-desc">
       <strong>Live Link Hub</strong> is Epic's first-party capture application and the recommended
       input for MHA Manager. It bundles Capture Manager: connect your capture source (Live Link Face
-      on iPhone, a stereo head-mounted camera, or an existing take archive), import the takes, and
+      on a mobile device, a stereo head-mounted camera, or an existing take archive), import the takes, and
       ingest them into your Unreal project. Each take lands in the Content Browser as a
       <code>UFootageCaptureData</code> asset under <code>/Game/CaptureManager/Imports/&lt;Actor&gt;/</code>
       — exactly what every job runs on, with no manual asset assembly.
@@ -40,6 +40,13 @@ import DocFigure from '../../../../components/DocFigure.astro';
       of the Add Jobs dialog below. Either way, turn on <strong>Auto-Queue Ingested Takes</strong>
       and every take Live Link Hub delivers is classified and queued automatically — capture in one
       window, watch jobs appear in the other.
+    </p>
+    <p class="section-desc">
+      A single-camera take that arrives carrying its own depth - a mobile device running Live Link
+      Face, or any other depth camera - is queued as a <strong>Depth</strong> job when its
+      calibration came with it, or <strong>Other</strong> when one still has to be found. Both need a
+      prepared Identity for the actor, the same as Stereo. Turn off <strong>Depth solve for depth
+      takes</strong> in Global Settings to queue them as Mono instead.
     </p>
     <div class="callout callout-note">
       Live Link Hub is a separate Epic download and depends on the Live Link / Virtual Production
