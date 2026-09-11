@@ -51,10 +51,10 @@ const params = [
       exists. You need <code>git</code> and either Python 3.10 or <code>uv</code> on PATH, and an
       NVIDIA GPU with headroom beside the editor.
     </p>
-    <div class="callout callout-warn">
-      <strong>Check the backend's licence before commercial work.</strong> LivePortrait is the first
-      supported backend: its own code is MIT, but the face-detection models it pulls in are licensed
-      for non-commercial use only. The installer prints the notice; the plugin ships neither.
+    <div class="callout callout-note">
+      <strong>Licensing.</strong> LivePortrait is the first supported backend: its code and weights
+      are MIT, and face finding uses MediaPipe Face Mesh (Apache 2.0), which the installer puts into
+      the backend venv. Nothing non-commercial is downloaded.
     </div>
   </section>
 
@@ -62,8 +62,8 @@ const params = [
     <h2 class="section-title">The panel</h2>
     <p class="section-desc">
       Opening a session starts the backend - once per editor session, so the weights load once - and
-      copies the take's frames aside. The header reports the take, frame count, fps, backend name, and
-      state: Loading model, Loading footage, Ready, Rendering, or Error.
+      copies the take's frames aside. The header reports the take, frame count, fps, backend name,
+      variant, and state: Loading model, Loading footage, Ready, Rendering, or Error.
     </p>
     <div class="field-list">
       <div class="fe-row header">
@@ -95,6 +95,12 @@ const params = [
       Markers and the note are stored per take, so reopening the panel picks up where you left off.
       The menu entry is greyed out while a batch is running, and on Stereo and Audio rows: editing one
       view of a stereo pair destroys the stereo consistency the depth solve depends on.
+    </p>
+    <p class="section-desc">
+      A backend may list <code>variants</code> - alternate ways it can run. The header shows a
+      dropdown only when there is more than one; switching restarts the model and reloads the take
+      with the same markers. LivePortrait offers <code>mp468</code> (default: every Face Mesh point
+      seeds the crop box) and <code>mp68</code> (the mesh mapped to the 68-point layout).
     </p>
   </section>
 
