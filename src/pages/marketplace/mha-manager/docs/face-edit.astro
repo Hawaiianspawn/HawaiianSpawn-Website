@@ -65,6 +65,11 @@ const params = [
       copies the take's frames aside. The header reports the take, frame count, fps, backend name,
       variant, and state: Loading model, Loading footage, Ready, Rendering, or Error.
     </p>
+    <p class="section-desc">
+      The same panel opens from a <strong>Face Edit</strong> button in the MetaHuman Performance
+      editor's toolbar, as a docked tab beside the viewport. There the two timelines are tied together:
+      scrubbing in the panel moves the Performance timeline, and scrubbing the timeline moves the panel.
+    </p>
     <div class="field-list">
       <div class="fe-row header">
         <span>Area</span>
@@ -76,7 +81,7 @@ const params = [
       </div>
       <div class="fe-row">
         <span><strong>Marker list</strong></span>
-        <span>Add at Frame, Remove, Duplicate. Markers are keyframed adjustments, not a re-performance.</span>
+        <span>Add at Frame, Add for Shot, Remove, Duplicate. Markers are keyframed adjustments, not a re-performance.</span>
       </div>
       <div class="fe-row">
         <span><strong>Marker properties</strong></span>
@@ -84,7 +89,7 @@ const params = [
       </div>
       <div class="fe-row">
         <span><strong>Direct</strong></span>
-        <span>A plain-language note plus <strong>Send to Claude</strong>. See <a href="#directing">Directing in words</a>.</span>
+        <span>A plain-language direction plus <strong>Direct with MCP</strong>. See <a href="#directing">Directing in words</a>.</span>
       </div>
       <div class="fe-row">
         <span><strong>Render / Cancel / Revert Footage</strong></span>
@@ -107,10 +112,13 @@ const params = [
   <section class="doc-section">
     <h2 class="section-title">Markers</h2>
     <p class="section-desc">
-      A marker has a frame, a ramp in, a hold, and a ramp out, all counted in frames. It is at full
-      strength from <code>frame</code> to <code>frame + hold</code>, eases in over the frames before
-      and out over the frames after, and is zero everywhere else. Overlapping markers sum, so a long
-      mood marker plus short beats layer cleanly. Every value defaults to 0, meaning no change.
+      A marker has a frame, a duration, a ramp in, and a ramp out, all counted in frames. It covers
+      <code>frame</code> to <code>frame + duration - 1</code> and nothing outside that span. Both ramps
+      sit inside the duration: the marker eases up over the first ramp-in frames, holds at full strength
+      through the middle, and eases out over the last ramp-out frames. Overlapping markers sum, so a long
+      mood marker plus short beats layer cleanly. Every value defaults to 0, meaning no change. In the
+      session JSON the key is <code>duration</code>; older lists written with <code>hold</code> are
+      folded into a duration when they load.
     </p>
     <div class="field-list">
       <div class="param-row header">
@@ -133,6 +141,18 @@ const params = [
       backend maps them to its own ranges and declares which of them it supports. Subtle is 0.2-0.4,
       clear 0.5-0.7, big 0.8-1.0 - prefer smaller values over longer spans, because large pose and
       zoom values produce artifacts that the solver then faithfully tracks.
+    </p>
+  </section>
+
+  <section class="doc-section">
+    <h2 class="section-title">Shots</h2>
+    <p class="section-desc">
+      Cuts are detected when the session opens and drawn as a strip under the scrubber, one block per
+      shot, sized to the shot's length; clicking a block jumps to its first frame. The strip is hidden
+      on a take that is one continuous shot. <strong>Add for Shot</strong> drops a single marker
+      covering the shot the current frame sits in, with its ramps inside the shot so nothing crosses a
+      cut. The shot list is also returned by <code>get_face_edit_session</code>, numbered from 1, so a
+      direction can name "the second shot".
     </p>
   </section>
 
@@ -164,12 +184,13 @@ const params = [
     <h2 class="section-title">Directing in words</h2>
     <p class="section-desc">
       Type the change you want - "subtle smile from 2s to 4s, glance left at 4.5s" - and press
-      <strong>Send to Claude</strong>. That stores the note on the session; running
-      <code>/mha-direct</code> in a Claude Code session next to the editor reads it, translates it into
-      markers, and writes them back through
-      <a href="/marketplace/mha-manager/docs/mcp-toolset">the MCP toolset</a>
-      (<code>get_face_edit_session</code> and <code>set_face_edit_markers</code>). The panel refreshes
-      on its own.
+      <strong>Direct with MCP</strong>. The panel runs Claude Code headless with
+      <a href="/marketplace/mha-manager/docs/mcp-toolset">the MCP toolset</a>, which reads the session
+      and writes markers back through <code>get_face_edit_session</code> and
+      <code>set_face_edit_markers</code>. The reply is shown in the panel and the marker list refreshes
+      on its own. This needs the <code>claude</code> CLI on PATH and a <code>.mcp.json</code> in the
+      project folder, which the mha-setup skill writes. Running <code>/mha-direct</code> in a terminal
+      beside the editor still does the same job.
     </p>
     <p class="section-desc">
       Nothing renders on its own: markers arrive for you to scrub, preview, adjust, and render

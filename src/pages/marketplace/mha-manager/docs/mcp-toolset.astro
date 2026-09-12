@@ -148,7 +148,7 @@ const toolGroups = [
       {
         sig: 'get_face_edit_session(job_id="") -> str',
         params: '<code>job_id</code> (empty uses the session open in the panel)',
-        desc: 'The session as JSON: <code>take_name</code>, <code>frame_count</code>, <code>fps</code>, <code>params</code> (the neutral parameter names the installed backend supports), the current <code>markers</code>, the <code>prompt</code> typed in the panel, and a <code>contact_sheet</code> of stills to look at when the direction depends on what the performer is doing.',
+        desc: 'The session as JSON: <code>take_name</code>, <code>frame_count</code>, <code>fps</code>, <code>params</code> (the neutral parameter names the installed backend supports), the current <code>markers</code>, the <code>prompt</code> typed in the panel, <code>shots</code> (the detected cuts as <code>{index, start, end}</code>, numbered from 1), and a <code>contact_sheet</code> of stills to look at when the direction depends on what the performer is doing.',
       },
       {
         sig: 'set_face_edit_markers(job_id, markers_json) -> str',
