@@ -41,7 +41,7 @@ const params = [
       the plugin at it. Until you do, the menu entry is greyed out and its tooltip says why.
     </p>
     <div class="code-block">
-      <pre><code>{'powershell -ExecutionPolicy Bypass -File Scripts\\Install-FaceEditBackend.ps1 -Root D:\\FaceEdit'}</code></pre>
+      <pre><code>{'powershell -ExecutionPolicy Bypass -File Scripts\\Install_FaceEditBackend.ps1 -Root D:\\FaceEdit'}</code></pre>
     </div>
     <p class="section-desc">
       The script clones the backend, builds its own Python 3.10 virtual environment, downloads its
@@ -189,7 +189,7 @@ const params = [
       and writes markers back through <code>get_face_edit_session</code> and
       <code>set_face_edit_markers</code>. The reply is shown in the panel and the marker list refreshes
       on its own. This needs the <code>claude</code> CLI on PATH and a <code>.mcp.json</code> in the
-      project folder, which the mha-setup skill writes. Running <code>/mha-direct</code> in a terminal
+      project folder, which the mha_setup skill writes. Running <code>/mha_direct</code> in a terminal
       beside the editor still does the same job.
     </p>
     <p class="section-desc">

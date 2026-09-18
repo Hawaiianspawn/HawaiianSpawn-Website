@@ -269,19 +269,19 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
         <span>Use it when</span>
       </div>
       <div class="skill-row">
-        <span><code>mha-setup</code></span>
+        <span><code>mha_setup</code></span>
         <span>Connecting an agent to the editor for the first time, or the <code>unreal</code> MCP server is not responding. Walks the two Epic MCP plugins, autostart, the ImgMedia cache size, the Capture Manager / Live Link Hub connection, pointing the client at the server, and verification.</span>
       </div>
       <div class="skill-row">
-        <span><code>mha-help</code></span>
+        <span><code>mha_help</code></span>
         <span>Asking why a job is blocked, what a status means, how the stereo chain fits together, or what a setting does. Reads the live queue to diagnose rather than guessing from documentation.</span>
       </div>
       <div class="skill-row">
-        <span><code>mha-direct</code></span>
+        <span><code>mha_direct</code></span>
         <span>Directing a Mono take's facial performance in words - "subtle smile from 2s to 4s". Reads the open <a href="/marketplace/mha-manager/docs/face-edit">Face Performance Edit</a> session, writes markers back for you to review, and never renders.</span>
       </div>
       <div class="skill-row">
-        <span><code>mha-organize-takes</code></span>
+        <span><code>mha_organize_takes</code></span>
         <span>Raw takes need sorting before ingest, take names misclassify, or Capture Data landed in the wrong actor folder. Three modes: organize on disk, verify and fix the <code>/Game</code> layout after ingest, or both as one flow. Its disk-organizing mode needs nothing but a folder; the other two need the toolset connected.</span>
       </div>
     </div>
@@ -291,13 +291,13 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
     </p>
     <div class="code-block">
       <pre><code>{`# per project - commits with the project, whole team gets them
-<YourProject>/.claude/skills/mha-setup/
-<YourProject>/.claude/skills/mha-help/
-<YourProject>/.claude/skills/mha-organize-takes/
-<YourProject>/.claude/skills/mha-direct/
+<YourProject>/.claude/skills/mha_setup/
+<YourProject>/.claude/skills/mha_help/
+<YourProject>/.claude/skills/mha_organize_takes/
+<YourProject>/.claude/skills/mha_direct/
 
 # or per user - available in every project you open
-~/.claude/skills/mha-help/`}</code></pre>
+~/.claude/skills/mha_help/`}</code></pre>
     </div>
     <p class="section-desc">
       Copy the whole folder, not just the <code>SKILL.md</code> inside it. Skills are picked up on
@@ -308,7 +308,7 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
       <strong>Reads are free; writes ask first.</strong> The skills query the queue, classify takes,
       and lint a layout without touching anything, then present a plan and stop. Nothing is moved,
       renamed, queued, or started until you approve it — so "show me what's wrong with this shoot"
-      is a safe thing to ask. The classification rules <code>mha-organize-takes</code> enforces are
+      is a safe thing to ask. The classification rules <code>mha_organize_takes</code> enforces are
       the same ones documented under
       <a href="/marketplace/mha-manager/docs/naming-conventions">Naming Conventions</a>.
     </div>
