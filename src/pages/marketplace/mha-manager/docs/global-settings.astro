@@ -139,23 +139,23 @@ const settings = [
   {
     name: 'Performance Viewport Lighting',
     section: 'Export',
-    default: 'Empty (the editor preview scene)',
-    desc: 'Lighting used in the MetaHuman Performance editor viewport: one of the MetaHuman lighting rigs Epic ships, or the package path of a level from the custom folder below. Set from the <strong>Lighting</strong> combo on the <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a> panel and re-applied every time a Performance editor opens. Nothing is written into the Performance asset.',
+    default: 'Studio',
+    desc: 'Lighting used in the MetaHuman Performance editor viewport: one of the MetaHuman lighting rigs Epic ships, a Custom Light Preset registered in MetaHuman Character, or the package path of a level from the custom folder below. Empty means Epic\'s own preview scene. No row in the settings panel - set it from the <strong>Lighting</strong> combo on the Performance editor toolbar (see <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a>) and it is re-applied every time a Performance editor opens. Nothing is written into the Performance asset.',
     note: null,
   },
   {
     name: 'Performance Viewport Hair',
     section: 'Export',
     default: 'Off',
-    desc: 'Puts the grooms of the MetaHuman on the preview face in the Performance editor viewport. The character is found from the face mesh the viewport already shows. Set from the <strong>Hair</strong> toggle on the <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a> panel and re-applied every time a Performance editor opens. Nothing is written into the Performance asset.',
+    desc: 'Puts the grooms of the MetaHuman on the preview face in the Performance editor viewport. The character is found from the face mesh the viewport already shows. No row in the settings panel - set it from the <strong>Hair</strong> toggle on the <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a> panel and it is re-applied every time a Performance editor opens. Nothing is written into the Performance asset.',
     note: null,
   },
   {
     name: 'Custom Lighting Environment Folder',
     section: 'Export',
     default: '<code>/Game/LightingEnvironments</code>',
-    desc: 'Where you keep your own lighting levels. Every map under it, recursively, joins both lighting lists. A custom level follows the same convention Epic uses - the subject stands at the origin facing +Y with the head at (0, -1, 147) - and only its lights, static meshes and post process volumes are copied.',
-    note: null,
+    desc: 'Where you keep your own lighting levels. Every map under it, recursively, joins both lighting lists, alongside the Custom Light Presets registered in MetaHuman Character. A custom level follows the same convention Epic uses - the subject stands at the origin facing +Y with the head at (0, -1, 147). A LevelSequence export copies its lights, static meshes and post process volumes; the Performance viewport streams the level itself.',
+    note: 'The Performance viewport can only stream a plain level. A World Partition map is refused with a warning - resave it as a non-World-Partition level to use it there. LevelSequence export is unaffected.',
   },
   {
     name: 'Clean Depth',

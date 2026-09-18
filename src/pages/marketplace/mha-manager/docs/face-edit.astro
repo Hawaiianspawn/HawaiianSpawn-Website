@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '../../../../layouts/DocsLayout.astro';
+import DocFigure from '../../../../components/DocFigure.astro';
 
 const params = [
   { group: 'Pose',  name: 'head_pitch, head_yaw, head_roll', range: 'deg, -25 to 25', desc: 'Head nod / turn / tilt offsets. Past about 8 deg the framing itself changes.' },
@@ -70,6 +71,11 @@ const params = [
       editor's toolbar, as a docked tab beside the viewport. There the two timelines are tied together:
       scrubbing in the panel moves the Performance timeline, and scrubbing the timeline moves the panel.
     </p>
+    <DocFigure
+      src="/assets/docs/mha/face-edit.webp"
+      alt="The Face Edit tab docked beside the Performance viewport: before and after frames, a marker list, timing and pose fields, and the Direct text box"
+      caption="Face Edit docked in the Performance editor - a head_yaw marker added at a frame, then rendered"
+    />
     <div class="field-list">
       <div class="fe-row header">
         <span>Area</span>

@@ -83,7 +83,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "export_level_sequence": true,
   "bind_face_to_audio_level_sequence": true,
   "level_sequence_lighting_environment": "Portrait",
+  "performance_viewport_lighting_environment": "Studio",
   "performance_viewport_hair": false,
+  "custom_lighting_environment_folder": "/Game/LightingEnvironments",
   "export_for_dcc": false,
   "export_dcc_audio": true,
   "dcc_export_directory": "",
@@ -108,6 +110,8 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "rejected_calibration_paths": [],
   "export_calibration_json": false,
   "clean_depth": false,
+  "prefer_depth_solve_for_depth_takes": true,
+  "face_edit_backend_root": "D:/FaceEdit",
   "auto_queue_ingested_takes": true,
   "auto_run_ingested_takes": false,
   "auto_categorize_stereo_takes_by_name": true,
@@ -118,7 +122,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "timing_calibration": [ ... ],
   "default_job_options_by_category": {
     "mono":   { ... },
-    "stereo": { ... },
+    "depth":  { ... },
     "audio":  { ... }
   },
   "default_job_options": { ... },
@@ -139,8 +143,9 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     </p>
     <p class="section-desc">
       <code>default_job_options_by_category</code> holds the per-category solve default templates —
-      one sub-object per category (Mono / Stereo / Audio) using the same keys as a job's
-      <code>options</code> block. <code>default_job_options</code> is the legacy single-template key,
+      one sub-object per category (Mono / Depth / Audio) using the same keys as a job's
+      <code>options</code> block. The depth template was written as <code>"stereo"</code> before
+      2026-09 and either key still loads. <code>default_job_options</code> is the legacy single-template key,
       kept so older plugin builds can still read the manifest; a manifest that has only the legacy
       key seeds all three categories from it on load.
     </p>
@@ -157,6 +162,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "id": "A1B2C3D4-E5F6-...",
   "name": "Scene_01_Take_03",
   "input_type": "Mono",
+  "type_pinned": true,
   "footage_capture_data": "/Game/Captures/Scene01/Take03.Take03",
   "identity": "",
   "status": "pending",
@@ -183,8 +189,13 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="field-row">
         <span class="field-name"><code>input_type</code></span>
-        <span class="field-type"><code>"Mono"</code> | <code>"Stereo"</code> | <code>"Audio"</code> | <code>"Calibrate"</code> | <code>"Identity"</code></span>
-        <span class="field-desc">Determines the pipeline and which solve options are used. <code>"CalibrateStereo"</code> and <code>"IdentityCreate"</code> are accepted on load as pre-rename aliases but are never written, and a legacy <code>"Depth"</code> value loads as <code>"Stereo"</code> — the same solve, which skips depth generation when depth already exists.</span>
+        <span class="field-type"><code>"Mono"</code> | <code>"Stereo"</code> | <code>"Depth"</code> | <code>"Other"</code> | <code>"Audio"</code> | <code>"Calibrate"</code> | <code>"Identity"</code></span>
+        <span class="field-desc">Determines the pipeline and which solve options are used. <code>"CalibrateStereo"</code> and <code>"IdentityCreate"</code> are accepted on load as pre-rename aliases but are never written.</span>
+      </div>
+      <div class="field-row">
+        <span class="field-name"><code>type_pinned</code></span>
+        <span class="field-type">Bool</span>
+        <span class="field-desc">Set when a person picked the Type by hand; omitted when false. A pinned job keeps its type through auto-classification and through Retry.</span>
       </div>
       <div class="field-row">
         <span class="field-name"><code>footage_capture_data</code></span>
@@ -194,7 +205,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <div class="field-row">
         <span class="field-name"><code>identity</code></span>
         <span class="field-type">String</span>
-        <span class="field-desc">Object path to the <code>UMetaHumanIdentity</code>. Used by Stereo jobs only; empty for Mono, Audio, and Calibration jobs.</span>
+        <span class="field-desc">Object path to the <code>UMetaHumanIdentity</code>. Used by the depth family (Stereo, Depth, Other) and written by an Identity job; empty for Mono, Audio, and Calibration jobs.</span>
       </div>
       <div class="field-row">
         <span class="field-name"><code>status</code></span>

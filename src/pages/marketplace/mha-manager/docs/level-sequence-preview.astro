@@ -86,12 +86,20 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       rather than hardcoded, so environments a future engine adds show up on their own.
     </p>
     <p class="section-desc">
-      Your own lighting levels join the list too: every map under the <strong>Custom Lighting
-      Environment Folder</strong> (<code>/Game/LightingEnvironments</code> by default) is offered
-      alongside Epic's. A custom level follows Epic's convention - the subject stands at the origin
-      facing +Y with the head at (0, -1, 147) - and only its lights, static meshes and post process
-      volumes are copied. The same list lights the Performance editor viewport, chosen from the
-      <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a> panel.
+      Two more sources join the list: the Custom Light Presets registered in MetaHuman Character,
+      shown under their preset names, and every map under the <strong>Custom Lighting Environment
+      Folder</strong> (<code>/Game/LightingEnvironments</code> by default). A custom level follows
+      Epic's convention - the subject stands at the origin facing +Y with the head at (0, -1, 147) -
+      and only its lights, static meshes and post process volumes are copied into the sequence.
+    </p>
+    <p class="section-desc">
+      The same list lights the Performance editor viewport, chosen from the <strong>Lighting</strong>
+      combo on the Performance editor toolbar (see
+      <a href="/marketplace/mha-manager/docs/expression-limits">Expression Limits</a>). That path
+      copies nothing: it streams the rig's own map into the preview world, the way the MetaHuman
+      Character editor does, and unloads it again on switch. Streaming only works for a plain level,
+      so a World Partition map is refused there with a warning even though it exports into a sequence
+      normally.
     </p>
     <p class="section-desc">
       The rigs' shared companion level (the backdrop and its post-process grade) is deliberately left

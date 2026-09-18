@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '../../../../layouts/DocsLayout.astro';
+import DocFigure from '../../../../components/DocFigure.astro';
 ---
 
 <DocsLayout
@@ -28,6 +29,11 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       The profile is an ordinary asset: keep it per character and point every job for that character
       at it.
     </p>
+    <DocFigure
+      src="/assets/docs/mha/expression-limits.webp"
+      alt="The Expression Limits tab docked beside the Performance viewport: face control board on top, one slider row per limited control below, the preview face following as a ceiling is dragged"
+      caption="Dialling a limit against a solved take - the viewport follows the slider"
+    />
     <div class="field-list">
       <div class="el-row header">
         <span>Control</span>
@@ -47,7 +53,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
       <div class="el-row">
         <span><strong>Lighting</strong></span>
-        <span>Lights the Performance viewport with one of Epic's MetaHuman rigs or a level from your own lighting folder. Remembered for every Performance you open; nothing is written into the asset.</span>
+        <span>On the Performance editor's own toolbar, not this panel. Lights the viewport with one of Epic's MetaHuman rigs (<strong>Studio</strong> by default), a Custom Light Preset registered in MetaHuman Character, or a level from your own lighting folder. The rig's map is streamed into the preview world and unloaded again on switch, so a World Partition level is refused. Remembered for every Performance you open; nothing is written into the asset.</span>
       </div>
       <div class="el-row">
         <span><strong>Hair</strong></span>
@@ -62,6 +68,11 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
         <span>One slider per limited control, with Min / Mid / Max spin boxes, the take's own peak, and a tick at the current frame. Filter by name, or use <strong>Add curve</strong>.</span>
       </div>
     </div>
+    <DocFigure
+      src="/assets/docs/mha/lighting-toolbar.webp"
+      alt="The Lighting combo on the Performance editor toolbar open, listing Preview Scene and Epic's rigs, switching the viewport from Studio to RedLantern"
+      caption="The Lighting combo on the Performance toolbar - the rig's map streams into the preview world on switch"
+    />
   </section>
 
   <section class="doc-section">
