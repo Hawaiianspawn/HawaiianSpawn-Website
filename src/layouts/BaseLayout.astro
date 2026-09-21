@@ -6,11 +6,14 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  /** Site-relative path to a social-card image, e.g. /assets/docs/mha/cover.jpeg */
+  image?: string;
 }
 
 const {
   title = 'Aaron Low — Technical Artist',
   description = 'Portfolio of Aaron Low, Technical Artist and Game Designer based in Hawaii.',
+  image,
 } = Astro.props;
 ---
 
@@ -26,6 +29,8 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+    {image && <meta name="twitter:card" content="summary_large_image" />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 

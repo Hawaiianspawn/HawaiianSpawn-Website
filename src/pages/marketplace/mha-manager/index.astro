@@ -5,6 +5,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 <BaseLayout
   title="MHA Manager — Aaron Low"
   description="An Unreal Engine 5.7-5.8 editor plugin that automates batch processing of MetaHuman Animator footage — Mono, Stereo, Depth, and Audio solves plus stereo calibration and identity creation in one queue."
+  image="/assets/docs/mha/cover.jpeg"
 >
   <div class="page-content">
     <div class="container">
@@ -30,6 +31,14 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
           </a>
         </div>
       </section>
+
+      <img
+        class="hero-cover"
+        src="/assets/docs/mha/cover.webp"
+        width="1920"
+        height="1080"
+        alt="MetaHuman Animator Batch Processing: captured footage on the left solved into MetaHuman facial animation on the right, for Mono, Stereo, Depth, and Audio takes"
+      />
 
       <!-- Stats strip -->
       <div class="stats-strip">
@@ -322,6 +331,15 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
   .hero {
     padding: 80px 0 64px;
     max-width: 760px;
+  }
+
+  .hero-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 48px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
   }
 
   .hero-badges {

@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '../../../../layouts/DocsLayout.astro';
+import DocFigure from '../../../../components/DocFigure.astro';
 
 // Same grouping and order as the sidebar in DocsLayout.astro - keep the two in step.
 const topics = [
@@ -162,6 +163,12 @@ const topics = [
       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
   </div>
+
+  <DocFigure
+    src="/assets/docs/mha/cover.webp"
+    alt="Captured footage on the left solved into MetaHuman facial animation on the right, for Mono, Stereo, Depth, and Audio takes"
+    caption="What MHA Manager does — a whole shoot of footage in, solved MetaHuman animation out"
+  />
 
   {topics.map(section => (
     <section class="topic-section">
