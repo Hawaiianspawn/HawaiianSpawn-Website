@@ -9,6 +9,12 @@ import DocFigure from '../../../../components/DocFigure.astro';
   currentSlug="ingest"
 >
 
+  <DocFigure
+    src="/assets/docs/mha/llh-capture-manager.webp"
+    alt="Live Link Hub — Capture Manager view with takes selected, ingesting into the Unreal project"
+    caption="Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data"
+  />
+
   <div class="doc-header">
     <h1 class="doc-title">Ingest &amp; Add Jobs</h1>
     <p class="doc-lead">
@@ -22,11 +28,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
   <section class="doc-section">
     <h2 class="section-title">Live Link Hub</h2>
-    <DocFigure
-      src="/assets/docs/mha/llh-capture-manager.webp"
-      alt="Live Link Hub — Capture Manager view with takes selected, ingesting into the Unreal project"
-      caption="Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data"
-    />
     <p class="section-desc">
       <strong>Live Link Hub</strong> is Epic's first-party capture application and the recommended
       input for MHA Manager. It bundles Capture Manager: connect your capture source (Live Link Face
@@ -48,10 +49,22 @@ import DocFigure from '../../../../components/DocFigure.astro';
       prepared Identity for the actor, the same as Stereo. Turn off <strong>Depth solve for depth
       takes</strong> in Global Settings to queue them as Mono instead.
     </p>
+    <div class="llh-links">
+      <a href="https://store.epicgames.com/en-US/p/livelink-hub-2ed588" class="btn btn-primary" target="_blank" rel="noopener">
+        Get Live Link Hub — Epic Games Store
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+      </a>
+      <a href="com.epicgames.launcher://store/p/livelink-hub-2ed588" class="btn btn-outline">
+        Open in Epic Games Launcher
+      </a>
+    </div>
     <div class="callout callout-note">
-      Live Link Hub is a separate Epic download and depends on the Live Link / Virtual Production
-      plugins. See Epic's Live Link Hub and MetaHuman Animator capture documentation for device
-      setup and recording — that side of the workflow is Epic's, not this plugin's.
+      Live Link Hub is a separate Epic download (free, from the store links above — or from the
+      <strong>Unreal Engine → Library</strong> tab of the launcher) and depends on the Live Link /
+      Virtual Production plugins. See Epic's
+      <a href="https://dev.epicgames.com/documentation/en-us/unreal-engine/live-link-hub-in-unreal-engine" target="_blank" rel="noopener">Live Link Hub</a>
+      and MetaHuman Animator capture documentation for device setup and recording — that side of
+      the workflow is Epic's, not this plugin's.
     </div>
   </section>
 
@@ -404,6 +417,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
   .callout-tip { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
   .callout-note { background: var(--bg-surface); border-color: var(--border); }
+  .llh-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
   .callout strong { color: var(--text); font-weight: 600; }
   .callout em { color: var(--text); font-style: italic; }
 

@@ -20,29 +20,14 @@ if (!exists) {
 ---
 
 {exists && (
-  <details class="doc-figure" open>
-    <summary>{caption ?? alt}</summary>
-    <figure>
-      <img src={src} alt={alt} />
-    </figure>
-  </details>
+  <figure class="doc-figure">
+    <img src={src} alt={alt} />
+    {caption && <figcaption>{caption}</figcaption>}
+  </figure>
 )}
 
 <style>
-  .doc-figure { margin: 20px 0 4px; }
-
-  summary {
-    cursor: pointer;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    padding: 6px 10px;
-    border: 1px dashed color-mix(in srgb, var(--border) 80%, transparent);
-    border-radius: var(--radius);
-  }
-  summary::before { content: "Screenshot: "; font-weight: 600; }
-  .doc-figure[open] summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-
-  figure { margin: 0; }
+  .doc-figure { margin: 20px 0; }
 
   .doc-figure img {
     display: block;
@@ -51,4 +36,9 @@ if (!exists) {
     border-radius: var(--radius);
   }
 
+  figcaption {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
 </style>
