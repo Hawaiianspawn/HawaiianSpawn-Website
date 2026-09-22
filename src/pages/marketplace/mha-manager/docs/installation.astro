@@ -452,7 +452,32 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
     </div>
   </div>
 
-  <!-- Next page -->
+  <!-- Live Link Hub - needed for footage ingest on every track -->
+  <section class="doc-section" id="live-link-hub">
+    <h2 class="section-title">Live Link Hub</h2>
+    <p class="section-desc">
+      Footage jobs run on Capture Data assets, and <strong>Live Link Hub</strong> — Epic's free,
+      stand-alone capture app that bundles Capture Manager — is what produces them. Install it
+      alongside the plugin; audio-only jobs do not need it.
+    </p>
+    <div class="llh-links">
+      <a href="https://store.epicgames.com/en-US/p/livelink-hub-2ed588" class="btn btn-primary" target="_blank" rel="noopener">
+        Get Live Link Hub — Epic Games Store
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+      </a>
+      <a href="com.epicgames.launcher://store/p/livelink-hub-2ed588" class="btn btn-outline">
+        Open in Epic Games Launcher
+      </a>
+    </div>
+    <div class="callout callout-note">
+      Also available from the launcher's <strong>Unreal Engine &rarr; Library</strong> tab, or
+      <strong>Tools &rarr; Live Link Hub</strong> inside the editor. Device setup and recording are
+      covered in Epic's
+      <a href="https://dev.epicgames.com/documentation/en-us/unreal-engine/live-link-hub-in-unreal-engine" target="_blank" rel="noopener">Live Link Hub documentation</a>;
+      how takes reach the queue is on the
+      <a href="/marketplace/mha-manager/docs/ingest">Ingest &amp; Add Jobs</a> page.
+    </div>
+  </section>
 
 </DocsLayout>
 
@@ -584,6 +609,19 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
   }
 
   .callout strong { font-weight: 600; }
+
+  /* Live Link Hub */
+  .doc-section { margin-top: 48px; }
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-desc { font-size: 0.925rem; color: var(--text-muted); line-height: 1.7; }
+  .llh-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
 
   /* Steps */
   .steps { display: flex; flex-direction: column; }
