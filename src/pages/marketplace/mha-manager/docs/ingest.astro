@@ -5,42 +5,28 @@ import DocFigure from '../../../../components/DocFigure.astro';
 
 <DocsLayout
   title="Ingest & Add Jobs — MHA Manager"
-  description="Bring raw capture footage into your project as Capture Data through Live Link Hub, and fill the queue from the one Add Jobs dialog — project assets, audio, or raw footage — or automatically as takes arrive."
+  description="Bring raw capture footage into your project as Capture Data with Capture Manager, inside the editor, and fill the queue from the one Add Jobs dialog — project assets, audio, or raw footage — or automatically as takes arrive."
   currentSlug="ingest"
 >
-
-  <DocFigure
-    src="/assets/docs/mha/llh-capture-manager.webp"
-    alt="Live Link Hub — Capture Manager view with takes selected, ingesting into the Unreal project"
-    caption="Live Link Hub's Capture Manager ingests takes straight into the project as Capture Data"
-  />
 
   <div class="doc-header">
     <h1 class="doc-title">Ingest &amp; Add Jobs</h1>
     <p class="doc-lead">
       Every footage job runs on a <code>UFootageCaptureData</code> asset. Getting raw footage into
-      the project as that asset is <em>ingest</em>, and Epic's Live Link Hub — which bundles Capture
-      Manager — is the engine that does it. Getting assets into the queue is
+      the project as that asset is <em>ingest</em>, done by Epic's Capture Manager. Getting assets into the queue is
       <strong>Add Jobs...</strong>, the single entry point in the MHA Manager toolbar — or the
       auto-queue watcher, which needs no dialog at all.
     </p>
   </div>
 
   <section class="doc-section">
-    <h2 class="section-title">Live Link Hub</h2>
+    <h2 class="section-title">Where takes come from</h2>
     <p class="section-desc">
-      <strong>Live Link Hub</strong> is Epic's first-party capture application and the recommended
-      input for MHA Manager. It bundles Capture Manager: connect your capture source (Live Link Face
-      on a mobile device, a stereo head-mounted camera, or an existing take archive), import the takes, and
-      ingest them into your Unreal project. Each take lands in the Content Browser as a
-      <code>UFootageCaptureData</code> asset under <code>/Game/CaptureManager/Imports/&lt;Actor&gt;/</code>
-      — exactly what every job runs on, with no manual asset assembly.
-    </p>
-    <p class="section-desc">
-      Drive it from Live Link Hub's own window, or from the <strong>External Footage</strong> source
-      of the Add Jobs dialog below. Either way, turn on <strong>Auto-Queue Ingested Takes</strong>
-      and every take Live Link Hub delivers is classified and queued automatically — capture in one
-      window, watch jobs appear in the other.
+      Raw take folders on disk are ingested from the <strong>External Footage</strong> source of the
+      Add Jobs dialog below, inside the editor (UE 5.8). Takes that Capture Manager has already
+      ingested - from this dialog, or from Epic's own Live Link Hub - land under
+      <code>/Game/CaptureManager/Imports/&lt;Actor&gt;/</code> as <code>UFootageCaptureData</code>
+      assets and are queued from <strong>Project Assets</strong> or by the auto-queue watcher.
     </p>
     <p class="section-desc">
       A single-camera take that arrives carrying its own depth - a mobile device running Live Link
@@ -49,11 +35,6 @@ import DocFigure from '../../../../components/DocFigure.astro';
       prepared Identity for the actor, the same as Stereo. Turn off <strong>Depth solve for depth
       takes</strong> in Global Settings to queue them as Mono instead.
     </p>
-    <div class="callout callout-note">
-      Live Link Hub is a separate, free Epic download — links and setup are on the
-      <a href="/marketplace/mha-manager/docs/installation#live-link-hub">Installation</a> page.
-      Device setup and recording are Epic's side of the workflow, not this plugin's.
-    </div>
   </section>
 
   <section class="doc-section">
@@ -64,7 +45,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
       caption="The Ingest section of Global Settings"
     />
     <p class="section-desc">
-      As takes arrive from Live Link Hub / Capture Manager, the <strong>Ingest</strong> section
+      As Capture Manager delivers takes, the <strong>Ingest</strong> section
       of <a href="/marketplace/mha-manager/docs/global-settings">Global Settings</a> can watch the
       project and queue them the moment they appear in the Content Browser — no dialog needed:
     </p>
@@ -92,7 +73,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
     <h2 class="section-title">The three sources</h2>
     <DocFigure
       src="/assets/docs/mha/ingest-three-sources.webp"
-      alt="Add Jobs dialog with the Source picker — Project Assets, Audio, External Footage (Live Link Hub) — and the Project Assets tree of FootageCaptureData assets below"
+      alt="Add Jobs dialog with the Source picker - Project Assets, Audio, External Footage - and the Project Assets tree of FootageCaptureData assets below"
       caption="The Add Jobs dialog: pick a source at the top, tick takes in the tree below"
     />
     <div class="field-list">
@@ -109,8 +90,8 @@ import DocFigure from '../../../../components/DocFigure.astro';
         <span>Audio-driven jobs from project SoundWaves, WAV files on disk, or a Wwise container. Requires UE 5.8.</span>
       </div>
       <div class="src-row">
-        <span><strong>External Footage (Live Link Hub)</strong></span>
-        <span>Raw take folders on disk, scanned and then ingested by Live Link Hub. Requires the <code>CaptureManagerEditor</code> plugin (UE 5.7+) and an installed Live Link Hub.</span>
+        <span><strong>External Footage</strong></span>
+        <span>Raw take folders on disk, scanned and then ingested by Capture Manager inside the editor. Requires UE 5.8 and the <code>CaptureManagerEditor</code> plugin; on UE 5.7 the source is disabled and its tooltip says why.</span>
       </div>
     </div>
     <div class="callout callout-note">
@@ -175,7 +156,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
   </section>
 
   <section class="doc-section">
-    <h2 class="section-title">External Footage (Live Link Hub)</h2>
+    <h2 class="section-title">External Footage</h2>
     <DocFigure
       src="/assets/docs/mha/ingest-add-jobs-external.webp"
       alt="Add Jobs dialog on the External Footage source: footage root, fallback actor, schema and destination line, and the scanned take tree with Kind / Take / Actor columns"
@@ -183,10 +164,16 @@ import DocFigure from '../../../../components/DocFigure.astro';
     />
     <p class="section-desc">
       For footage that is not in the project yet. Point the dialog at a footage root on disk; it
-      walks the folder itself — a plain filesystem scan, because Live Link Hub is not running yet —
-      and classifies every take it finds. You check the ones to bring in, and the confirmed set is
-      handed to Live Link Hub as ingest device requests.
+      walks the folder and classifies every take it finds. Check the ones to bring in and press
+      <strong>Ingest</strong>: Capture Manager's ingest library runs in this editor process, one
+      actor at a time, into <code>/Game/CaptureManager/Imports/&lt;Actor&gt;/</code>. The checked
+      takes are queued when the ingest finishes, including takes that were already in the project.
     </p>
+    <ul class="bullet-list">
+      <li>Set a <strong>Media Directory</strong> in Project Settings -&gt; Capture Manager first; the ingest refuses to start while it is empty. Other Capture Manager settings apply as usual.</li>
+      <li>A notification counts finished takes (there is no progress within a take) and has a <strong>Cancel</strong> button. Per-take results are in the Output Log under <code>LogMHAManager</code>, lines starting <code>MHACaptureManagerIngest:</code>.</li>
+      <li>One ingest at a time: a second is refused until the first finishes or is cancelled.</li>
+    </ul>
     <div class="field-list">
       <div class="src-row header">
         <span>Take kind</span>
@@ -206,7 +193,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
       </div>
       <div class="src-row">
         <span><strong>Audio</strong></span>
-        <span>A loose WAV, when <strong>Include .wav audio as audio takes</strong> is on. Scan-only — audio takes are queued directly in the editor and never go through Live Link Hub. A WAV that belongs to a stereo take is always that take's audio track, never a take of its own.</span>
+        <span>A loose WAV, when <strong>Include .wav audio as audio takes</strong> is on. Scan-only — audio takes are queued directly and never ingested. A WAV that belongs to a stereo take is always that take's audio track, never a take of its own.</span>
       </div>
     </div>
     <p class="section-desc" style="margin-top:14px;">

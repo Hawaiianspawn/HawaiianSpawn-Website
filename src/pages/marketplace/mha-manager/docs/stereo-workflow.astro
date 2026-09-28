@@ -49,9 +49,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       </div>
     </div>
     <div class="callout callout-note">
-      <strong>Depth generation is serial.</strong> Even when Max Concurrent Jobs is above 1, depth
-      generation for all stereo jobs completes before any job enters the concurrent processing pool.
-      Depth is skipped when the take already has a linked depth sequence.
+      Depth generation is skipped when the take already has a linked depth sequence.
     </div>
   </section>
 

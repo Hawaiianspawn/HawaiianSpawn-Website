@@ -7,7 +7,7 @@ const settings = [
     name: 'Auto-Queue Ingested Takes',
     section: 'Ingest',
     default: 'On',
-    desc: 'Watches the project for new Footage Capture Data assets — takes pushed from Live Link Hub / Capture Manager — and queues them automatically. Takes already in the queue are never re-added. When Live Link Hub exits, a sweep also picks up takes that were already in the project or arrived while the watcher was off.',
+    desc: 'Watches the project for new Footage Capture Data assets - takes delivered by Capture Manager - and queues them automatically. Takes already in the queue are never re-added. Takes ingested from Add Jobs -> External Footage are queued when the ingest finishes, whether or not this is on.',
     note: null,
   },
   {
@@ -176,27 +176,6 @@ const settings = [
     section: 'Camera Calibration and Depth (whole queue)',
     default: 'SKM_Body',
     desc: 'Global default <code>USkeletalMesh</code> for body-tracked jobs whose Body Export Skeleton is Existing Skeleton. A per-job Body Target Mesh takes priority.',
-    note: null,
-  },
-  {
-    name: 'Face Edit Backend Root',
-    section: 'External Tools',
-    default: 'Empty (face editing off)',
-    desc: 'Folder holding the <code>backend.json</code> written by <code>Scripts/Install_FaceEditBackend.ps1</code>. The plugin ships no model or weights - this points it at one you installed. Empty, or no readable manifest, greys out <a href="/marketplace/mha-manager/docs/face-edit">Edit Face Performance</a> with the reason in its tooltip. The backend variant chosen in the Face Edit panel header is saved alongside it as <code>face_edit_backend_variant</code>, not editable here.',
-    note: null,
-  },
-  {
-    name: 'Max Concurrent Jobs',
-    section: 'Advanced',
-    default: '1',
-    desc: 'How many takes are solved simultaneously (1-8). Sequential mode (1) is the safest and lowest-memory option. Values above 1 launch separate worker processes that each solve a take side by side — real parallelism, since Epic\'s MetaHuman pipeline only allows one solve per editor instance.',
-    note: 'Each extra slot costs one subprocess and 2-5 GB of RAM. Stereo depth generation still runs serially before jobs enter the parallel pool.',
-  },
-  {
-    name: 'Force DX12 for Worker Processes',
-    section: 'Advanced',
-    default: 'Off',
-    desc: 'Launches subprocess workers with <code>-d3d12</code> so headless jobs use DirectX 12 even if the editor session was started differently.',
     note: null,
   },
   {

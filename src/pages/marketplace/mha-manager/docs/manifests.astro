@@ -77,7 +77,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "output_path": "/Game/CaptureManager/Export",
   "ue_export_flat": true,
   "skip_if_already_solved": true,
-  "max_concurrent_jobs": 1,
   "export_anim_sequence": true,
   "reduce_control_rig_keys": true,
   "export_level_sequence": true,
@@ -95,7 +94,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "auto_open_after_export": false,
   "use_metahuman_id_for_output_mesh": true,
   "target_skeleton_or_skeletal_mesh": "",
-  "force_d3d12": false,
   "add_skeleton_compatibility": true,
   "body_target_skeletal_mesh_global": "/MetaHumanBodyTracker/SKM_Body.SKM_Body",
   "retargeter_output_path": "/Game/CaptureManager/BodyTrackerTargets",
@@ -111,7 +109,6 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   "export_calibration_json": false,
   "clean_depth": false,
   "prefer_depth_solve_for_depth_takes": true,
-  "face_edit_backend_root": "D:/FaceEdit",
   "auto_queue_ingested_takes": true,
   "auto_run_ingested_takes": false,
   "auto_categorize_stereo_takes_by_name": true,
@@ -306,7 +303,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
     </p>
     <p class="section-desc">
       It does not replace the manifest. The <code>.mhajson</code> file stays the persistence layer —
-      crash-recovery autosave, worker subprocess IPC, and MCP polling all run on it. The asset is the
+      crash-recovery autosave, the headless commandlet, and MCP polling all run on it. The asset is the
       <em>shareable</em> face of the same state: it lives in <code>/Game</code>, so it commits to
       source control, diffs, and travels with the project. That is what puts a job's provenance — a
       Wwise sound id and its event, say — next to the Performance it produced, instead of in a

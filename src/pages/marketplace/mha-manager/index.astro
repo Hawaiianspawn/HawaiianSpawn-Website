@@ -53,11 +53,6 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <span class="stat-value">1–8</span>
-          <span class="stat-label">Parallel Workers</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
           <span class="stat-value">UE 5.7-5.8</span>
           <span class="stat-label">Compatibility</span>
         </div>
@@ -96,16 +91,6 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             <h3 class="feature-title">Non-Destructive Depth Clean-Up</h3>
             <p class="feature-desc">
               An async hole-filling pass for stereo depth sequences that tells background from genuine gaps in the subject and patches only those — writing a new <code>_Clean</code> copy so the original capture data is never touched.
-            </p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-            </div>
-            <h3 class="feature-title">Face Performance Edit</h3>
-            <p class="feature-desc">
-              Fix a mono take instead of reshooting it: adjust gaze, brows, mouth, or head pose on a marker timeline, render over the take's frames, and re-solve. Original frames kept, revert in one click. Needs a face-edit backend you install locally.
             </p>
           </div>
 
@@ -193,9 +178,9 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
             <div class="feature-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="8" height="10" rx="1"/><rect x="14" y="7" width="8" height="10" rx="1"/></svg>
             </div>
-            <h3 class="feature-title">Parallel Worker Processes</h3>
+            <h3 class="feature-title">In-Editor Footage Ingest</h3>
             <p class="feature-desc">
-              Raise <strong>Max Concurrent Jobs</strong> (1–8) and MHA Manager launches separate worker processes that solve takes side by side — real parallelism, not just overlapped stages.
+              Point Add Jobs at a folder of raw takes: it classifies stereo, mono, and Live Link Face takes, ingests them with Capture Manager inside the editor, and queues the results. (UE 5.8)
             </p>
           </div>
 
@@ -280,8 +265,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
           <div class="req-block">
             <h3 class="req-heading">Hardware</h3>
             <ul class="req-list">
-              <li>16 GB RAM minimum (sequential mode)</li>
-              <li>32+ GB RAM for concurrent jobs</li>
+              <li>16 GB RAM minimum</li>
               <li>NVIDIA GPU recommended</li>
               <li>DirectX 12 capable GPU</li>
             </ul>

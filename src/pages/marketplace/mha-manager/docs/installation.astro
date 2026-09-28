@@ -38,7 +38,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
     <div class="plugin-row">
       <span><strong>RAM</strong></span>
       <span>16 GB minimum</span>
-      <span>Enough for sequential batches; raise it before raising Max Concurrent Jobs</span>
+      <span>The queue solves one take at a time</span>
     </div>
     <div class="plugin-row">
       <span><strong>GPU</strong></span>
@@ -217,9 +217,9 @@ import DocFigure from '../../../../components/DocFigure.astro';
           images. Please make sure Depth Processing plugin is enabled."
         </div>
         <div class="callout callout-tip" style="margin-top: 14px;">
-          <strong>Capture Manager:</strong> auto-queue of takes ingested through Live Link Hub /
-          Capture Manager uses the engine's <code>CaptureManager</code> plugin (UE 5.7+, included
-          with the engine). It produces the Footage Capture Data assets the watcher picks up.
+          <strong>Capture Manager:</strong> the engine's <code>CaptureManagerEditor</code> plugin
+          produces the Footage Capture Data assets the watcher picks up, and on UE 5.8 runs the
+          in-editor ingest behind Add Jobs -&gt; External Footage.
         </div>
       </div>
     </div>
@@ -407,7 +407,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
           />
           <div class="callout callout-tip" style="margin-top: 12px;">
             If you don't see this context menu option, open the Unreal Editor first (it will prompt
-            to rebuild), or run <code>UnrealBuildTool.exe</code> manually via the Engine's <code>Build/BatchFiles/</code> directory.
+            to rebuild), or run UnrealBuildTool manually via the Engine's <code>Build/BatchFiles/</code> directory.
           </div>
         </div>
       </div>
@@ -452,13 +452,14 @@ Build:         Build → Build Solution  (or Ctrl+Shift+B)</code></pre>
     </div>
   </div>
 
-  <!-- Live Link Hub - needed for footage ingest on every track -->
+  <!-- Live Link Hub - optional, Epic's device recording app -->
   <section class="doc-section" id="live-link-hub">
     <h2 class="section-title">Live Link Hub</h2>
     <p class="section-desc">
-      Footage jobs run on Capture Data assets, and <strong>Live Link Hub</strong> — Epic's free,
-      stand-alone capture app that bundles Capture Manager — is what produces them. Install it
-      alongside the plugin; audio-only jobs do not need it.
+      Optional. Raw footage already on disk is ingested inside the editor (UE 5.8, see
+      <a href="/marketplace/mha-manager/docs/ingest">Ingest &amp; Add Jobs</a>). <strong>Live Link
+      Hub</strong> is Epic's free capture app for recording from devices; takes it ingests into the
+      project are queued like any other.
     </p>
     <div class="llh-links">
       <a href="com.epicgames.launcher://store/p/livelink-hub-2ed588" class="btn btn-primary">

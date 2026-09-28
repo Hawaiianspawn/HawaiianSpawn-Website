@@ -48,15 +48,15 @@ const issues = [
   {
     id: 'out-of-memory',
     symptom: 'Editor crashes or becomes unresponsive during batch processing',
-    cause: 'Insufficient RAM for the number of concurrent jobs.',
-    fix: 'Set <strong>Max Concurrent Jobs</strong> back to 1 in Global Settings. Sequential processing is stable on 16 GB RAM. For concurrent jobs, 32+ GB is required per active job slot. If the crash persists on a single job, the issue is the solver itself — check Epic\'s MetaHuman Animator documentation for system requirements.',
+    cause: 'Insufficient RAM, or other memory-heavy applications running alongside the editor.',
+    fix: 'The queue solves one take at a time and is stable on 16 GB RAM. Close other editors and memory-heavy tools and re-run. If the crash persists on a single job, the issue is the solver itself - check Epic\'s MetaHuman Animator documentation for system requirements.',
     type: 'performance',
   },
   {
     id: 'slow-solve',
     symptom: 'Solve is much slower than expected',
-    cause: 'GPU not being used, or D3D12 not active on a system that benefits from it.',
-    fix: 'Enable <strong>Force DX12 for Worker Processes</strong> under Global Settings &rarr; Advanced and re-run. Also verify your GPU drivers are up to date and that the editor is running on the discrete GPU rather than an integrated graphics adapter (check Windows Graphics Settings → Hardware-accelerated GPU scheduling).',
+    cause: 'GPU not being used.',
+    fix: 'Verify your GPU drivers are up to date and that the editor is running on the discrete GPU rather than an integrated graphics adapter (check Windows Graphics Settings → Hardware-accelerated GPU scheduling).',
     type: 'performance',
   },
   {

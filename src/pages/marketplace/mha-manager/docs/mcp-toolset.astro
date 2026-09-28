@@ -84,7 +84,7 @@ const toolGroups = [
       {
         sig: 'cancel_batch() -> bool',
         params: '(none)',
-        desc: 'Request cooperative cancellation of the running batch (cancels adapters, kills workers). Returns <code>false</code> if nothing was running or the editor is in an unattended session.',
+        desc: 'Request cooperative cancellation of the running batch (cancels adapters). Returns <code>false</code> if nothing was running or the editor is in an unattended session.',
       },
       {
         sig: 'retry_jobs(job_ids) -> int',
@@ -137,23 +137,6 @@ const toolGroups = [
         sig: 'duplicate_capture_data(source_object_path, dest_folder, new_name) -> str',
         params: '<code>source_object_path</code>, <code>dest_folder</code>, <code>new_name</code>',
         desc: 'Duplicate a Footage Capture Data asset with its depth and calibration links cleared — the copy shares the original RGB sequences but regenerates its own depth and links its own calibration. Never overwrites an existing asset.',
-      },
-    ],
-  },
-  {
-    id: 'face-edit',
-    label: 'Face edit',
-    desc: 'Turn a plain-language direction into marker keyframes on a Mono job\'s <a href="/marketplace/mha-manager/docs/face-edit">Face Performance Edit</a> session. Both need a face-edit backend installed and a session open or openable; rendering stays with the user.',
-    tools: [
-      {
-        sig: 'get_face_edit_session(job_id="") -> str',
-        params: '<code>job_id</code> (empty uses the session open in the panel)',
-        desc: 'The session as JSON: <code>take_name</code>, <code>frame_count</code>, <code>fps</code>, <code>params</code> (the neutral parameter names the installed backend supports), the current <code>markers</code>, the <code>prompt</code> typed in the panel, <code>shots</code> (the detected cuts as <code>{index, start, end}</code>, numbered from 1), and a <code>contact_sheet</code> of stills to look at when the direction depends on what the performer is doing.',
-      },
-      {
-        sig: 'set_face_edit_markers(job_id, markers_json) -> str',
-        params: '<code>job_id</code>, <code>markers_json</code>',
-        desc: 'Replace the marker list, validated against the parameter names the backend supports, the take frame count, and each parameter range — one bad marker rejects the whole list and the error names it. The panel refreshes on success. Nothing is rendered; the user reviews and presses Render.',
       },
     ],
   },
@@ -257,10 +240,10 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
   <section class="doc-section" id="skills">
     <h2 class="section-title">Agent skills</h2>
     <p class="section-desc">
-      The plugin ships four agent skills alongside its source. They turn the toolset from a list of
+      The plugin ships three agent skills alongside its source. They turn the toolset from a list of
       function calls into guided workflows — connect the editor, ask why a job is blocked,
-      reorganize a shoot's worth of takes before ingest, or direct a face edit in words. Each is a folder holding a
-      <code>SKILL.md</code> instruction file (plus a helper script where needed), so any LLM agent
+      or reorganize a shoot's worth of takes before ingest. Each is a folder holding a
+      <code>SKILL.md</code> instruction file, so any LLM agent
       that reads skill folders can use them.
     </p>
     <div class="field-list">
@@ -270,15 +253,11 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
       </div>
       <div class="skill-row">
         <span><code>mha_setup</code></span>
-        <span>Connecting an agent to the editor for the first time, or the <code>unreal</code> MCP server is not responding. Walks the two Epic MCP plugins, autostart, the ImgMedia cache size, the Capture Manager / Live Link Hub connection, pointing the client at the server, and verification.</span>
+        <span>Connecting an agent to the editor for the first time, or the <code>unreal</code> MCP server is not responding. Walks the two Epic MCP plugins, autostart, the ImgMedia cache size, the Capture Manager settings for in-editor ingest, pointing the client at the server, and verification.</span>
       </div>
       <div class="skill-row">
         <span><code>mha_help</code></span>
         <span>Asking why a job is blocked, what a status means, how the stereo chain fits together, or what a setting does. Reads the live queue to diagnose rather than guessing from documentation.</span>
-      </div>
-      <div class="skill-row">
-        <span><code>mha_direct</code></span>
-        <span>Directing a Mono take's facial performance in words - "subtle smile from 2s to 4s". Reads the open <a href="/marketplace/mha-manager/docs/face-edit">Face Performance Edit</a> session, writes markers back for you to review, and never renders.</span>
       </div>
       <div class="skill-row">
         <span><code>mha_organize_takes</code></span>
@@ -294,7 +273,6 @@ const totalTools = toolGroups.reduce((n, g) => n + g.tools.length, 0);
 <YourProject>/.claude/skills/mha_setup/
 <YourProject>/.claude/skills/mha_help/
 <YourProject>/.claude/skills/mha_organize_takes/
-<YourProject>/.claude/skills/mha_direct/
 
 # or per user - available in every project you open
 ~/.claude/skills/mha_help/`}</code></pre>

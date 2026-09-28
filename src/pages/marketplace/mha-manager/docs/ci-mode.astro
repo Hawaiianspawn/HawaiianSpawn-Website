@@ -20,15 +20,16 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
   <section class="doc-section">
     <h2 class="section-title">Basic syntax</h2>
     <div class="code-block">
-      <pre><code>UnrealEditor-Cmd.exe YourProject.uproject ^
+      <pre><code>UnrealEditor-Cmd YourProject.uproject ^
   -run=MHAManager ^
   -manifest="C:/path/to/batch.mhajson" ^
   -log</code></pre>
     </div>
     <p class="section-desc">
-      The commandlet requires <code>UnrealEditor-Cmd.exe</code> (Win64) — the plugin is editor-only
+      The commandlet requires <code>UnrealEditor-Cmd</code> (Win64) - the plugin is editor-only
       on Windows. It loads the manifest, runs the batch to completion, saves the updated manifest
-      (statuses, timings, error messages) back to the same path, and exits.
+      (statuses, timings, error messages) back to the same path, and exits. Jobs run serially; for
+      more throughput, start several commandlets from your own scheduler, one manifest each.
     </p>
     <div class="callout-note" style="padding: 12px 16px; border-radius: var(--radius); font-size: 0.825rem; line-height: 1.6; border-left: 3px solid #f0a500; background: color-mix(in srgb, #f0a500 8%, transparent); color: var(--text-muted); margin-bottom: 12px;">
       <strong style="color: var(--text);">Identity Create jobs are not supported headless</strong> — they
@@ -117,7 +118,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       <pre><code set:html={[
         '- name: Run MHA Manager batch\n',
         '  run: |\n',
-        '    &quot;C:/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe&quot; \\\n',
+        '    &quot;C:/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd&quot; \\\n',
         '      &quot;$&#123;&#123; github.workspace &#125;&#125;/MyProject.uproject&quot; \\\n',
         '      -run=MHAManager \\\n',
         '      -manifest=&quot;$&#123;&#123; github.workspace &#125;&#125;/Saved/MHAManager/batch.mhajson&quot; \\\n',
