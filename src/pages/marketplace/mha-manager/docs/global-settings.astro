@@ -259,11 +259,12 @@ const settings = [
   </section>
 
   <section class="extra-section">
-    <h2 class="extra-title">Stereo Calibration settings</h2>
+    <h2 class="extra-title">Camera Calibration and Depth settings</h2>
     <p class="extra-desc">
-      These settings control <a href="/marketplace/mha-manager/docs/stereo-workflow#calibration-identity">Stereo Calibration jobs</a>
-      queued from checkerboard takes. A bad calibration poisons the depth of every take built on it,
-      so the two quality gates below sit upstream of processing.
+      The <strong>Camera Calibration and Depth</strong> rows (shown with the Depth solve defaults) apply to the
+      whole queue and drive <a href="/marketplace/mha-manager/docs/stereo-workflow#calibration-identity">calibration jobs</a>
+      queued from checkerboard takes. The two quality gates live under <strong>Advanced -&gt; Calibration Quality Gates</strong>.
+      A bad calibration poisons the depth of every take built on it, so the gates sit upstream of processing.
     </p>
     <div class="callout callout-note">
       <strong>Both gates are trust gates, not silent filters.</strong> A calibration that exceeds
@@ -287,7 +288,7 @@ const settings = [
           <span class="setting-default">Default: <code>0.75 cm</code></span>
         </div>
         <div class="setting-body">
-          <p class="setting-desc">Physical size of one board square. This cannot be measured from footage — a wrong value silently scales the stereo baseline and therefore all reconstructed depth. Measure your printed board. Only takes effect while <strong>Override Default Board</strong> is on.</p>
+          <p class="setting-desc">Physical size of one board square. This cannot be measured from footage — a wrong value silently scales the stereo baseline and therefore all reconstructed depth. Measure your printed board. Only takes effect while <strong>Override default board</strong> is on; otherwise Epic's 0.75 cm is assumed.</p>
         </div>
       </div>
       <div class="setting-row">
@@ -296,12 +297,12 @@ const settings = [
           <span class="setting-default">Default: <code>Off</code></span>
         </div>
         <div class="setting-body">
-          <p class="setting-desc">Off, the plugin assumes Epic's shipped board and lets Board Pattern and Square Size auto-detect. On, your Board Pattern W/H and Square Size are pinned verbatim — the probe only tries them and their swapped orientation, and detection never writes back over them. Use this for a non-Epic board. You can save named boards as <strong>presets</strong> in this sub-section and switch between them.</p>
+          <p class="setting-desc">Off, the plugin assumes Epic's shipped 11 x 16 board at 0.75 cm and auto-detects the board pattern. On, your Board Width/Height and Square Size are pinned verbatim - only they and their swapped orientation are tried, and detection never writes back over them. Use this for a non-Epic board. Named board <strong>presets</strong> are saved and applied in the <strong>Generate Stereo Calibration</strong> dialog.</p>
         </div>
       </div>
       <div class="setting-row">
         <div class="setting-meta">
-          <span class="setting-name">Sharpness auto-tune</span>
+          <span class="setting-name">Automatic sharpness tuning</span>
           <span class="setting-default">Not a setting</span>
         </div>
         <div class="setting-body">
@@ -311,6 +312,7 @@ const settings = [
       <div class="setting-row">
         <div class="setting-meta">
           <span class="setting-name">Max RMS Error (px)</span>
+          <span class="setting-default">Advanced -&gt; Calibration Quality Gates</span>
           <span class="setting-default">Default: <code>1.0 px</code></span>
         </div>
         <div class="setting-body">
@@ -323,6 +325,7 @@ const settings = [
       <div class="setting-row">
         <div class="setting-meta">
           <span class="setting-name">Min Score</span>
+          <span class="setting-default">Advanced -&gt; Calibration Quality Gates</span>
           <span class="setting-default">Default: <code>0.5</code></span>
         </div>
         <div class="setting-body">

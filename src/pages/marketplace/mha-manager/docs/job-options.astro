@@ -139,6 +139,16 @@ const groups = [
   </div>
 
   <div class="callout callout-tip">
+    <strong>Folder rows:</strong> jobs that share a source fold under a collapsible folder row -
+    footage takes by their <code>Imports/&lt;Actor&gt;</code> folder, audio by the folder its WAV or
+    SoundWave sits in, Wwise audio by its parent container path. Inside a folder, rows read in batch
+    order (calibration, identity, then performances) and the folder row shows a live done / running /
+    blocked / failed count. Selecting a folder selects every job in it, so this panel and the
+    right-click menu act on the whole folder. Shift-click the arrow or Shift-double-click to expand or
+    collapse all folders. Display only - the batch run order is unchanged.
+  </div>
+
+  <div class="callout callout-tip">
     <strong>Column picker:</strong> the <strong>Columns</strong> button in the toolbar toggles
     which queue columns are visible — Thumbnail, Type, Solve, Status, Progress, Process Time and
     the rest. It controls the queue table, not the options themselves; column layout is saved in

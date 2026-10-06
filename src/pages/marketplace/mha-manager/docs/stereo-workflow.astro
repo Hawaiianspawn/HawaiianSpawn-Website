@@ -227,9 +227,10 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       Epic's MetaHuman Calibration Processing plugin (UE 5.7+) and produces a
       <code>CC_&lt;TakeName&gt;</code> asset linked to the Capture Data, plus an optional OpenCV
       <code>calib.json</code> on disk. The board is measured in <strong>squares</strong>, not inner
-      corners (Epic's shipped board is 11 x 16 at 0.75 cm), and Auto-Detect probes candidate sizes
-      before the full scan. Frame selection, sharpness, board override, and the quality gates live
-      under <a href="/marketplace/mha-manager/docs/global-settings">Global Settings -&gt; Stereo Calibration</a>.
+      corners (Epic's shipped board is 11 x 16 at 0.75 cm). The board pattern is detected and sharpness
+      tuned automatically unless <strong>Override default board</strong> is on. The board override lives
+      under <a href="/marketplace/mha-manager/docs/global-settings">Global Settings -&gt; Camera Calibration and Depth</a>,
+      the quality gates under Advanced -&gt; Calibration Quality Gates.
     </p>
     <h3 class="sub-heading">Identity Create</h3>
     <p class="type-desc">

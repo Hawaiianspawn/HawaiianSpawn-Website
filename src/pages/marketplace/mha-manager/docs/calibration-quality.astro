@@ -71,7 +71,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
     </p>
     <div class="option-list">
       <div class="option-row">
-        <span class="option-name">Max RMS Error (px)<br /><span class="opt-default">Default 1.0</span></span>
+        <span class="option-name">Max RMS Error (px)<br /><span class="opt-default">Default 1.0 - Advanced -&gt; Calibration Quality Gates</span></span>
         <span class="option-desc">
           Upper bound on validation reprojection error, in pixels. Above it, the calibration is set
           aside and the job pauses as <strong>Poor Calibration</strong>. This is our convention — Epic
@@ -98,13 +98,13 @@ import DocFigure from '../../../../components/DocFigure.astro';
   <section class="type-section">
     <h2 class="section-title">Gate 2 — The footage diagnostics gate</h2>
     <p class="type-desc">
-      Before a stereo performance take generates depth, the calibration it discovered is scored against
+      Before a depth-family (Stereo, Depth, Other) or Identity take uses its calibration, the calibration is scored against
       a sample of that take's <strong>own footage</strong> on Epic's 0-1 diagnostics scale. The check runs
       at preflight, ahead of depth generation, and its result is cached for the session.
     </p>
     <div class="option-list">
       <div class="option-row">
-        <span class="option-name">Min Score<br /><span class="opt-default">Default 0.5</span></span>
+        <span class="option-name">Min Score<br /><span class="opt-default">Default 0.5 - Advanced -&gt; Calibration Quality Gates</span></span>
         <span class="option-desc">
           Minimum diagnostics score for the discovered calibration on this take. Below it, the take
           pauses as <strong>Poor Calibration</strong> before any depth is generated.
@@ -130,6 +130,30 @@ import DocFigure from '../../../../components/DocFigure.astro';
       If the diagnostics check cannot run in your environment, it does not block: the job logs that the
       check was skipped and proceeds. The gate is only ever a reason to pause, never a reason to fail.
     </div>
+    <h3 class="sub-heading">Capture provenance on a failed verdict</h3>
+    <p class="type-desc">
+      For takes ingested in-editor, the plugin reads the camera serials and record time that the capture
+      unit wrote into the source <code>.mov</code> headers, for both this take and the grid take the
+      calibration was solved from, and caches them in <code>takecache.json</code>. Provenance changes the
+      wording of a failed verdict, never the verdict. The status message then says one of:
+    </p>
+    <ul class="bullet-list">
+      <li><strong>Recorded on different cameras</strong> - the grid describes another helmet. Link the right unit's calibration; do not accept it.</li>
+      <li><strong>Recorded &lt;time&gt; after/before this take</strong> - the same helmet changed in between (re-seated, lights or filters, mount moved). Shoot a grid in the same block. Under 10 minutes apart, timing is ruled out - check the grid take itself.</li>
+      <li><strong>Timecode was not jammed</strong> - informational; the unit was not synced, often a sign it was reset.</li>
+      <li>No camera or timing sentence - provenance is unknown (ingested outside the editor, or the source files moved). Nothing is guessed.</li>
+    </ul>
+    <p class="type-desc">
+      After a failure, up to 6 other calibrations under <code>/Game/CaptureManager/Imports</code> (rejected
+      ones skipped) are scored on this take's footage. The message names the <strong>best alternative</strong>
+      - the highest score that beats the failed one, which does not mean it clears Min Score. Link it only
+      if its score passes and its rig matches the take's.
+    </p>
+    <p class="type-desc">
+      The job log gets a <code>[Preflight] Provenance:</code> line on every verdict (rig, cameras, record
+      time, clip, timecode for take and grid, then same or different cameras, time between them, shoot
+      day) and one <code>[Preflight] Alternative calibration ...</code> line per alternative scored.
+    </p>
   </section>
 
   <section class="type-section">
@@ -190,7 +214,7 @@ import DocFigure from '../../../../components/DocFigure.astro';
     </p>
     <div class="option-list">
       <div class="option-row">
-        <span class="option-name">Override Default Board<br /><span class="opt-default">Default off</span></span>
+        <span class="option-name">Override default board<br /><span class="opt-default">Default off</span></span>
         <span class="option-desc">
           Turn on for a non-Epic board. Your board width, height, and square size are then pinned
           verbatim — only those dimensions and their swapped orientation are tried, and auto-detection
@@ -210,22 +234,23 @@ import DocFigure from '../../../../components/DocFigure.astro';
         <span class="option-name">Board presets</span>
         <span class="option-desc">
           Save a named board (dimensions plus square size) from the <strong>Generate Stereo Calibration</strong>
-          dialog and switch between them per shoot. The preset section appears only while the override is
-          on. No presets ship by default — a new one starts at Epic's board.
+          dialog and switch between them per shoot. Presets exist only in that dialog, and its preset
+          section appears only while the override is on. No presets ship by default — a new one starts at Epic's board.
         </span>
       </div>
     </div>
     <div class="callout callout-tip">
       Symptoms that point at the board rather than the gates: calibration that scans forever and produces
       nothing (wrong dimensions, nothing detects), or a clean-looking solve whose depth comes out at
-      visibly the wrong scale (wrong square size).
+      visibly the wrong scale (wrong square size). Blurry-frame rejection is not a setting: sharpness
+      tuning runs automatically on every solve.
     </div>
   </section>
 
   <section class="type-section">
     <h2 class="sub-heading">Related</h2>
     <ul class="bullet-list">
-      <li><a href="/marketplace/mha-manager/docs/global-settings">Global Settings -&gt; Stereo Calibration</a> — every calibration setting with its default, including the two gate thresholds.</li>
+      <li><a href="/marketplace/mha-manager/docs/global-settings">Global Settings -&gt; Camera Calibration and Depth</a> — every calibration setting with its default, including the two gate thresholds.</li>
       <li><a href="/marketplace/mha-manager/docs/stereo-workflow#calibration-identity">Stereo Workflow</a> — the calibration -&gt; identity -&gt; performance chain and the other blocked states.</li>
       <li><a href="/marketplace/mha-manager/docs/troubleshooting">Troubleshooting</a> — stuck, blocked, and failing jobs.</li>
     </ul>

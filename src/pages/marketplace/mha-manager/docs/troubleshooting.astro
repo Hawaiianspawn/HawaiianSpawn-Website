@@ -77,14 +77,14 @@ const issues = [
     id: 'calib-no-detect',
     symptom: 'Calibration job fails immediately with "no board detected"',
     cause: 'The board pattern settings do not match the printed checkerboard — the most common mistakes are entering inner corners instead of squares, or swapping width and height.',
-    fix: 'Board Pattern W/H is measured in <strong>squares</strong>, not inner corners. Leave <strong>Auto-Detect Board Pattern</strong> enabled — it probes your setting, its transpose, the inner-corner misentry, and Epic\'s shipped board (11 x 16 squares) before failing. Epic\'s own detection output appears in the Output Log under <code>LogMetaHumanCalibrationGenerator</code>.',
+    fix: 'Board Width/Height is measured in <strong>squares</strong>, not inner corners. With <strong>Override default board</strong> off (the default) the pattern is detected automatically - the last detected board, its transpose, the inner-corner misentry, and Epic\'s shipped board (11 x 16 squares) are probed before failing. With the override on only your entered size and its swapped orientation are tried, so check those values. Epic\'s own detection output appears in the Output Log under <code>LogMetaHumanCalibrationGenerator</code>.',
     type: 'calibration',
   },
   {
     id: 'calib-wrong-scale',
     symptom: 'Calibration succeeds but reconstructed depth / face scale looks wrong',
     cause: 'The <strong>Square Size</strong> setting does not match the physical board. It cannot be measured from footage, so a wrong value silently scales the stereo baseline and all depth.',
-    fix: 'Measure a square on your printed board and set <strong>Square Size</strong> exactly (Epic\'s shipped board is 0.75 cm). If the probe recognizes Epic\'s board while your square size differs from 0.75 cm, the job log prints a hint. Re-run the calibration job after correcting it.',
+    fix: 'Measure a square on your printed board, turn on <strong>Override default board</strong>, and set <strong>Square Size</strong> exactly (Epic\'s shipped board is 0.75 cm). If the probe recognizes Epic\'s board while your square size differs from 0.75 cm, the job log prints a hint. Re-run the calibration job after correcting it.',
     type: 'calibration',
   },
   {
