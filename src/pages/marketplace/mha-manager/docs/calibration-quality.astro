@@ -69,6 +69,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       training error rewards exactly the overfit solves the gate exists to catch. Out-of-sample error
       does not have that blind spot.
     </p>
+    <DocFigure
+      src="/assets/docs/mha/calibration-take.webp"
+      alt="A checkerboard take as one HMC camera sees it - a hand slowly tilting and turning an 11 x 16 board while it stays in focus and fills most of the frame"
+      caption="A checkerboard take as the HMC sees it. Slow, in-focus board movement across the frame leaves plenty of sharp frames for the solve and for out-of-sample validation"
+    />
     <div class="option-list">
       <div class="option-row">
         <span class="option-name">Max RMS Error (px)<br /><span class="opt-default">Default 1.0 - Advanced -&gt; Calibration Quality Gates</span></span>
@@ -102,6 +107,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       a sample of that take's <strong>own footage</strong> on Epic's 0-1 diagnostics scale. The check runs
       at preflight, ahead of depth generation, and its result is cached for the session.
     </p>
+    <DocFigure
+      src="/assets/docs/mha/calibration-diagnostics.webp"
+      alt="Epic's Calibration Diagnostics tab: the two HMC camera views A and B of a performance take side by side, Mean Error and RMS Error readouts, a Detect Features button, and the assigned Camera Calibration asset below"
+      caption="The same check, run by hand: Epic's Calibration Diagnostics scores a calibration against a take's own footage. Gate 2 runs it for you at preflight"
+    />
     <div class="option-list">
       <div class="option-row">
         <span class="option-name">Min Score<br /><span class="opt-default">Default 0.5 - Advanced -&gt; Calibration Quality Gates</span></span>

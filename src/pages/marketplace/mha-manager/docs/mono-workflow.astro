@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '../../../../layouts/DocsLayout.astro';
+import DocFigure from '../../../../components/DocFigure.astro';
 ---
 
 <DocsLayout
@@ -47,6 +48,11 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
       No MetaHuman Identity or Camera Calibration needed. Get the Capture Data from
       <a href="/marketplace/mha-manager/docs/ingest">Ingest</a>, then add it to the queue.
     </div>
+    <DocFigure
+      src="/assets/docs/mha/mono-performance.webp"
+      alt="A solved Mono performance asset: the Image Review panel shows the single-camera color footage of the performer, the viewport shows the solved expression on a MetaHuman, and the Details panel lists Input Type Monocular Footage with the Facial Tracking options"
+      caption="A Mono take after the solve: one color camera in, the expression on the MetaHuman out — no calibration, identity or depth on the asset"
+    />
   </section>
 
   <section class="type-section">
