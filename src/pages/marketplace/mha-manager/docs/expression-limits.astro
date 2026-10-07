@@ -88,6 +88,11 @@ import DocFigure from '../../../../components/DocFigure.astro';
       Rows are ordered <code>0 &lt;= Min &lt; Mid &lt; Max &lt;= 1</code>. Dragging one handle past
       another pushes it rather than swapping the two, so a row can never be inverted.
     </p>
+    <DocFigure
+      src="/assets/docs/mha/expression-limits-min-mid-max.webp"
+      alt="The Expression Limits tab with the two CTRL_C_mouth rows selected, Min 0 / Mid 0.25 / Max 0.49 against a take peak of 0.5; the schematic's mouth knob sits inside a red-barred box marking the cut, and the preview face holds a smaller mouth opening than the raw solve"
+      caption="Min / Mid / Max on one control: the mouth is held to half its solved travel. Set per character, the same solved take reads differently on each face it drives"
+    />
     <div class="callout callout-note">
       <strong>Control rows and curve rows are different units.</strong> A board control row spans the
       control's own range, so a two-sided axis such as blink / widen rests at 0.5: its floor limits
